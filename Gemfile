@@ -40,13 +40,17 @@ end
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
-
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+
+
   #Capistrano Gems
   gem 'capistrano', '~> 3.4.1'
   gem 'capistrano-rails', '~> 1.1.6'
   gem 'capistrano-bundler', '~> 1.1.4'
   gem 'capistrano-rbenv', '~> 2.0.4'
+  #capistrano-passenger, entre otras, para que al hacer deploy se muestren automaticamente los cambios en ultimo push
+  #Se requiere ponerlo como require en Capfile
+  #Por ultimo metodo 'set :passenger_restart_with_touch, true' en deploy.rb
   gem 'capistrano-passenger'
 end
