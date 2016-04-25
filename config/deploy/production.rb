@@ -1,6 +1,6 @@
 set :stage, :production
 
-server 'http://integra4.ing.puc.cl', user: 'administrator', roles: %w{web app db}
+server 'integra4.ing.puc.cl', user: 'administrator', roles: %w{web app db}
 
 # server-based syntax
 # ======================
