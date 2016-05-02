@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
 
-  root 'bodegas#index'
+  root 'almacen#index'
+
+  get 'almacen/show', :as => :show_almacen
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

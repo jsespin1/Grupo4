@@ -11,16 +11,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160429225143) do
+ActiveRecord::Schema.define(version: 20160502012653) do
+
+  create_table "almacens", force: :cascade do |t|
+    t.string   "_id"
+    t.integer  "grupo"
+    t.boolean  "pulmon"
+    t.boolean  "despacho"
+    t.boolean  "recepcion"
+    t.integer  "totalSpace"
+    t.integer  "usedSpace"
+    t.integer  "v"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "bodegas", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "ftps", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "productos", force: :cascade do |t|
+    t.string   "_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "cantidad"
+  end
+
   create_table "requests", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "skus", force: :cascade do |t|
+    t.string   "_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "cantidad"
   end
 
 end

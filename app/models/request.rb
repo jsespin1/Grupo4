@@ -12,7 +12,20 @@ class Request < ActiveRecord::Base
 		hash = get_hash("GET")
 		almacenes = HTTParty.get(ruta, :body => {}, :headers => hash)
 		almacenes.to_json
+		Almacen.getAlmacenes(almacenes)
 	end
+
+	def self.getSKUs(almacenID)
+		ruta = URI.parse("http://integracion-2016-dev.herokuapp.com/bodega" + "/skusWithStock".to_s)
+		puts "Almacen ID -> " + almacenID
+		hash = get_hash("GET"+almacenID)
+		query = { almacenId: almacenID}
+		skus = HTTParty.get(ruta, :query => query, :headers => hash)
+		Sku.getSkus(skus)
+	end
+
+
+
 
 	def  self.get_hash(parametros="")
 		 hash = Base64.encode64((HMAC::SHA1.new("tdk6NIzbhNfORDP") << parametros).digest).strip

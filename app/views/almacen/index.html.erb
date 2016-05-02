@@ -1,0 +1,10 @@
+<h1>Bienvenido al sistema del Grupo4,  Bodega</h1>
+<ul class="almacenes-container">
+	<% @almacenes.each do |a| %>
+	  <%= link_to show_almacen_path(:almacen => a.attributes) do %>
+		<li> Atributos:  <%=a.attributes%></li>
+	  <% end %>
+	  	<li> Almacen ID: <%=a._id%></li>
+	<% end %>
+	
+</ul>

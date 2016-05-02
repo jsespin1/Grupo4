@@ -1,0 +1,12 @@
+<h1>Bienvenido al sistema del Grupo4,  Bodega</h1>
+<ul class="almacenes-container">
+
+
+	  <%= link_to show_almacen_path do %>
+		<li> Almacen ID: <%=@almacen['_id']%></li>
+		<% @skus.each do |s| %>
+			<li> SKU ID: <%=s._id%>, Cantidad: <%=s.cantidad%></li>
+		<%end%>
+	  <% end %>
+	
+</ul>
