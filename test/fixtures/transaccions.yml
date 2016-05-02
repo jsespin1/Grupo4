@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: MyString
+  fecha_creacion: 2016-05-02 19:18:19
+  cuenta_origen: MyString
+  cuenta_destino: MyString
+  monto: 
+
+two:
+  id: MyString
+  fecha_creacion: 2016-05-02 19:18:19
+  cuenta_origen: MyString
+  cuenta_destino: MyString
+  monto: 
