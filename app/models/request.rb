@@ -31,9 +31,6 @@ class Request < ActiveRecord::Base
 		puts "Stock -> " + skus.parsed_response.count.to_s
 	end
 
-
-
-
 	def  self.get_hash(parametros="")
 		 hash = Base64.encode64((HMAC::SHA1.new("tdk6NIzbhNfORDP") << parametros).digest).strip
 		 auth_header = { 'Authorization' => "INTEGRACION grupo4:"+hash.to_s,  'Content-Type' => "application/json"}
@@ -42,4 +39,37 @@ class Request < ActiveRecord::Base
 	def self.get_header1
 		header1 = { 'Content-type' => "application/json" }
 	end
+
+	def self.create_orden(canal, cantidad, sku, cliente, proveedor, precio_unitario, fecha_entrega,notas)
+		ruta = URI.parse("http://mare.ing.puc.cl/oc" + "/crear")
+		hash = get_hash("PUT"+canal+cantidad+sku+cliente+proveedor+precio_unitario+fecha_entrega)
+		query = { canal: canal, cantidad: cantidad, sku: sku, cliente: cliente, proveedor: proveedor, precioUnitario: precio_unitario, fechaEntrega: fecha_entrega, notas: notas }
+		orden = HTTParty.put(ruta, :query => query, :headers => hash)
+		puts "Orden -> " + orden.inspect
+	end
+
+	#def self.date_to_millis(fecha)
+    #fecha.strftime('%Q')
+  #end
+
+	def self.receive_orden
+
+	end
+
+	def self.reject_orden
+	
+	end
+
+	def self.annul_orden
+	
+	end
+
+	def self.obtain_orden
+
+	end
+
+	def self.deliver_orden
+
+	end
+
 end
