@@ -52,12 +52,20 @@ class Request < ActiveRecord::Base
     #fecha.strftime('%Q')
   #end
 
-	def self.receive_orden
-
+	def self.receive_orden(orden_id)
+		ruta = URI.parse("http://mare.ing.puc.cl/oc" + "/recepcionar/" + orden_id)
+		hash = {'Content-Type' => "application/json"}
+		body = { _id: orden_id }.to_json
+		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
+		#puts "Orden -> " + respuesta.inspect
 	end
 
-	def self.reject_orden
-	
+	def self.reject_orden(orden_id, rechazo)
+		ruta = URI.parse("http://mare.ing.puc.cl/oc" + "/rechazar/" + orden_id)
+		hash = {'Content-Type' => "application/json"}
+		body = { _id: orden_id, rechazo: rechazo }.to_json
+		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
+		#puts "OrdenRechazo -> " + respuesta.inspect
 	end
 
 	def self.annul_orden
