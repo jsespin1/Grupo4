@@ -11,7 +11,6 @@ class Sku < ActiveRecord::Base
 		linea = linea.tr('{','')
 		linea = linea.tr('}','')
 		info = linea.split(',')
-		puts "Todo -> "+ info.inspect
 		id = ""
 		cantidad = ""
 		par = true
@@ -24,7 +23,6 @@ class Sku < ActiveRecord::Base
 				par = false
 			else
 				cantidad = i1[1].tr('\"','')
-				puts "Cantidad -> " + cantidad.to_s
 				sku = Sku.new(_id: id, cantidad: cantidad)
 				arreglo.push(sku)
 				par = true

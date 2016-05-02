@@ -11,31 +11,43 @@ class Ftp < ActiveRecord::Base
     end 
 
     def self.showls
+        set_url
         connect()
-        #@carpeta = @ftp.getdir()
-        #puts @carpeta.inspect
-        puts @ftp.dir.entries("/pedidos").inspect
-        #@ftp.dir.foreach("/pedidos") do |entry|
-		 #   puts entry.name
-		#  end
+        entries = @ftp.dir.entries("/pedidos")
+        entries.each do |e|
+            if e.name!='.' && e.name!='..'
+                filename = e.name
+                path =  Rails.root.to_s + '/pedidos/'
+                puts "RUTA -> " + path
+                @ftp.download!("/pedidos/"+filename.to_s, path+filename.to_s)
+            end
+        end
     end
 
 
 	private
     def self.connect()
-        p 'ESTABLISH FTP CONNECTION'
-        host = "mare.ing.puc.cl"
+        p 'ESTABLISHING FTP CONNECTION'
         port = 22
-        username = "integra4"
-        password = "dQSxFZpG"
-        session = Net::SSH.start(host, username, :password => password, :port => port)
-        @ftp = Net::SFTP.start(host, username, :password => password, :port => port)
-        #@ftp = Net::FTP.new
-        #@ftp.debug_mode = true
-        #@ftp.passive = true
-        #@ftp.connect(host,port)
-        #@ftp.login(username, password)
+        @ftp = Net::SFTP.start(@host, @username, :password => @password, :port => port)
     end 
+
+
+    def self.set_url
+        if Rails.env == 'development'
+            @host = "mare.ing.puc.cl"
+            @username = "integra4"
+            @password = "dQSxFZpG"
+            @path = Rails.root.to_s + '/pedidos/'
+        else
+            @host = "moto.ing.puc.cl"
+            @username = "integra4"
+            @password = "38FeEdpt"
+            @path = '/home/administrator/Grupo4/pedidos/'
+        end
+    end
+
+    
 
     def self.close_connection
         p 'CLOSE FTP CONNECTION'

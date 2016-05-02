@@ -28,10 +28,16 @@ class Request < ActiveRecord::Base
 		hash = get_hash("GET"+almacenID+skuId)
 		query = { almacenId: almacenID, sku: skuId}
 		skus = HTTParty.get(ruta, :query => query, :headers => hash)
-		puts "Stock -> " + skus.parsed_response.count.to_s
+		Producto.getProductos(skus.parsed_response, 100)
 	end
 
-
+	 def self.getOC(iD)
+        ruta = URI.parse("http://mare.ing.puc.cl/oc/obtener/" + iD.to_s)
+        hash = {'Content-Type' => "application/json"}
+        oc = HTTParty.get(ruta, :headers => hash)
+        puts "OC -> " + oc.inspect
+        oc
+    end
 
 
 	def  self.get_hash(parametros="")
