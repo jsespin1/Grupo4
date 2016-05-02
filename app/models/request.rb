@@ -8,7 +8,7 @@ class Request < ActiveRecord::Base
 	route_bodega = "http://integracion-2016-dev.herokuapp.com/bodega"
 
 	def self.getAlmacenesAll
-		ruta = URI.parse("http://integracion-2016-dev.herokuapp.com/bodega" + "/almacenes".to_s)
+		ruta = URI.parse("http://integracion-2016-dev.herokuapp.com/bodega" + "/almacenes")
 		hash = get_hash("GET")
 		almacenes = HTTParty.get(ruta, :body => {}, :headers => hash)
 		almacenes.to_json
@@ -16,12 +16,19 @@ class Request < ActiveRecord::Base
 	end
 
 	def self.getSKUs(almacenID)
-		ruta = URI.parse("http://integracion-2016-dev.herokuapp.com/bodega" + "/skusWithStock".to_s)
-		puts "Almacen ID -> " + almacenID
+		ruta = URI.parse("http://integracion-2016-dev.herokuapp.com/bodega" + "/skusWithStock")
 		hash = get_hash("GET"+almacenID)
 		query = { almacenId: almacenID}
 		skus = HTTParty.get(ruta, :query => query, :headers => hash)
 		Sku.getSkus(skus)
+	end
+
+	def self.getStock(almacenID, skuId)
+		ruta = URI.parse("http://integracion-2016-dev.herokuapp.com/bodega" + "/stock")
+		hash = get_hash("GET"+almacenID+skuId)
+		query = { almacenId: almacenID, sku: skuId}
+		skus = HTTParty.get(ruta, :query => query, :headers => hash)
+		puts "Stock -> " + skus.parsed_response.count.to_s
 	end
 
 
