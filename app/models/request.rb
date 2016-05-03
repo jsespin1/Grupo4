@@ -4,12 +4,10 @@ class Request < ActiveRecord::Base
 	require 'hmac-sha1'
 	require 'date'
 
-	#Bodegas
-	clave_bodega = "tdk6NIzbhNfORDP"
-	route_bodega = "http://integracion-2016-dev.herokuapp.com/bodega"
+#-----------------------BODEGA/ALMACENES----------------------#
 
 	def self.getAlmacenesAll
-		ruta = URI.parse("http://integracion-2016-dev.herokuapp.com/bodega" + "/almacenes")
+		ruta = URI.parse(set_url_bodega + "/almacenes")
 		hash = get_hash("GET")
 		almacenes = HTTParty.get(ruta, :body => {}, :headers => hash)
 		almacenes.to_json
@@ -17,7 +15,7 @@ class Request < ActiveRecord::Base
 	end
 
 	def self.getSKUs(almacenID)
-		ruta = URI.parse("http://integracion-2016-dev.herokuapp.com/bodega" + "/skusWithStock")
+		ruta = URI.parse(set_url_bodega + "/skusWithStock")
 		hash = get_hash("GET"+almacenID)
 		query = { almacenId: almacenID}
 		skus = HTTParty.get(ruta, :query => query, :headers => hash)
@@ -25,7 +23,7 @@ class Request < ActiveRecord::Base
 	end
 
 	def self.getStock(almacenID, skuId)
-		ruta = URI.parse("http://integracion-2016-dev.herokuapp.com/bodega" + "/stock")
+		ruta = URI.parse(set_url_bodega + "/stock")
 		hash = get_hash("GET"+almacenID+skuId)
 		query = { almacenId: almacenID, sku: skuId}
 		skus = HTTParty.get(ruta, :query => query, :headers => hash)
@@ -40,13 +38,17 @@ class Request < ActiveRecord::Base
 	def self.get_header1
 		header1 = { 'Content-type' => "application/json" }
 	end
+
+#-----------------------ORDENES COMPRA----------------------#
 	
 	def self.getOC(iD)
-		ruta = URI.parse("http://mare.ing.puc.cl/oc/obtener" + iD.to_s)
+		ruta = URI.parse(set_url_oc + "/obtener/" + iD.to_s)
+		puts "RUTA -> " + ruta.inspect
 		hash = {'Content-Type' => "application/json"}
 		oc = HTTParty.get(ruta, :headers => hash)
-		oc
+		oc.parsed_response
 	end
+
 
 	def self.create_orden(canal, cantidad, sku, cliente, proveedor, precio_unitario, fecha_entrega, notas)
 		ruta = URI.parse("http://mare.ing.puc.cl/oc" + "/crear")
@@ -54,7 +56,6 @@ class Request < ActiveRecord::Base
 		puts "hash -> " + hash.to_s
 		body = { canal: canal, cantidad: cantidad, sku: sku, cliente: cliente, proveedor: proveedor, precioUnitario: precio_unitario, fechaEntrega: date_to_millis(fecha_entrega), notas: notas }.to_json
 		orden = HTTParty.put(ruta, :body => body, :headers => hash)
-		puts "Orden -> " + orden.inspect
 	end
 
 	def self.date_to_millis(fecha)
@@ -63,7 +64,7 @@ class Request < ActiveRecord::Base
   	
 
 	def self.receive_orden(orden_id)
-		ruta = URI.parse("http://mare.ing.puc.cl/oc" + "/recepcionar/" + orden_id)
+		ruta = URI.parse(set_url_oc + "/recepcionar/" + orden_id)
 		hash = {'Content-Type' => "application/json"}
 		body = { _id: orden_id }.to_json
 		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
@@ -71,7 +72,7 @@ class Request < ActiveRecord::Base
 	end
 
 	def self.reject_orden(orden_id, rechazo)
-		ruta = URI.parse("http://mare.ing.puc.cl/oc" + "/rechazar/" + orden_id)
+		ruta = URI.parse(set_url_oc + "/rechazar/" + orden_id)
 		hash = {'Content-Type' => "application/json"}
 		body = { _id: orden_id, rechazo: rechazo }.to_json
 		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
@@ -80,7 +81,7 @@ class Request < ActiveRecord::Base
 	
 
 	def self.anular_orden(orden_id, motivo)
-		ruta = URI.parse("http://mare.ing.puc.cl/oc" + "/anular/" + orden_id)
+		ruta = URI.parse(set_url_oc + "/anular/" + orden_id)
 		hash = {'Content-Type' => "application/json"}
 		body = { _id: orden_id, anulacion: motivo}.to_json
 		respuesta = HTTParty.delete(ruta, :body => body, :headers => hash)
@@ -92,60 +93,13 @@ class Request < ActiveRecord::Base
 	end
 
 	def self.deliver_orden(orden_id) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
-
-		ruta = URI.parse("http://mare.ing.puc.cl/oc")
+		ruta = URI.parse(set_url_oc)
 		hash = {'Content-Type' => "application/json"}
 		body = { _id: orden_id}.to_json
 		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
 		puts "Orden -> " + respuesta.inspect
 
 	end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #Método que sirve para emitir una factura, retorna la factura o un error en caso de existir.
@@ -237,5 +191,22 @@ class Request < ActiveRecord::Base
 
 
 
+#---------------------------URLs--------------------------#
+	def self.set_url_oc
+        if Rails.env == 'development'
+            @url = "http://mare.ing.puc.cl/oc"
+        else
+            @url = "http://moto.ing.puc.cl/oc"
+        end
+        @url
+    end
 
-end
+    def self.set_url_bodega
+        if Rails.env == 'development'
+            @url = "http://integracion-2016-dev.herokuapp.com/bodega"
+        else
+            @url =  "http://integracion-2016-prod.herokuapp.com/bodega"
+        end
+        @url
+    end
+
