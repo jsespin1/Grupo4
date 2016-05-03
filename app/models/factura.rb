@@ -12,18 +12,20 @@ class Factura < ActiveRecord::Base
     # :motivo_rechazo, :string
     # :motivo_anulacion, :string
 
-    def self.getFactura(respuestaServ)
-      	puts "Generando Trans" + respuestaServ.inspect
-      	#Generar la factura
 
-
-    end
 
     def self.toObject(response)
     	r = response
 	 	factura = Factura.new(_id: r['_id'], fecha_creacion: r['created_at'], proveedor: r['proveedor'], cliente: r['cliente'], 
 	 		valor_bruto: r['bruto'], iva: r['iva'], valor_total: r['total'], estado_pago: r['pago'], 
 			id_oc: r['oc'])
+    end
+
+    def self.toObject2(response)
+        r = response[0]
+        factura = Factura.new(_id: r['_id'], fecha_creacion: r['created_at'], proveedor: r['proveedor'], cliente: r['cliente'], 
+            valor_bruto: r['bruto'], iva: r['iva'], valor_total: r['total'], estado_pago: r['pago'], 
+            id_oc: r['oc'])
     end
 
 

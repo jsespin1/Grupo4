@@ -1,10 +1,55 @@
-<h1>Bienvenido al sistema del Grupo4,  Bodega</h1>
-<ul class="almacenes-container">
-	<% @almacenes.each do |a| %>
-	  <%= link_to show_almacen_path(:almacen => a.attributes) do %>
-		<li> Atributos:  <%=a.attributes%></li>
-	  <% end %>
-	  	<li> Almacen ID: <%=a._id%></li>
-	<% end %>
-	
-</ul>
+<a href="http://integra4.ing.puc.cl">Ir a Home</a>
+
+<h1>API Grupo 4 </h1>
+
+<ol>
+
+
+
+<dl>
+
+<li><dt>IDs: </dt>
+
+<dd> ID Grupo: 571262b8a980ba030058ab52 </dd>
+<dd> ID Banco: 571262c3a980ba030058ab5f </dd>
+<!-- <dd> ID Almacen: xxx</dd> -->
+
+</dd></li>
+</br>
+
+
+<li><dt><a href="">integra4.ing.puc.cl/api/consultar/:sku (GET)</a></dt>
+
+<dd> Retorna un JSON con el stock del producto del SKU ingresado: {"stock": int, "sku": string}
+</dd></li>
+</br>
+
+<li><dt><a href="">integra4.ing.puc.cl/api/oc/recibir/:idoc (GET)</a></dt>
+
+<dd> Retorna un JSON informando si se acepta la OC: {"aceptado": boolean, "idoc": string}
+</dd></li>
+</br>
+
+
+<li><dt><a href="">integra4.ing.puc.cl/api/facturas/recibir/:idfactura (GET)</a></dt>
+
+<dd> Retorna un JSON informando si se valida la factura: {"validado": boolean, "idfactura": string}
+</dd></li>
+</br>
+
+
+<li><dt><a href="">integra4.ing.puc.cl/api/pagos/recibir/:idtrx?idfactura=:idfactura (GET)</a></dt>
+
+<dd> Retorna un JSON informando si la transaccion es valida: {"validado": boolean, "idtrx": string}
+</dd></li>
+</br>
+
+
+<li><dt><a href="">integra4.ing.puc.cl/api/despachos/recibir/:idfactura (GET)</a></dt>
+
+<dd> Retorna un JSON informando si los productos fueron despachados: {"validado": boolean}
+</dd></li>
+</br>
+
+</dl>
+</ol>
