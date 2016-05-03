@@ -60,7 +60,7 @@ class Request < ActiveRecord::Base
 
 	def self.date_to_millis(fecha)
     	fecha.strftime('%Q')
-  end
+    end
   	
 
 	def self.receive_orden(orden_id)
@@ -102,9 +102,11 @@ class Request < ActiveRecord::Base
 	end
 
 
+#-----------------------Facturas------------------------#
+
 #Método que sirve para emitir una factura, retorna la factura o un error en caso de existir.
 	def self.emitir_factura(orden_id)
-		ruta = URI.parse("http://mare.ing.puc.cl/facturas/")
+		ruta = URI.parse(set_url_fac)
 		hash = {'Content-Type' => "application/json"}
 		body = { oc: orden_id}.to_json
 		respuesta = HTTParty.put(ruta, :body => body, :headers => hash)
@@ -113,7 +115,7 @@ class Request < ActiveRecord::Base
 
 #Método que sirve para obtener una factura dado su id, retorna la factura o un error en caso de existir.
 	def self.obtener_factura(factura_id)
-		ruta = URI.parse("http://mare.ing.puc.cl/facturas/" + factura_id)
+		ruta = URI.parse(set_url_fac + "/" + factura_id.to_s)
 		hash = {'Content-Type' => "application/json"}
 		body = { id: factura_id}.to_json
 		respuesta = HTTParty.get(ruta, :body => body, :headers => hash)
@@ -122,7 +124,7 @@ class Request < ActiveRecord::Base
 
 #Método que sirve para pagar una factura dado su id, retorna la factura pagada o un error en caso de existir.
 	def self.pagar_factura(factura_id)
-		ruta = URI.parse("http://mare.ing.puc.cl/facturas/pay")
+		ruta = URI.parse(set_url_fac+"/pay")
 		hash = {'Content-Type' => "application/json"}
 		body = { id: factura_id}.to_json
 		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
@@ -131,7 +133,7 @@ class Request < ActiveRecord::Base
 
 #Método que sirve para rechazar una factura dado su id, retorna la factura rechazada con un texto que representa el motivo del rechazo o un error en caso de existir.
 	def self.rechazar_factura(factura_id, motivo)
-		ruta = URI.parse("http://mare.ing.puc.cl/facturas/reject")
+		ruta = URI.parse(set_url_fac+"/reject")
 		hash = {'Content-Type' => "application/json"}
 		body = { id: factura_id, motivo: motivo }.to_json
 		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
@@ -140,7 +142,7 @@ class Request < ActiveRecord::Base
 
 #Método que sirve para anular una factura dado su id, retorna la factura anulada con un texto que representa el motivo del rechazo o un error en caso de existir.
 	def self.anular_factura(factura_id, motivo)
-		ruta = URI.parse("http://mare.ing.puc.cl/facturas/cancel")
+		ruta = URI.parse(set_url_fac+"/cancel")
 		hash = {'Content-Type' => "application/json"}
 		body = { id: factura_id, motivo: motivo }.to_json
 		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
@@ -148,15 +150,18 @@ class Request < ActiveRecord::Base
 
 #Método que sirve para crear una boleta con el id del proveedor (el de nosotros), un string que representa el id del cliente al que se le hace la boleta y finalmente un int que representa el total de la boleta. Retorna la factura pagada o un error en caso de existir.
 	def self.crear_boleta(proveedor_id, cliente_id, total)
-		ruta = URI.parse("http://mare.ing.puc.cl/facturas/boleta")
+		ruta = URI.parse(set_url_fac+"/boleta")
 		hash = {'Content-Type' => "application/json"}
 		body = { proveedor: proveedor_id, cliente: cliente_id, total: total }.to_json
 		respuesta = HTTParty.put(ruta, :body => body, :headers => hash)
 		#puts "BOLETA -> " + respuesta.inspect
 	end
 
+
+#-----------------------Transferencias------------------------#
+
 	def self.transferir(monto,origen,destino)
-		ruta = URI.parse("http://mare.ing.puc.cl/banco" + "/trx")
+		ruta = URI.parse(set_url_bco + "/trx")
 		hash = { 'Content-type' => "application/json" } # get_hash("PUT"+canal+cantidad.to_s+sku+cliente+proveedor+precio_unitario.to_s+fecha_entrega.to_s+notas)
 		puts "hash -> " + hash.to_s
 		body = { monto: monto, origen: origen, destino: destino }.to_json
@@ -165,7 +170,7 @@ class Request < ActiveRecord::Base
 	end
 
 	def self.obtener_transaccion(transferencia_id)
-		ruta = URI.parse("http://mare.ing.puc.cl/banco" + "/trx/" +transferencia_id)
+		ruta = URI.parse(set_url_bco + "/trx/" +transferencia_id)
 		hash = {'Content-Type' => "application/json"}
 		body = { id: transferencia_id }.to_json
 		transaccion = HTTParty.get(ruta, :body => body, :headers => hash)
@@ -173,7 +178,7 @@ class Request < ActiveRecord::Base
 	end
 
 	def self.obtener_cartola(fecha_inicio, fecha_fin, id_cuenta, limite)
-		ruta = URI.parse("http://mare.ing.puc.cl/banco" + "/cartola")
+		ruta = URI.parse(set_url_bco + "/cartola")
 		hash = {'Content-Type' => "application/json"}
 		body = { fechaInicio: date_to_millis(fecha_inicio), fechaFin: date_to_millis(fecha_fin), id: id_cuenta, limit: limite}.to_json
 		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
@@ -181,13 +186,21 @@ class Request < ActiveRecord::Base
 	end
 
 	def self.obtener_cuenta(id_cuenta)
-		ruta = URI.parse("http://mare.ing.puc.cl/banco" + "/cuenta/" + id_cuenta)
+		ruta = URI.parse(set_url_bco + "/cuenta/" + id_cuenta)
 		hash = {'Content-Type' => "application/json"}
 		body = { _id: id_cuenta}.to_json
 		respuesta = HTTParty.get(ruta, :body => body, :headers => hash)
 		puts "cuenta -> " + respuesta.inspect
-
 	end
+
+
+#-----------------------API-------------------------#
+
+	def self.enviarFactura(ruta, idfactura)
+        ruta = URI.parse(ruta)
+        body = {:validado true, :idfactura idfactura}.to_json
+		respuesta = HTTParty.get(ruta, body)
+    end
 
 
 
@@ -209,4 +222,29 @@ class Request < ActiveRecord::Base
         end
         @url
     end
+
+
+    def self.set_url_fac
+        if Rails.env == 'development'
+            @url = "http://mare.ing.puc.cl/facturas"
+        else
+            @url = "http://moto.ing.puc.cl/facturas"
+        end
+        @url
+    end
+
+    def self.set_url_bco
+        if Rails.env == 'development'
+            @url = "http://mare.ing.puc.cl/banco"
+        else
+            @url = "http://moto.ing.puc.cl/banco"
+        end
+        @url
+    end
+
+
+
+
+
+end
 

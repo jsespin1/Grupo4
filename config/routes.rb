@@ -8,6 +8,12 @@ Rails.application.routes.draw do
     scope module: :v1 do
       #Métodos para Stock
       get '/consultar/:_id' => 'b2b#getStock'
+
+      #Método para recibir transaccion despues de pagada la factura
+      get '/facturas/recibir/:id_factura' => 'b2b#facturar'
+
+      #Método para recibir transaccion despues de pagada la factura
+      get '/pagos/recibir/:id_trx?id_factura=:id_factura' => 'b2b#transaccion'
       #Métodos para registro y token
       #Registrar grupo
        #post 'register_group' => 'b2b#create_group'
