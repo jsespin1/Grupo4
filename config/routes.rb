@@ -11,10 +11,13 @@ Rails.application.routes.draw do
 
       #Método para recibir transaccion despues de pagada la factura
       get '/facturas/recibir/:id_factura' => 'b2b#facturar'
+      #Método recibir orden
+      get '/oc/recibir/:_idorden' => 'b2b#analizarOC'
 
       #Método para recibir transaccion despues de pagada la factura
       get '/pagos/recibir/:id_trx?id_factura=:id_factura' => 'b2b#transaccion'
-      get '/oc/recibir/:_idorden' => 'b2b#analizarOC'
+      
+      #Métodos que recibe transaccion y factura -> despacha
       #Métodos para registro y token
       #Registrar grupo
        #post 'register_group' => 'b2b#create_group'

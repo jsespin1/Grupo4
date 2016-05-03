@@ -53,10 +53,13 @@ class Api::V1::B2bController < ApplicationController
 
 	def transaccion
 		respond_to do |format|
-			id = params[:_id].to_i
 			if params[:id_trx] && params[:id_factura]
-				validacion = Controlador.validarTrx(params[:id_trx])
-				total = respuesta.to_i
+				id_trx = params[:id_trx]
+				id_factura = params[:id_factura]
+				#Hay que validar el pago
+				#validacion = Controlador.validarTrx(params[:id_trx])
+				#Ahora confirmamos transaccion
+				Request.obtener_transaccion(id_trx)
 				if total > 0
 					format.json {render json: {stock: total, sku: id},status:200}
 				else
