@@ -12,6 +12,24 @@ class Controlador < ActiveRecord::Base
 
 	end
 
+	def self.facturaFicticio(idOC)
+		#ESTO GATILLA TODO EL PROCESO FICTICIO
+		#Primero se recepciona orden de compra
+		response = Request.receive_orden(idOC)
+		#Obtenemos orden de compra
+		oc = Request.getOC(idOC)
+		#Generamos la factura
+		factura = Request.emitir_factura(idOC)
+		#Si la factura ya existe, obtenemos nil
+		idFactura = ""
+		if factura == nil
+			#idFactura = oc.idfactura
+		else
+			idFactura = factura._id
+		end
+		#Ya tenemos la factura -> Transaccion
+	end
+
 
 	def self.getStock(id)
 		#se debe revisar el stock, sumando todos los almacenes
@@ -24,16 +42,14 @@ class Controlador < ActiveRecord::Base
 
 
 	def self.facturar(idCliente, idFactura)
-			grupo = getGrupo(idCliente)
-			if grupo != 0
-				#Ahora simplemente debemos enviar la ruta correspondiente
-				#Delegamos el request a la clase request
-				ruta = "http://integra" + grupo.to_s + ".ing.puc.cl/api/facturas/recibir/" + idFactura.to_s
-				Request.enviarFactura(ruta, idFactura)
-			end
-
+		grupo = getGrupo(idCliente)
+		if grupo != 0
+			#Ahora simplemente debemos enviar la ruta correspondiente
+			#Delegamos el request a la clase request
+			ruta = "http://integra" + grupo.to_s + ".ing.puc.cl/api/facturas/recibir/" + idFactura.to_s
+			Request.enviarFactura(ruta, idFactura)
+		end
 	end
-
 
 
 	def self.getGrupo(id)
