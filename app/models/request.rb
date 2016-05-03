@@ -109,6 +109,7 @@ class Request < ActiveRecord::Base
 		body = { oc: orden_id}.to_json
 		respuesta = HTTParty.put(ruta, :body => body, :headers => hash)
 		#puts "factura -> " + respuesta.inspect
+		respuesta.parsed_response
 	end
 
 #Método que sirve para obtener una factura dado su id, retorna la factura o un error en caso de existir.
@@ -118,6 +119,7 @@ class Request < ActiveRecord::Base
 		body = { id: factura_id}.to_json
 		respuesta = HTTParty.get(ruta, :body => body, :headers => hash)
 		#puts "factura -> " + respuesta.inspect
+		respuesta.parsed_response
 	end
 
 #Método que sirve para pagar una factura dado su id, retorna la factura pagada o un error en caso de existir.
