@@ -200,7 +200,7 @@ class Request < ActiveRecord::Base
 
 	def self.enviarFactura(ruta, idfactura)
         ruta = URI.parse(ruta)
-        body = {:validado true, :idfactura idfactura}.to_json
+        body = {validado: true, idfactura: idfactura}.to_json
 		respuesta = HTTParty.get(ruta, body)
     end
 
@@ -224,7 +224,6 @@ class Request < ActiveRecord::Base
         end
         @url
     end
-  end
   
 
 

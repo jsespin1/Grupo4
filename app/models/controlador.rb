@@ -1,7 +1,5 @@
 class Controlador < ActiveRecord::Base
 
-	respond_to :json, :html
-
 	#A este metodo le llega un id de orden de compra desde pedidos
 	def self.procesar_oc(id)
 		#primero se crea, con el id, la orden
@@ -25,7 +23,7 @@ class Controlador < ActiveRecord::Base
 	end
 
 
-	def facturar(idCliente, idFactura)
+	def self.facturar(idCliente, idFactura)
 			grupo = getGrupo(idCliente)
 			if grupo != 0
 				#Ahora simplemente debemos enviar la ruta correspondiente
@@ -38,12 +36,12 @@ class Controlador < ActiveRecord::Base
 
 
 
-	def getGrupo(id)
+	def self.getGrupo(id)
 		retornar = 0
 		array_grupos
 		@array_grupos.each do |g|
-			if g.id==id
-				retornar = g.grupo
+			if g['id']==id
+				retornar = g['grupo']
 			end
 		end
 		retornar
@@ -60,11 +58,10 @@ class Controlador < ActiveRecord::Base
         {id: "571262b8a980ba030058ab54", grupo: 6},
         {id: "571262b8a980ba030058ab55", grupo: 7},
         {id: "571262b8a980ba030058ab56", grupo: 8},
-        {id: "", grupo: 9 }
+        {id: "", grupo: 9 },
         {id: "571262b8a980ba030058ab58", grupo: 10},
         {id: "571262b8a980ba030058ab59", grupo: 11},
-        {id: "571262b8a980ba030058ab5a", grupo: 12},
-
+        {id: "571262b8a980ba030058ab5a", grupo: 12}
       ]
   end
 
