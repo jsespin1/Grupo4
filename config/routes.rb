@@ -8,6 +8,7 @@ Rails.application.routes.draw do
     scope module: :v1 do
       #Métodos para Stock
       get '/consultar/:_id' => 'b2b#getStock'
+      get '/oc/recibir/:_idorden' => 'b2b#analizarOC'
       #Métodos para registro y token
       #Registrar grupo
        #post 'register_group' => 'b2b#create_group'

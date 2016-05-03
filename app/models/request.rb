@@ -209,4 +209,6 @@ class Request < ActiveRecord::Base
         end
         @url
     end
+  end
+  
 

@@ -18,4 +18,7 @@ class Controlador < ActiveRecord::Base
 		total = Almacen.getSkusTotal(id).to_i
 	end
 
+	
+
+
 end
