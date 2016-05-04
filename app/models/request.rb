@@ -30,6 +30,24 @@ class Request < ActiveRecord::Base
 		Producto.getProductos(skus.parsed_response, 100)
 	end
 
+	def self.moverStock(prod_id, almacen_id) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
+		ruta = URI.parse(set_url_bodega + "/moveStock")
+		hash = get_hash("POST"+prod_id.to_s+almacen_id.to_s)
+		body = { productoId: prod_id, almacenId: almacen_id}.to_json
+		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
+		puts "Mover Stock -> " + respuesta.inspect
+
+	end
+
+	def self.moverStockBodega(prod_id, almacen_id, oc_id, precio) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
+		ruta = URI.parse(set_url_bodega + "/moveStockBodega")
+		hash = get_hash("POST"+prod_id.to_s+almacen_id.to_s+oc_id.to_s+precio.to_s)
+		body = { productoId: prod_id, almacenId: almacen_id, oc: oc_id, precio: precio}.to_json
+		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
+		puts "Mover Stock -> " + respuesta.inspect
+
+	end
+
 	def  self.get_hash(parametros="")
 		 hash = Base64.encode64((HMAC::SHA1.new("tdk6NIzbhNfORDP") << parametros).digest).strip
 		 auth_header = { 'Authorization' => "INTEGRACION grupo4:"+hash.to_s,  'Content-Type' => "application/json"}
@@ -43,10 +61,10 @@ class Request < ActiveRecord::Base
 	
 	def self.getOC(iD)
 		ruta = URI.parse(set_url_oc + "/obtener/" + iD.to_s)
-		puts "RUTA -> " + ruta.inspect
 		hash = {'Content-Type' => "application/json"}
 		oc = HTTParty.get(ruta, :headers => hash)
-		oc.parsed_response
+		#oc.parsed_response
+		Orden.toObject(oc.parsed_response)
 	end
 
 
@@ -106,12 +124,13 @@ class Request < ActiveRecord::Base
 
 #Método que sirve para emitir una factura, retorna la factura o un error en caso de existir.
 	def self.emitir_factura(orden_id)
-		ruta = URI.parse(set_url_fac)
+		ruta = URI.parse(set_url_fac + "/")
+		puts "RUTA -> " + ruta.inspect
 		hash = {'Content-Type' => "application/json"}
 		body = { oc: orden_id}.to_json
 		respuesta = HTTParty.put(ruta, :body => body, :headers => hash)
 		#puts "factura -> " + respuesta.inspect
-		respuesta.parsed_response
+		Factura.toObject(respuesta.parsed_response)
 	end
 
 #Método que sirve para obtener una factura dado su id, retorna la factura o un error en caso de existir.
@@ -121,7 +140,7 @@ class Request < ActiveRecord::Base
 		body = { id: factura_id}.to_json
 		respuesta = HTTParty.get(ruta, :body => body, :headers => hash)
 		#puts "factura -> " + respuesta.inspect
-		respuesta.parsed_response
+		Factura.toObject2(respuesta.parsed_response)
 	end
 
 #Método que sirve para pagar una factura dado su id, retorna la factura pagada o un error en caso de existir.
@@ -168,7 +187,7 @@ class Request < ActiveRecord::Base
 		puts "hash -> " + hash.to_s
 		body = { monto: monto, origen: origen, destino: destino }.to_json
 		transferencia = HTTParty.put(ruta, :body => body, :headers => hash)
-		puts "transferencia -> " + transferencia.inspect
+		Transaccion.toObject(transferencia.parsed_response)
 	end
 
 	def self.obtener_transaccion(transferencia_id)
@@ -176,7 +195,7 @@ class Request < ActiveRecord::Base
 		hash = {'Content-Type' => "application/json"}
 		body = { id: transferencia_id }.to_json
 		transaccion = HTTParty.get(ruta, :body => body, :headers => hash)
-		puts "transaccion -> " + transaccion.inspect
+		Transaccion.toObject2(transaccion.parsed_response)
 	end
 
 	def self.obtener_cartola(fecha_inicio, fecha_fin, id_cuenta, limite)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160502221939) do
+ActiveRecord::Schema.define(version: 20160503170918) do
 
   create_table "almacens", force: :cascade do |t|
     t.string   "_id"
@@ -37,8 +37,20 @@ ActiveRecord::Schema.define(version: 20160502221939) do
   end
 
   create_table "facturas", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.string   "_id"
+    t.datetime "fecha_creacion"
+    t.string   "proveedor"
+    t.string   "cliente"
+    t.integer  "valor_bruto"
+    t.integer  "iva"
+    t.integer  "valor_total"
+    t.string   "estado_pago"
+    t.datetime "fecha_pago"
+    t.string   "id_oc"
+    t.string   "motivo_rechazo"
+    t.string   "motivo_anulacion"
   end
 
   create_table "ftps", force: :cascade do |t|

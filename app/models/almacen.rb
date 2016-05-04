@@ -13,6 +13,18 @@ class Almacen < ActiveRecord::Base
 		arreglo
 	end
 
+	def self.getIdDespacho
+		#Primero se obtienen todos los skus
+		id = "0"
+		@almacenes = Request.getAlmacenesAll
+		@almacenes.each do |a|
+			if a.despacho
+				id = a._id
+			end
+		end
+		id
+	end
+
 	def self.getSkusTotal(idSku)
 		#Primero se obtienen todos los skus
 		@almacenes = Request.getAlmacenesAll
