@@ -18,6 +18,7 @@ class Controlador < ActiveRecord::Base
 		response = Request.receive_orden(idOC)
 		#Obtenemos orden de compra
 		oc = Request.getOC(idOC)
+		puts "OC -> " + oc._id
 		#Generamos la factura
 		factura = Request.emitir_factura(idOC)
 		#Si la factura ya existe, obtenemos nil
@@ -30,8 +31,10 @@ class Controlador < ActiveRecord::Base
 			idGrupo = factura.proveedor
 
 		end
+		puts "Factura -> " + idFactura
 		Request.pagar_factura(idFactura)
 		cuentaDestino(idGrupo)
+		#Nuestra Cuenta
 		@cuentaDestino = "571262c3a980ba030058ab5f"
 		#Ahora generamos la transaccion, para probar lo haremos con nostros mismos
 		transferencia = Request.transferir(3, @cuentaDestino, @cuentaDestino)

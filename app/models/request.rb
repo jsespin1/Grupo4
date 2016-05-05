@@ -40,12 +40,14 @@ class Request < ActiveRecord::Base
 	end
 
 	def self.moverStockBodega(prod_id, almacen_id, oc_id, precio) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
-		ruta = URI.parse(set_url_bodega + "/moveStockBodega")
-		hash = get_hash("POST"+prod_id.to_s+almacen_id.to_s+oc_id.to_s+precio.to_s)
-		body = { productoId: prod_id, almacenId: almacen_id, oc: oc_id, precio: precio}.to_json
-		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
-		puts "Mover Stock -> " + respuesta.inspect
+		ruta = URI.parse(set_url_bodega + "/fabrica/getCuenta")
+		hash = get_hash("GET")
+		cuenta = HTTParty.post(ruta, :headers => hash)
+		cuenta.to_json
+	end
 
+	def self.getCuentaFabrica
+		ruta = URI.parse(set_url_bodega + "/moveStockBodega")
 	end
 
 	def  self.get_hash(parametros="")
@@ -180,6 +182,7 @@ class Request < ActiveRecord::Base
 
 
 #-----------------------Transferencias------------------------#
+  #------------Requests solo se acceden desde FINANZA--------#
 
 	def self.transferir(monto,origen,destino)
 		ruta = URI.parse(set_url_bco + "/trx")

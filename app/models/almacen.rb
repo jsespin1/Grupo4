@@ -14,7 +14,6 @@ class Almacen < ActiveRecord::Base
 	end
 
 	def self.getIdDespacho
-		#Primero se obtienen todos los skus
 		id = "0"
 		@almacenes = Request.getAlmacenesAll
 		@almacenes.each do |a|
