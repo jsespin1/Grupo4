@@ -1,7 +1,12 @@
 class AlmacenController < ApplicationController
 
 	def index 
-		#@almacenes = Request.getAlmacenesAll
+		almacenes = Request.getAlmacenesAll
+		almacenes.each do |a|
+			puts "Almacen ->" + a.inspect
+			skus = Request.getSKUs(params[a._id)
+			puts "   SKUs " skus.inspect
+		end
 		#El siguiente método gatilla el proceso de compra ficticio SKU:38 QTY:340
 		#Controlador.facturaFicticio("571682b543c20b03003d9ab7")
 		#Request.create_orden('b2b', 4, '38', '571262b8a980ba030058ab52', '571262b8a980ba030058ab52', 1513, DateTime.current + 6.days, 'jpp' )
@@ -20,8 +25,7 @@ class AlmacenController < ApplicationController
 		@almacen = params[:almacen]
 		@skus = Request.getSKUs(params[:almacen]['_id'])
 		#Obtenemos
-		#productos = Request.getStock(params[:almacen]['_id'], s._id)
-		
+		#productos = Request.getStock(params[:almacen]['_id'], s._id)	
 	end
 
 end
