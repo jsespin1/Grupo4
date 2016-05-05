@@ -4,8 +4,8 @@ class AlmacenController < ApplicationController
 		almacenes = Request.getAlmacenesAll
 		almacenes.each do |a|
 			puts "Almacen ->" + a.inspect
-			skus = Request.getSKUs(params[a._id)
-			puts "   SKUs " skus.inspect
+			skus = Request.getSKUs(a._id)
+			puts "   SKUs " + skus.inspect
 		end
 		#El siguiente método gatilla el proceso de compra ficticio SKU:38 QTY:340
 		#Controlador.facturaFicticio("571682b543c20b03003d9ab7")
