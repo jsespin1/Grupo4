@@ -32,10 +32,13 @@ class Api::V1::B2bController < ApplicationController
 				# Logica de nuestra de nuestro programa
 				if cantidadOrden<=Almacen.getSkusTotal(sku)
 					format.json{render json: {aceptado: true, idoc: id.to_s}, status:200}
+					# --> Vender
 					#LLAMAR AL METODO QUE VMOS A CREAR
 				else
-					format.json{render json: {aceptado: false, idoc: id.to_s}, status: 200}
-					#generar_factura(id,id_cliente) #NO VA AQUI !=!=!=!=DIESFUOEIFUSEOIFUSO. (VA EN EL IF DE ARRIBA)
+					# --> producir materia prima.
+					# SI tenemos materia prima, producimos y mandamos.
+					# Si no tenemos prima pedimos lotes necesarios. (ver que falta)	
+					# Si no hay lotes necesarios rechazamos.  				
 				end
 			else
 				format.json {render json: {description: 'Missing parameters'},status:400}
