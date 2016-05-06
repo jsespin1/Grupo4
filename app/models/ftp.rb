@@ -1,6 +1,6 @@
 class Ftp < ActiveRecord::Base
-	require 'net/ftp'
-	require 'net/sftp'
+    require 'net/ftp'
+    require 'net/sftp'
 
 
     def self.getFtps
@@ -46,22 +46,32 @@ class Ftp < ActiveRecord::Base
     def self.despacharFtp(oc_id, ftp)
         #Obtenemos la orden de compra
         oc = Request.getOC(oc_id)
-        if oc.cantidad <= Almacen.getSkusTotal(oc.sku)
-            #Generamos factura
-            factura = Request.emitir_factura(oc._id)
+        #Obtenemos disponibilidad y cantidad a despachar
+        disponible = Almacen.getSkusTotal(oc.sku)
+        despachar = oc.cantidad-oc.cantidad_despachada
 
-            if factura != nil  # => Si la factura es nil significa hay error de lógica lo más probable.
+        #Generamos factura
+        factura = Request.emitir_factura(oc._id)
 
-                #Ahora se despacha
-            #METODO DESPACHAARRR!!!!!!
-
-            end
-
-
-            #-------------------------------------#
+        if disponible == 0 || factura==nil
+            return
         end
+
+        #Despachamos según factibilidad
+        if despachar <= disponible
+            #Despachamos todo lo requerido
+            #METODO DESPACHAR!!!!!
+
+        else
+            #Despacho parcial segñun disponibilidad
+            #METODO DESPACHAR!!!!!
+        end
+
         #Si el archivo ftp fue totalmente despachado, se elimina de la lista
-        File.delete(ftp)
+        if oc.cantidad_despachada ==  oc.cantidad && ftp != nil
+            File.delete("./pedidos/" + ftp)
+            puts "FTP: " + ftp.to_s + ", Eliminado Satisfactoriamente"
+        end
     end
 
     def self.descargarFtp
@@ -81,7 +91,7 @@ class Ftp < ActiveRecord::Base
     end
 
 
-	private
+    private
     def self.connect()
         p 'ESTABLISHING FTP CONNECTION'
         port = 22
