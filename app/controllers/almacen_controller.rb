@@ -1,7 +1,7 @@
 class AlmacenController < ApplicationController
 
 	def index 
-		#Ftp.descargarFtp
+		Ftp.descargarFtp
 		#almacenes = Request.getAlmacenesAll
 		#almacenes.each do |a|
 		#	puts "Almacen ->" + a.inspect

@@ -187,7 +187,6 @@ class Request < ActiveRecord::Base
 	def self.transferir(monto,origen,destino)
 		ruta = URI.parse(set_url_bco + "/trx")
 		hash = { 'Content-type' => "application/json" } # get_hash("PUT"+canal+cantidad.to_s+sku+cliente+proveedor+precio_unitario.to_s+fecha_entrega.to_s+notas)
-		puts "hash -> " + hash.to_s
 		body = { monto: monto, origen: origen, destino: destino }.to_json
 		transferencia = HTTParty.put(ruta, :body => body, :headers => hash)
 		Transaccion.toObject(transferencia.parsed_response)
