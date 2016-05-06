@@ -7,9 +7,9 @@ class Abastecer < ActiveRecord::Base
 
 
 	def self.revisarProcesados
-		#Debemos revisar los niveles de SKUs 11 y 16
+		
 
-
+		
 	end
 
 	def self.revisarmp
