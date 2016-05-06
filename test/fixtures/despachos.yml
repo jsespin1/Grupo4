@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id_oc: MyString
+  id_factura: MyString
+  id_trx: MyString
+  cantidad: 1
+  cantidad_despachada: 1
+
+two:
+  id_oc: MyString
+  id_factura: MyString
+  id_trx: MyString
+  cantidad: 1
+  cantidad_despachada: 1

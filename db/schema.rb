@@ -36,9 +36,24 @@ ActiveRecord::Schema.define(version: 20160506025406) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "compras", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "controladors", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "despachos", force: :cascade do |t|
+    t.string   "id_oc"
+    t.string   "id_factura"
+    t.string   "id_trx"
+    t.integer  "cantidad"
+    t.integer  "cantidad_despachada"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
   create_table "facturas", force: :cascade do |t|
@@ -124,6 +139,11 @@ ActiveRecord::Schema.define(version: 20160506025406) do
     t.float    "monto"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+  end
+
+  create_table "venta", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

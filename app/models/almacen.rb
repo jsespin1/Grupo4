@@ -25,6 +25,18 @@ class Almacen < ActiveRecord::Base
 		id
 	end
 
+	def self.getIdPulmon # retorna el id de pulmon.
+		#Primero se obtienen todos los skus
+		id = "0"
+		@almacenes = Request.getAlmacenesAll
+		@almacenes.each do |a|
+			if a.pulmon
+				id = a._id
+			end
+		end
+		id
+	end
+
 	def self.getSkusTotal(idSku)
 		#Primero se obtienen todos los skus
 		@almacenes = Request.getAlmacenesAll
