@@ -3,25 +3,81 @@ class Ftp < ActiveRecord::Base
 	require 'net/sftp'
 
 
-	def self.download(credentials,path,filename)
-        p 'FTP DOWNLOAD'
-        connect(credentials)
-        @ftp.chdir("#{credentials.directory_path}")
-        @ftp.getbinaryfile(filename,"#{path}#{filename}")
-    end 
+    def self.getFtps
+        #Obtenemos los ftps
+        archivos=[]
+        contador = 0
+        Dir.foreach("./pedidos/") do |xml|
+          if xml!="." && xml!=".."
+            archivos.push(xml)
+          end
+        end
+        archivos
+    end
 
-    def self.showls
+    def self.procesarFtps(ftps=[])
+        #Aca leemos cada ftp y generamos la orden de compra
+        #La idea, es que generamos una orden de compra
+        #Si hay stock, generamos la OC y movemos el archivo a la carpeta de ordenes FTP despachadas
+        ftps.each do |ftp|
+            f = File.open("./pedidos/"+ftp.to_s, "r")
+            #id de la OC, em línea 3
+            texto = f.readline()
+            texto = f.readline()
+            texto = f.readline().to_s
+            oc_id = texto.gsub("</id>", '') 
+            oc_id = oc_id.gsub("<id>", '')
+            oc_id = oc_id.tr("\n", '')
+            f.close
+            #Una vez obtenidos la OC id, obtenemos la orden de compra real
+            despacharFtp(oc_id, ftp)
+        end
+    end
+
+    def self.revisarFtp(oc_id, ftp)
+        #Obtenemos la orden de compra
+        oc = Request.getOC(oc_id)
+        #Si cumple con las condiciones, se envía para despacho
+        if oc.canal=="ftp" && oc.cantidad_despachada < oc.cantidad_despachada
+            despacharFtp(oc_id)
+        end
+    end
+
+    def self.despacharFtp(oc_id, ftp)
+        #Obtenemos la orden de compra
+        oc = Request.getOC(oc_id)
+        if oc.cantidad <= Almacen.getSkusTotal(oc.sku)
+            #Generamos factura
+            factura = Request.emitir_factura(oc._id)
+
+            if factura != nil  # => Si la factura es nil significa hay error de lógica lo más probable.
+
+                #Ahora se despacha
+            #METODO DESPACHAARRR!!!!!!
+
+            end
+
+
+            #-------------------------------------#
+        end
+        #Si el archivo ftp fue totalmente despachado, se elimina de la lista
+        File.delete(ftp)
+    end
+
+    def self.descargarFtp
         set_url
         connect()
+        contador = 0
         entries = @ftp.dir.entries("/pedidos")
         entries.each do |e|
             if e.name!='.' && e.name!='..'
                 filename = e.name
                 path =  Rails.root.to_s + '/pedidos/'
-                puts "RUTA -> " + path
                 @ftp.download!("/pedidos/"+filename.to_s, path+filename.to_s)
+                contador = contador + 1
             end
         end
+        puts "Se Descargaron: " + contador.to_s + " solicitudes FTP"
     end
 
 
@@ -45,13 +101,6 @@ class Ftp < ActiveRecord::Base
             @password = "38FeEdpt"
             @path = '/home/administrator/Grupo4/pedidos/'
         end
-    end
-
-    
-
-    def self.close_connection
-        p 'CLOSE FTP CONNECTION'
-        @ftp.close
     end
 
 
