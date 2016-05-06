@@ -49,8 +49,14 @@ class Ftp < ActiveRecord::Base
         if oc.cantidad <= Almacen.getSkusTotal(oc.sku)
             #Generamos factura
             factura = Request.emitir_factura(oc._id)
-            #Ahora se despacha
+
+            if factura != nil  # => Si la factura es nil significa hay error de lógica lo más probable.
+
+                #Ahora se despacha
             #METODO DESPACHAARRR!!!!!!
+
+            end
+
 
             #-------------------------------------#
         end
@@ -61,14 +67,17 @@ class Ftp < ActiveRecord::Base
     def self.descargarFtp
         set_url
         connect()
+        contador = 0
         entries = @ftp.dir.entries("/pedidos")
         entries.each do |e|
             if e.name!='.' && e.name!='..'
                 filename = e.name
                 path =  Rails.root.to_s + '/pedidos/'
                 @ftp.download!("/pedidos/"+filename.to_s, path+filename.to_s)
+                contador = contador + 1
             end
         end
+        puts "Se Descargaron: " + contador.to_s + " solicitudes FTP"
     end
 
 
