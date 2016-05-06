@@ -16,8 +16,8 @@ class Request < ActiveRecord::Base
 
 	def self.getSKUs(almacenID)
 		ruta = URI.parse(set_url_bodega + "/skusWithStock")
-		hash = get_hash("GET"+almacenID)
-		query = { almacenId: almacenID}
+		hash = get_hash("GET"+almacenID.to_s)
+		query = { almacenId: almacenID.to_s}
 		skus = HTTParty.get(ruta, :query => query, :headers => hash)
 		Sku.getSkus(skus)
 	end
@@ -232,7 +232,7 @@ class Request < ActiveRecord::Base
         if Rails.env == 'development'
             @url = "http://mare.ing.puc.cl/oc"
         else
-            @url = "http://mare.ing.puc.cl/oc"
+            @url = "http://moto.ing.puc.cl/oc"
         end
         @url
     end
@@ -241,7 +241,7 @@ class Request < ActiveRecord::Base
         if Rails.env == 'development'
             @url = "http://integracion-2016-dev.herokuapp.com/bodega"
         else
-            @url =  "http://integracion-2016-dev.herokuapp.com/bodega"
+            @url =  "http://integracion-2016-prod.herokuapp.com/bodega"
         end
         @url
     end
@@ -252,7 +252,7 @@ class Request < ActiveRecord::Base
         if Rails.env == 'development'
             @url = "http://mare.ing.puc.cl/facturas"
         else
-            @url = "http://mare.ing.puc.cl/facturas"
+            @url = "http://moto.ing.puc.cl/facturas"
         end
         @url
     end
@@ -261,7 +261,7 @@ class Request < ActiveRecord::Base
         if Rails.env == 'development'
             @url = "http://mare.ing.puc.cl/banco"
         else
-            @url = "http://mare.ing.puc.cl/banco"
+            @url = "http://moto.ing.puc.cl/banco"
         end
         @url
     end
