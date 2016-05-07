@@ -39,7 +39,7 @@ class Ftp < ActiveRecord::Base
         oc = Request.getOC(oc_id)
         #Si cumple con las condiciones, se envía para despacho
         if oc.canal <=> "ftp" && oc.cantidad_despachada.to_i < oc.cantidad.to_i
-            despacharFtp(oc_id)
+            despacharFtp(oc_id, ftp)
         end
     end
 
@@ -72,7 +72,7 @@ class Ftp < ActiveRecord::Base
 
         #Si el archivo ftp fue totalmente despachado, se elimina de la lista
         if oc.cantidad_despachada ==  oc.cantidad && ftp != nil
-            File.delete("./pedidos/" + ftp)
+            #File.delete("./pedidos/" + ftp)
             puts "FTP: " + ftp.to_s + ", Eliminado Satisfactoriamente"
         end
     end
