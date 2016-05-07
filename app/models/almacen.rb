@@ -4,7 +4,6 @@ class Almacen < ActiveRecord::Base
 
 	def self.getAlmacenes(almacenes)
 		arreglo = []
-		puts "Almacenes " + almacenes.inspect
 		almacenes.each do |b|
 			a = Almacen.new(:_id => b['_id'], :grupo => b['grupo'], :pulmon => b['pulmon'], 
 				:despacho => b['despacho'], :recepcion => b['recepcion'], :totalSpace => b['totalSpace'], 
@@ -104,19 +103,20 @@ class Almacen < ActiveRecord::Base
   
   def self.moverAlmacenDespacho(sku,cantidad)
   	cantidad_a_mover = cantidad.to_i
-  	@despachados = 0
+  	despachados = 0
   	id_despacho = getIdDespacho
   	almacenes = Request.getAlmacenesAll
   	almacenes.each do |almacen|
   		if almacen.despacho == false			  
-  			array_productos = Request.getStock(almacen._id,sku)
+  			array_productos = Request.getStock(almacen._id,sku, cantidad)
   			array_productos.each do |producto|
-  				if @despachados < cantidad_a_mover
+  				if despachados < cantidad_a_mover
   					Request.moverStock(producto, id_despacho)
-  					@despachos = @despachados + 1
+  					despachados = despachados + 1
   				end
   			end
   		end
+  		"Se despacharon a Despacho: " + despachados.to_s
   	end
   end
 
@@ -132,7 +132,7 @@ class Almacen < ActiveRecord::Base
 		id
 	end
 
-	def verificar_stock_sin_pulmon(cantidad,sku)
+	def self.verificar_stock_sin_pulmon(cantidad,sku)
 		@almacenes = Request.getAlmacenesAll
 		puts @almacenes.inspect
 		total = 0
@@ -140,7 +140,7 @@ class Almacen < ActiveRecord::Base
 			if a.pulmon == false
 				skus = Request.getSKUs(a._id)
 				skus.each do |s|
-					if s._id.to_i == idSku.to_i
+					if s._id.to_i == sku.to_i
 						total += s.cantidad.to_i
 					end
 				end
@@ -150,14 +150,14 @@ class Almacen < ActiveRecord::Base
 	end
 
 
-	def verificar_stock_con_pulmon(cantidad,sku)
+	def self.verificar_stock_con_pulmon(cantidad,sku)
 		@almacenes = Request.getAlmacenesAll
 		puts @almacenes.inspect
 		total = 0
 		@almacenes.each do |a|
 				skus = Request.getSKUs(a._id)
 				skus.each do |s|
-					if s._id.to_i == idSku.to_i
+					if s._id.to_i == sku.to_i
 						total += s.cantidad.to_i
 					end
 				end
@@ -168,13 +168,16 @@ class Almacen < ActiveRecord::Base
 	def self.moverBodegaFTP(cantidad, sku, id_oc)
 		id_despacho = getIdDespacho
 		oc=Request.getOC(id_oc)
-		array_productos = Request.getStock(id_despacho, sku)
+		array_productos = Request.getStock(id_despacho, sku, cantidad)
+		puts "Productos listos para despacho : " + array_productos.count.to_s
 		cuenta=0
 		array_productos.each do |p|
-			hay_espacio = Request.moverStockFTP(p._id, oc.cliente, Controlador.getPrecio(sku),id_oc)
+			hay_espacio = Request.moverStockFTP(p, oc.cliente, oc.precio_unitario,id_oc)
 			if !hay_espacio
 				break
+				"El mover Stock FTP problema"
 			end
+			puts "Se Movio Correctamente" 
 		end
 	end
 
@@ -183,13 +186,9 @@ class Almacen < ActiveRecord::Base
 		orden = Request.getOC(id_oc)
 		if Almacen.verificar_stock_sin_pulmon(cantidad,sku)
 			moverAlmacenDespacho(sku,cantidad)
-			if orden.canal<=>"b2b"
+			if orden.canal<=>"ftp"
 				moverBodegaFTP(cantidad, sku, id_oc)
 			end
-		
-						
-						
-
 					#despachar 
 		elsif Almacen.verificar_stock_con_pulmon(cantidad,sku)
 					#p

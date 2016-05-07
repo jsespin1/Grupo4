@@ -5,7 +5,6 @@ class Producto < ActiveRecord::Base
 
 	def self.getProductos(productos, cantidad)
 		#Arreglo de id de productos que se van a movilizar
-		puts "RESPUESTA R PRODUCTOS"+productos.inspect
 		array=[]
 		cantidad_almacen = productos.count
 		if cantidad_almacen < cantidad
