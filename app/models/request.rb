@@ -24,10 +24,10 @@ class Request < ActiveRecord::Base
 
 	def self.getStock(almacenID, skuId)
 		ruta = URI.parse(set_url_bodega + "/stock")
-		hash = get_hash("GET"+almacenID+skuId)
+		hash = get_hash("GET"+almacenID.to_s+skuId.to_s)
 		query = { almacenId: almacenID, sku: skuId}
 		skus = HTTParty.get(ruta, :query => query, :headers => hash)
-		Producto.getProductos(skus.parsed_response, 100)
+		Producto.getProductos(skus.parsed_response, 1000)
 	end
 
 	def self.moverStock(prod_id, almacen_id) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra

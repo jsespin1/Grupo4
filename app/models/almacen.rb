@@ -62,8 +62,6 @@ class Almacen < ActiveRecord::Base
 		id_almacen = getAlmacenRecepcion
   		puts "Comenzamos a Mover (recepcion)" + sku
 		movidos = 0
-		
-		
 		@almacenes = Request.getAlmacenesAll
 		array_productos = Request.getStock(id_almacen, sku)
 		cantidad_productos=0
@@ -88,23 +86,40 @@ class Almacen < ActiveRecord::Base
 			end
 		end
 	end
-				
-
 
   
-  	def self.revisarAlmacenRecepcion()
-  		id_almacen = getAlmacenRecepcion
-  		puts "id almacen -> " + id_almacen
-  		arreglo_skus = Request.getSKUs(id_almacen.to_s)
-  		puts "arreglo_skus " + arreglo_skus.inspect
-  		if arreglo_skus.length > 0
-  			arreglo_skus.each do |s|
-  				puts "se deberia mover -> " + s._id.to_s + s.cantidad.to_s
-  				moverAlmacenRecepcion(s._id)
+  def self.revisarAlmacenRecepcion
+  	id_almacen = getAlmacenRecepcion
+  	puts "id almacen -> " + id_almacen
+  	arreglo_skus = Request.getSKUs(id_almacen.to_s)
+  	puts "arreglo_skus " + arreglo_skus.inspect
+  	if arreglo_skus.length > 0
+  		arreglo_skus.each do |s|
+  			puts "se deberia mover -> " + s._id.to_s + s.cantidad.to_s
+  			moverAlmacenRecepcion(s._id)
+  		end
+  	end
+  end
+
+  
+  def self.moverAlmacenDespacho(sku,cantidad)
+  	cantidad_a_mover = cantidad.to_i
+  	@despachados = 0
+  	id_despacho = getIdDespacho
+  	almacenes = Request.getAlmacenesAll
+  	almacenes.each do |almacen|
+  		if almacen.despacho == false			  
+  			array_productos = Request.getStock(almacen._id,sku)
+  			array_productos.each do |producto|
+  				if @despachados < cantidad_a_mover
+  					Request.moverStock(producto, id_despacho)
+  					@despachos = @despachados + 1
+  				end
   			end
   		end
-  		
   	end
+  end
+
 
 	
 	

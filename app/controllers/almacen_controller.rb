@@ -7,14 +7,21 @@ class AlmacenController < ApplicationController
 		#Ftp.revisarFtp(oc_id, ftp_file)
 		#Abastecer.revisarMPPropias
 		#Ftp.descargarFtp
+		#Request.moverStock('571262b6a980ba030058a7aa','571262aaa980ba030058a242')
+		#Almacen.moverAlmacenDespacho("38","1")
 		#almacenes = Request.getAlmacenesAll
 		#almacenes.each do |a|
 		#	puts "Almacen ->" + a.inspect
 		#	skus = Request.getSKUs(a._id)
 		#	productos = Request.getStock(a._id, "38")
 		#	puts "   PRODUCTOS " + productos.inspect
+			#puts "Almacen ->" + a.inspect
+			#skus = Request.getSKUs(a._id)
+			#puts "   SKUs " + skus.inspect
 		#end
-
+		#numero = Request.getStock('571262aaa980ba030058a241','16')
+		#almacenes = Request.getAlmacenesAll
+		#puts "CHAMESITO TIENE SUEÑO " + numero.inspect
 		#@almacenes = Request.getAlmacenesAll
 		#puts "prueba jarita ->" + Compra.consultar_materia_prima(26).inspect
 		#origin/compras
