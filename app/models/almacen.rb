@@ -180,6 +180,25 @@ class Almacen < ActiveRecord::Base
 			puts "Se Movio Correctamente" 
 		end
 	end
+	
+	def self.moverBodegaB2B(cantidad, sku, id_oc)
+		id_despacho = getIdDespacho
+		oc=Request.getOC(id_oc)
+		array_productos = Request.getStock(id_despacho, sku, cantidad)
+		cuenta=0
+		id_cliente=oc.cliente
+		almacen_destino=getDestino(id_cliente)
+		array_productos.each do |p|
+			respuesta=Request.moverStockBodega(p, almacen_destino, id_oc, oc.precio_unitario)
+			if respuesta['error'] <=> 'Traspaso no realizado debido a falta de espacio'
+				#hay que vaciar despacho
+				break
+			elsif respuesta['error']
+				break
+			end
+		end
+		
+	end
 
 	#revisa la forma en que se saca el stock para moverlo a despacho
 	def self.revisarFormaDeDespacho(cantidad, sku, id_oc)
