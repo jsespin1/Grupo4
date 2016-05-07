@@ -9,17 +9,17 @@ class AlmacenController < ApplicationController
 		#Ftp.descargarFtp
 		#Request.moverStock('571262b6a980ba030058a7aa','571262aaa980ba030058a242')
 		#Almacen.moverAlmacenDespacho("38","1")
-		#Almacen.moverAlmacenDespacho("38","1")
-		almacenes = Request.getAlmacenesAll
-		almacenes.each do |a|
-			puts "Almacen ->" + a._id.to_s + " " + a.usedSpace.to_s
+		#Almacen.moverAlmacenDespacho
+		#almacenes = Request.getAlmacenesAll
+		#almacenes.each do |a|
+		#	puts "Almacen ->" + a._id.to_s + " " + a.usedSpace.to_s
 			#skus = Request.getSKUs(a._id)
 			#productos = Request.getStock(a._id, "38")
 			#puts "   PRODUCTOS " + productos.count.to_s
 			
 			#skus = Request.getSKUs(a._id)
 			#puts "   SKUs " + skus.inspect
-		end
+		#end
 		#numero = Request.getStock('571262aaa980ba030058a241','16')
 		#almacenes = Request.getAlmacenesAll
 		#puts "CHAMESITO TIENE SUEÑO " + numero.inspect

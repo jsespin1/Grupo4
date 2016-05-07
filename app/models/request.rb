@@ -54,7 +54,7 @@ class Request < ActiveRecord::Base
 		ruta = URI.parse(set_url_bodega + "/moveStockBodega")
 		hash = get_hash("POST"+prod_id.to_s+almacen_id.to_s+oc_id.to_s+precio.to_s)
 		body = { productoId: prod_id, almacenId: almacen_id, oc: oc_id, precio: precio}.to_json
-		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
+		respuesta = HTTParty.post(ruta, :body => body, :headers => hash).parsed_response
 		puts "Mover Stock -> " + respuesta.inspect
 	end
 
