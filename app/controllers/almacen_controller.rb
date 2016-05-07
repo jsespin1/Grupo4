@@ -1,12 +1,18 @@
 class AlmacenController < ApplicationController
 
 	def index 
-		Ftp.descargarFtp
+		Compra.consultar_materia_prima("26")
+		#oc_id = "57145e4cf77d320300f0deb9"
+		#ftp_file = "1460952637328.xml"
+		#Ftp.revisarFtp(oc_id, ftp_file)
+		#Abastecer.revisarMPPropias
+		#Ftp.descargarFtp
 		#almacenes = Request.getAlmacenesAll
 		#almacenes.each do |a|
 		#	puts "Almacen ->" + a.inspect
 		#	skus = Request.getSKUs(a._id)
-		#	puts "   SKUs " + skus.inspect
+		#	productos = Request.getStock(a._id, "38")
+		#	puts "   PRODUCTOS " + productos.inspect
 		#end
 		#El siguiente método gatilla el proceso de compra ficticio SKU:38 QTY:340
 		#Controlador.facturaFicticio("571682b543c20b03003d9ab7")
