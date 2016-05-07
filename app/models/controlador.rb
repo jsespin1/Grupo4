@@ -59,26 +59,27 @@ class Controlador < ActiveRecord::Base
 		despachado
 	end
 
-	def self.moverBodegaDespacho(sku, cantidad, oc)
-		puts "Comenzamos a Mover " + sku
-		despachados = 0
-		id_despacho = Almacen.getIdDespacho
-		precio = getPrecio(sku)
-		id_destino = getDestino(oc.cliente)
-		@almacenes = Request.getAlmacenesAll
-		@almacenes.each do |a|
-			if a.despacho == false
-				array_productos = Request.getStock(a._id, sku)
-				array_productos.each do |p|
-					if despachados < cantidad 
-						Request.moverStock(p, id_despacho)
-						Request.moverStockBodega(p, id_destino, oc._id, precio)
-						despachados = despachados + 1
-					end
-				end
-			end
-		end
-	end
+
+	#def self.moverBodegaDespacho(sku, cantidad, oc)
+		#puts "Comenzamos a Mover " + sku
+		#despachados = 0
+		#id_despacho = Almacen.getIdDespacho
+		#precio = getPrecio(sku)
+		#id_destino = getDestino(oc.cliente)
+		#@almacenes = Request.getAlmacenesAll
+		#@almacenes.each do |a|
+			#if a.despacho == false
+				#array_productos = Request.getStock(a._id, sku)
+				#array_productos.each do |p|
+					#if despachados < cantidad 
+						#Request.moverStock(p, id_despacho)
+						#Request.moverStockBodega(p, id_destino, oc._id, precio)
+						#despachados = despachados + 1
+					#end
+				#end
+			#end
+		#end
+	#end
 
 
 	def self.getStock(id)
@@ -296,7 +297,17 @@ class Controlador < ActiveRecord::Base
   
   
   
-  
+  def self.validarTransaccion(idTrx, idFactura)
+  	factura=Request.obtener_factura(idFactura)
+  	trx=Request.obtener_transaccion(idTrx)
+  	boolean=false
+  	if factura.valor_total==trx.monto
+  		boolean = true
+  		boolean
+  	end
+ 		boolean
+  end
+
   
   
   
