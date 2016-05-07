@@ -9,7 +9,7 @@ class Orden < ActiveRecord::Base
 		#end	
 	 end
 
-	def self.toObject(response)
+	def self.toObject(response, nil)
 	 	r = response[0]
 	 	orden = Orden.new(_id: r['_id'], fecha_creacion: r['created_at'], canal: r['canal'], proveedor: r['proveedor'], cliente: r['cliente'], 
 	 		sku: r['sku'], cantidad: r['cantidad'], cantidad_despachada: r['cantidadDespachada'], precio_unitario: r['precioUnitario'], 

@@ -132,9 +132,23 @@ class Almacen < ActiveRecord::Base
 		id
 	end
 
+	def self.verificar_stock_despacho(cantidad,sku)
+		total = 0
+		id_despacho = getIdDespacho
+		skus = Request.getSKUs(id_despacho)
+		skus.each do |s|
+			puts "SKUS inspect " + s.inspect
+			if s._id.to_i == sku.to_i
+				total = s.cantidad.to_i
+			end
+			puts "HAY MUCHOS -->" + total.to_s
+		end
+		total > cantidad.to_i
+	end
+	
+
 	def self.verificar_stock_sin_pulmon(cantidad,sku)
 		@almacenes = Request.getAlmacenesAll
-		puts @almacenes.inspect
 		total = 0
 		@almacenes.each do |a|
 			if a.pulmon == false
@@ -152,7 +166,6 @@ class Almacen < ActiveRecord::Base
 
 	def self.verificar_stock_con_pulmon(cantidad,sku)
 		@almacenes = Request.getAlmacenesAll
-		puts @almacenes.inspect
 		total = 0
 		@almacenes.each do |a|
 				skus = Request.getSKUs(a._id)
@@ -184,7 +197,11 @@ class Almacen < ActiveRecord::Base
 	#revisa la forma en que se saca el stock para moverlo a despacho
 	def self.revisarFormaDeDespacho(cantidad, sku, id_oc)
 		orden = Request.getOC(id_oc)
-		if Almacen.verificar_stock_sin_pulmon(cantidad,sku)
+		if Almacen.verificar_stock_despacho
+			if orden.canal<=>"ftp"
+				moverBodegaFTP(cantidad, sku, id_oc)
+			end
+		elsif Almacen.verificar_stock_sin_pulmon(cantidad,sku)
 			moverAlmacenDespacho(sku,cantidad)
 			if orden.canal<=>"ftp"
 				moverBodegaFTP(cantidad, sku, id_oc)

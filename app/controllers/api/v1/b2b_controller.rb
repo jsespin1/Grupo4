@@ -28,13 +28,16 @@ class Api::V1::B2bController < ApplicationController
 				id_cliente = @oc.proveedor
 				sku = @oc.sku
 				cantidadOrden=@oc.cantidad
-				if Almacen.verificar_stock_sin_pulmon(cantidadOrden,sku)
-					format.json {render json: {aceptado: true, idoc: id.to_s}, status:200}
-					generar_factura(id,id_cliente)
-				elsif Almacen.verificar_stock_con_pulmon(cantidadOrden,sku)
+				if Almacen.verificar_stock_con_pulmon(cantidadOrden,sku)
+					#La orden se acepta cuando se envia la transaccion
+					Thread.new do
+						generar_factura(id,id_cliente)
+						ActiveRecord::Base.connection.close
+					end
 					format.json{render json: {aceptado: true, idoc: id.to_s}, status:200}
-					generar_factura(id,id_cliente)
 				else # Rechazamos orden de compra, no se envia factura.
+					#Rechazar OC en el sistema
+					Request.reject_orden(id.to_s, "Por algún motivo, aún no implementado, lo sentimos")
 					format.json{render json: {aceptado: false, idoc: id.to_s}, status:400}				
 				end
 			end
@@ -45,6 +48,9 @@ class Api::V1::B2bController < ApplicationController
 	def generar_factura(orden_id, id_grupo)
 		factura = Request.emitir_factura(orden_id)
 		id_factura = factura['_id']
+		orden = Orden.find_by(_id: orden_id)
+		#orden.id_factura = id_factura
+		orden.update_attributes(:id_factura => id_factura)
 		Controlador.facturar(id_grupo,id_factura)
 	end
 
@@ -60,9 +66,9 @@ class Api::V1::B2bController < ApplicationController
 				oc=Request.getOC(id_oc)
 				if valido
 					Almacen.revisarFormaDeDespacho(oc.cantida, oc.sku, oc._id)
-					format.json {render json: {aceptado: true, idoc: id.to_s}, status:200}
+					format.json {render json: {aceptado: true, idoc: id_trx.to_s}, status:200}
 				else
-					format.json {render json: {aceptado: false, idoc: id.to_s}, status:200}
+					format.json {render json: {aceptado: false, idoc: id_trx.to_s}, status:200}
 				end
 				#Hay que validar el pago
 				#validacion = Controlador.validarTrx(params[:id_trx])
