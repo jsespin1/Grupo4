@@ -120,8 +120,6 @@ class Almacen < ActiveRecord::Base
   	end
   end
 
-
-	
 	
 	def self.getAlmacenRecepcion
 		id = "0"
@@ -132,6 +130,73 @@ class Almacen < ActiveRecord::Base
 			end
 		end
 		id
+	end
+
+	def verificar_stock_sin_pulmon(cantidad,sku)
+		@almacenes = Request.getAlmacenesAll
+		puts @almacenes.inspect
+		total = 0
+		@almacenes.each do |a|
+			if a.pulmon == false
+				skus = Request.getSKUs(a._id)
+				skus.each do |s|
+					if s._id.to_i == idSku.to_i
+						total += s.cantidad.to_i
+					end
+				end
+			end
+		total > cantidad
+		end
+	end
+
+
+	def verificar_stock_con_pulmon(cantidad,sku)
+		@almacenes = Request.getAlmacenesAll
+		puts @almacenes.inspect
+		total = 0
+		@almacenes.each do |a|
+				skus = Request.getSKUs(a._id)
+				skus.each do |s|
+					if s._id.to_i == idSku.to_i
+						total += s.cantidad.to_i
+					end
+				end
+			end
+		total > cantidad
+	end
+
+	def self.moverBodegaFTP(cantidad, sku, id_oc)
+		id_despacho = getIdDespacho
+		oc=Request.getOC(id_oc)
+		array_productos = Request.getStock(id_despacho, sku)
+		cuenta=0
+		array_productos.each do |p|
+			hay_espacio = Request.moverStockFTP(p._id, oc.cliente, Controlador.getPrecio(sku),id_oc)
+			if !hay_espacio
+				break
+			end
+		end
+	end
+
+	#revisa la forma en que se saca el stock para moverlo a despacho
+	def self.revisarFormaDeDespacho(cantidad, sku, id_oc)
+		orden = Request.getOC(id_oc)
+		if Almacen.verificar_stock_sin_pulmon(cantidad,sku)
+			moverAlmacenDespacho(sku,cantidad)
+			if orden.canal<=>"b2b"
+				moverBodegaFTP(cantidad, sku, id_oc)
+			end
+		
+						
+						
+
+					#despachar 
+		elsif Almacen.verificar_stock_con_pulmon(cantidad,sku)
+					#p
+		else 
+						
+		end
+
 	end
 	
 end
