@@ -5,6 +5,7 @@ class AlmacenController < ApplicationController
 		#Ftp.descargarFtp
 		#Request.moverStock('571262b6a980ba030058a7aa','571262aaa980ba030058a242')
 		Almacen.moverAlmacenDespacho("38","1")
+		
 
 		#almacenes = Request.getAlmacenesAll
 		#almacenes.each do |a|

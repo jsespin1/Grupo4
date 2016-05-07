@@ -146,6 +146,7 @@ class Almacen < ActiveRecord::Base
 				end
 			end
 		total > cantidad
+		end
 	end
 
 
@@ -164,12 +165,16 @@ class Almacen < ActiveRecord::Base
 		total > cantidad
 	end
 
-	def self.moverOtrasBodegas(cantidad, sku, id_oc)
+	def self.moverBodegaFTP(cantidad, sku, id_oc)
 		id_despacho = getIdDespacho
+		oc=Request.getOC(id_oc)
 		array_productos = Request.getStock(id_despacho, sku)
 		cuenta=0
 		array_productos.each do |p|
-			
+			hay_espacio = Request.moverStockFTP(p._id, oc.cliente, Controlador.getPrecio(sku),id_oc)
+			if !hay_espacio
+				break
+			end
 		end
 	end
 
@@ -177,9 +182,13 @@ class Almacen < ActiveRecord::Base
 	def self.revisarFormaDeDespacho(cantidad, sku, id_oc)
 		orden = Request.getOC(id_oc)
 		if Almacen.verificar_stock_sin_pulmon(cantidad,sku)
-					moverAlmacenDespacho(sku,cantidad)
-					if orden.canal.eql? "b2b"
-
+			moverAlmacenDespacho(sku,cantidad)
+			if orden.canal<=>"b2b"
+				moverBodegaFTP(cantidad, sku, id_oc)
+			end
+		
+						
+						
 
 					#despachar 
 		elsif Almacen.verificar_stock_con_pulmon(cantidad,sku)
@@ -189,17 +198,18 @@ class Almacen < ActiveRecord::Base
 		end
 
 	end
-
-
-
-
-
-
-
-
-
 	
 end
+
+
+
+
+
+
+
+
+
+
 
 
 

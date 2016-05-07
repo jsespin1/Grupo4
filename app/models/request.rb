@@ -38,6 +38,17 @@ class Request < ActiveRecord::Base
 		puts "Mover Stock -> " + respuesta.inspect
 
 	end
+	
+	def self.moverStockFTP(prod_id, direccion, precio, id_oc)
+		ruta = URI.parse(set_url_bodega + "/stock")
+		hash = get_hash("DELETE"+prod_id.to_s+direccion.to_s+precio.to_s+id_oc.to_s)
+		body = { productoId: prod_id, direccion: direccion, precio: precio, oc: id_oc}.to_json
+		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
+		if respuesta
+			puts "paso y es boolean"
+		end
+		
+	end
 
 	def self.moverStockBodega(prod_id, almacen_id, oc_id, precio) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
 		ruta = URI.parse(set_url_bodega + "/fabrica/getCuenta")
