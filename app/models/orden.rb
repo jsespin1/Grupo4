@@ -9,10 +9,26 @@ class Orden < ActiveRecord::Base
 		#end	
 	 end
 
-	 def self.toObject(response)
+	def self.toObject(response)
 	 	r = response[0]
 	 	orden = Orden.new(_id: r['_id'], fecha_creacion: r['created_at'], canal: r['canal'], proveedor: r['proveedor'], cliente: r['cliente'], 
 	 		sku: r['sku'], cantidad: r['cantidad'], cantidad_despachada: r['cantidadDespachada'], precio_unitario: r['precioUnitario'], 
 	 		fecha_entrega: r['fechaEntrega'], fecha_despacho: r['fechaDespachos'], estado: r['estado'])
-     end
+	 	orden.save
+	 	orden
+    end
+
+
+    def self.verificar_oc(oc)
+    	respuesta = true
+    	if !(oc.sku <=> "11" || oc.sku <=> "16" || oc.sku <=> "38" || oc.sku <=> "44")
+    			respuesta = false
+    	end
+    	if !(oc.estado <=> "creada")
+    			respuesta = false
+    	end
+    	respuesta
+    end
+
+
 end

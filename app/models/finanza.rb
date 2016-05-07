@@ -8,16 +8,17 @@ class Finanza < ActiveRecord::Base
 	#
 
 	def self.transferir(monto, origen, destino)
-		Request.transferir(monto, origen, destino)
+		respuesta = Request.transferir(monto, origen, destino)
 	end
 
 
 	def self.getCuentaFabrica
-		cuenta = Request.getCuentaFabrica
+		respuesta = Request.getCuentaFabrica
+		cuenta = respuesta["cuentaId"]
 	end
 
 	def self.getCuentaPropia
-		cuenta = "572aac69bdb6d403005fb051"
+		cuenta = "571262c3a980ba030058ab5f"
 	end
 
 	def self.getCartola(fecha_inicio, fecha_fin, id_cuenta, limite)

@@ -1,14 +1,21 @@
 class AlmacenController < ApplicationController
 
 	def index 
-
+		Compra.consultar_materia_prima("26")
+		#oc_id = "57145e4cf77d320300f0deb9"
+		#ftp_file = "1460952637328.xml"
+		#Ftp.revisarFtp(oc_id, ftp_file)
+		#Abastecer.revisarMPPropias
 		#Ftp.descargarFtp
 		#Request.moverStock('571262b6a980ba030058a7aa','571262aaa980ba030058a242')
-		Almacen.moverAlmacenDespacho("38","1")
-		
-
+		#Almacen.moverAlmacenDespacho("38","1")
+		#Almacen.moverAlmacenDespacho("38","1")
 		#almacenes = Request.getAlmacenesAll
 		#almacenes.each do |a|
+		#	puts "Almacen ->" + a.inspect
+		#	skus = Request.getSKUs(a._id)
+		#	productos = Request.getStock(a._id, "38")
+		#	puts "   PRODUCTOS " + productos.inspect
 			#puts "Almacen ->" + a.inspect
 			#skus = Request.getSKUs(a._id)
 			#puts "   SKUs " + skus.inspect
