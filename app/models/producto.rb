@@ -33,8 +33,8 @@ class Producto < ActiveRecord::Base
 		#Arreglo
 		info = info_prods
 		info.each do |i|
-			if i['sku']==sku
-				costo = i['costo']
+			if i[:sku]==sku
+				costo = i[:costo]
 			end
 		end
 		costo
@@ -43,8 +43,8 @@ class Producto < ActiveRecord::Base
 		lote = 0
 		info = info_prods
 		info.each do |i|
-			if i['sku']==sku
-				lote = i['lote']
+			if i[:sku]==sku
+				lote = i[:lote]
 			end
 		end
 		lote
@@ -53,8 +53,8 @@ class Producto < ActiveRecord::Base
 		tiempo = 0
 		info = info_prods
 		info.each do |i|
-			if i['sku']==sku
-				tiempo = i['tiempo']
+			if i[:sku]==sku
+				tiempo = i[:tiempo]
 			end
 		end
 		tiempo
@@ -117,8 +117,8 @@ class Producto < ActiveRecord::Base
     def self.niveles
     	#Hash apuntando a arreglo[1,2] con inventario mínimo e inventario máximo
   	  #Stocks minimos para cada unos de las MP y PP, incluyendo MP no producidas por nosotros
-      niveles = { "11"=> [], "16"=> [], "38" => [], "44" => [],
-                           "4" => [], "23" => [], "26" => [], "2" => []  }   
+      niveles = { "11"=> [5400, 11000], "16"=> [6000, 24000], "38" => [4500, 21000], "44" => [4500, 21000],
+                           "4" => [4968, 17000], "23" => [1980, 7800], "26" => [1878, 7500], "2" => [2298, 9000]  }   
 
     end
 

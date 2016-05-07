@@ -38,7 +38,7 @@ class Ftp < ActiveRecord::Base
         #Obtenemos la orden de compra
         oc = Request.getOC(oc_id)
         #Si cumple con las condiciones, se envía para despacho
-        if oc.canal=="ftp" && oc.cantidad_despachada < oc.cantidad_despachada
+        if oc.canal <=> "ftp" && oc.cantidad_despachada.to_i < oc.cantidad.to_i
             despacharFtp(oc_id)
         end
     end
@@ -53,6 +53,8 @@ class Ftp < ActiveRecord::Base
         #Generamos factura
         factura = Request.emitir_factura(oc._id)
 
+        puts "FACTURA " + factura.inspect
+
         if disponible == 0 || factura==nil
             return
         end
@@ -61,6 +63,7 @@ class Ftp < ActiveRecord::Base
         if despachar <= disponible
             #Despachamos todo lo requerido
             #METODO DESPACHAR!!!!!
+            puts "DESPACHANDOO!!!"
 
         else
             #Despacho parcial segñun disponibilidad
