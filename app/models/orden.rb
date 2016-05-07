@@ -1,5 +1,7 @@
 class Orden < ActiveRecord::Base
 
+	#has_one :factura
+
 	def self.getOrdenes(oc)
 		#ordenes = []
 		#puts "Todo -> " + oc.inspect
