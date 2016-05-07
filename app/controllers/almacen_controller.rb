@@ -2,9 +2,9 @@ class AlmacenController < ApplicationController
 
 	def index 
 		#Compra.consultar_materia_prima("26")
-		oc_id = "57145e4cf77d320300f0deb9"
-		ftp_file = "1460952637328.xml"
-		Ftp.revisarFtp(oc_id, ftp_file)
+		#oc_id = "57145e4cf77d320300f0deb9"
+		#ftp_file = "1460952637328.xml"
+		#Ftp.revisarFtp(oc_id, ftp_file)
 		#Abastecer.revisarMPPropias
 		#Ftp.descargarFtp
 		#Request.moverStock('571262b6a980ba030058a7aa','571262aaa980ba030058a242')
@@ -23,7 +23,9 @@ class AlmacenController < ApplicationController
 		#numero = Request.getStock('571262aaa980ba030058a241','16')
 		#almacenes = Request.getAlmacenesAll
 		#puts "CHAMESITO TIENE SUEÑO " + numero.inspect
-		#@almacenes = Request.getAlmacenesAll
+		@almacenes = Request.getAlmacenesAll
+		@orden = Orden.all
+		@factura = Factura.all
 		#puts "prueba jarita ->" + Compra.consultar_materia_prima(26).inspect
 		#origin/compras
 		#El siguiente método gatilla el proceso de compra ficticio SKU:38 QTY:340
