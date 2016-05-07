@@ -22,12 +22,12 @@ class Request < ActiveRecord::Base
 		Sku.getSkus(skus)
 	end
 
-	def self.getStock(almacenID, skuId)
+	def self.getStock(almacenID, skuId, cantidad)
 		ruta = URI.parse(set_url_bodega + "/stock")
 		hash = get_hash("GET"+almacenID.to_s+skuId.to_s)
-		query = { almacenId: almacenID, sku: skuId}
+		query = { almacenId: almacenID, sku: skuId, limit: cantidad.to_i}
 		skus = HTTParty.get(ruta, :query => query, :headers => hash)
-		Producto.getProductos(skus.parsed_response, 1000)
+		Producto.getProductos(skus.parsed_response, cantidad)
 	end
 
 	def self.moverStock(prod_id, almacen_id) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
@@ -42,7 +42,8 @@ class Request < ActiveRecord::Base
 		ruta = URI.parse(set_url_bodega + "/stock")
 		hash = get_hash("DELETE"+prod_id.to_s+direccion.to_s+precio.to_s+id_oc.to_s)
 		body = { productoId: prod_id, direccion: direccion, precio: precio, oc: id_oc}.to_json
-		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
+		respuesta = HTTParty.delete(ruta, :body => body, :headers => hash)
+		puts "Respuesta despacho FTP -> " + respuesta.inspect
 		if respuesta
 			puts "paso y es boolean"
 		end

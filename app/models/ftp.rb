@@ -53,8 +53,6 @@ class Ftp < ActiveRecord::Base
         #Generamos factura
         factura = Request.emitir_factura(oc._id)
 
-        puts "FACTURA " + factura.inspect
-
         if disponible == 0 || factura==nil
             return
         end
@@ -63,7 +61,7 @@ class Ftp < ActiveRecord::Base
         if despachar <= disponible
             #Despachamos todo lo requerido
             #METODO DESPACHAR!!!!!
-            puts "DESPACHANDOO!!!"
+            Almacen.revisarFormaDeDespacho(despachar, oc.sku, oc_id)
 
         else
             #Despacho parcial segñun disponibilidad
