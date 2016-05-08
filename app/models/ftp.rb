@@ -20,6 +20,7 @@ class Ftp < ActiveRecord::Base
         #La idea, es que generamos una orden de compra
         #Si hay stock, generamos la OC y movemos el archivo a la carpeta de ordenes FTP despachadas
         ftps.each do |ftp|
+            puts "Procesando FTP -> " + ftp.to_s
             f = File.open("./pedidos/"+ftp.to_s, "r")
             #id de la OC, em línea 3
             texto = f.readline()
@@ -38,8 +39,9 @@ class Ftp < ActiveRecord::Base
         #Obtenemos la orden de compra
         oc = Request.getOC(oc_id)
         #Si cumple con las condiciones, se envía para despacho
-        if oc.canal <=> "ftp" && oc.cantidad_despachada.to_i < oc.cantidad.to_i
-            despacharFtp(oc_id, ftp)
+        ftp = "ftp" # => es necesaria para comparar strings
+        if (oc.canal.eql? ftp) && ( oc.cantidad_despachada.to_i < oc.cantidad.to_i )
+            #despacharFtp(oc_id, ftp)
         end
     end
 
@@ -66,11 +68,12 @@ class Ftp < ActiveRecord::Base
         else
             #Despacho parcial segñun disponibilidad
             #METODO DESPACHAR!!!!!
+            Almacen.revisarFormaDeDespacho(disponible, oc.sku, oc_id)
         end
 
         #Si el archivo ftp fue totalmente despachado, se elimina de la lista
         if oc.cantidad_despachada ==  oc.cantidad && ftp != nil
-            #File.delete("./pedidos/" + ftp)
+            File.delete("./pedidos/" + ftp)
             puts "FTP: " + ftp.to_s + ", Eliminado Satisfactoriamente"
         end
     end
@@ -88,7 +91,7 @@ class Ftp < ActiveRecord::Base
                 contador = contador + 1
             end
         end
-        puts "Se Descargaron: " + contador.to_s + " solicitudes FTP"
+        contador
     end
 
 

@@ -41,7 +41,9 @@ class Abastecer < ActiveRecord::Base
 		maximo_38 = Producto.get_maximo("38")
 		maximo_44 = Producto.get_maximo("44")
 		#Se revisan los niveles y se despacha
-		while actual_38 < minimo_38 || actual_38 < maximo_38
+		arreglo = [0, 0]
+
+		while actual_38 < minimo_38 
 			#Primero, se debe pagar a la fábrica
 			cuenta_fab = Finanza.getCuentaFabrica
 			#Se calcula el costo de mandar a producir un lote
@@ -49,21 +51,25 @@ class Abastecer < ActiveRecord::Base
 			#Luego, se le transfiere a la fábrica
 			transferencia = Finanza.transferir(costo, Finanza.getCuentaPropia, cuenta_fab)
 			lote = Producto.get_lote("38").to_i
+			puts "LOTEEE->  " + lote.to_s
 			#Finalmente, se manda a producir
 			produccion = Request.producir("38", transferencia._id, lote)
 			puts "Produccion -> "+ produccion.inspect
 			actual_38 = actual_38 + lote
+			arreglo[0] = arreglo[0] + lote
 		end
 
-		while actual_44 < minimo_44 || actual_44 < maximo_44 
+		while actual_44 < minimo_44 
 			cuenta_fab = Finanza.getCuentaFabrica
 			costo = costo_lote("44")
 			transferencia = Finanza.transferir(costo, Finanza.getCuentaPropia, cuenta_fab)
-			lote = Producto.get_lote("38").to_i
+			lote = Producto.get_lote("44").to_i
 			produccion = Request.producir("44", transferencia._id, lote)
 			puts "Produccion 44-> "+ produccion.inspect
 			actual_44 = actual_44 + lote
+			arreglo[1] = arreglo[1] + lote
 		end		
+		arreglo
 	end
 	
 

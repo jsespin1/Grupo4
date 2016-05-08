@@ -13,6 +13,10 @@ class AlmacenController < ApplicationController
 		#almacenes = Request.getAlmacenesAll
 		#almacenes.each do |a|
 			#puts "Almacen ->" + a._id.to_s + " " + a.usedSpace.to_s
+		#Almacen.moverAlmacenDespacho
+		#almacenes = Request.getAlmacenesAll
+		#almacenes.each do |a|
+		#	puts "Almacen ->" + a._id.to_s + " " + a.usedSpace.to_s
 			#skus = Request.getSKUs(a._id)
 			#productos = Request.getStock(a._id, "38",5)
 			#puts "   PRODUCTOS " + productos.count.to_s
@@ -23,7 +27,9 @@ class AlmacenController < ApplicationController
 		#numero = Request.getStock('571262aaa980ba030058a241','16')
 		#almacenes = Request.getAlmacenesAll
 		#puts "CHAMESITO TIENE SUEÑO " + numero.inspect
-		#@almacenes = Request.getAlmacenesAll
+		@almacenes = Request.getAlmacenesAll
+		@orden = Orden.all
+		@factura = Factura.all
 		#puts "prueba jarita ->" + Compra.consultar_materia_prima(26).inspect
 		#origin/compras
 		#El siguiente método gatilla el proceso de compra ficticio SKU:38 QTY:340

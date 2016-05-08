@@ -12,7 +12,7 @@ class Factura < ActiveRecord::Base
     # :motivo_rechazo, :string
     # :motivo_anulacion, :string
 
-
+    #belongs_to :orden
 
     def self.toObject(response)
         factura = nil
@@ -21,6 +21,7 @@ class Factura < ActiveRecord::Base
             factura = Factura.new(_id: r['_id'], fecha_creacion: r['created_at'], proveedor: r['proveedor'], cliente: r['cliente'], 
             valor_bruto: r['bruto'], iva: r['iva'], valor_total: r['total'], estado_pago: r['pago'], 
             id_oc: r['oc'])
+            factura.save
         end
 	 	factura
     end

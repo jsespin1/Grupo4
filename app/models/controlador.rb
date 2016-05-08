@@ -18,7 +18,6 @@ class Controlador < ActiveRecord::Base
 		response = Request.receive_orden(idOC)
 		#Obtenemos orden de compra
 		oc = Request.getOC(idOC)
-		puts "OC -> " + oc._id
 		#Generamos la factura
 		factura = Request.emitir_factura(idOC)
 		#Si la factura ya existe, obtenemos nil
@@ -59,29 +58,6 @@ class Controlador < ActiveRecord::Base
 		despachado
 	end
 
-
-	#def self.moverBodegaDespacho(sku, cantidad, oc)
-		#puts "Comenzamos a Mover " + sku
-		#despachados = 0
-		#id_despacho = Almacen.getIdDespacho
-		#precio = getPrecio(sku)
-		#id_destino = getDestino(oc.cliente)
-		#@almacenes = Request.getAlmacenesAll
-		#@almacenes.each do |a|
-			#if a.despacho == false
-				#array_productos = Request.getStock(a._id, sku)
-				#array_productos.each do |p|
-					#if despachados < cantidad 
-						#Request.moverStock(p, id_despacho)
-						#Request.moverStockBodega(p, id_destino, oc._id, precio)
-						#despachados = despachados + 1
-					#end
-				#end
-			#end
-		#end
-	#end
-
-
 	def self.getStock(id)
 		#se debe revisar el stock, sumando todos los almacenes
 		total = Almacen.getSkusTotal(id).to_i
@@ -104,11 +80,12 @@ class Controlador < ActiveRecord::Base
 
 
 	def self.getGrupo(id)
+		puts "id cliente" + id.to_s
 		retornar = 0
 		array_grupos
 		@array_grupos.each do |g|
-			if g['id']==id
-				retornar = g['grupo']
+			if g[:id].eql? id.to_s
+				retornar = g[:grupo]
 			end
 		end
 		retornar
@@ -118,8 +95,8 @@ class Controlador < ActiveRecord::Base
 		@cuentaOrigen = "571262c3a980ba030058ab5f"
 		array_grupos
 		@array_grupos.each do |g|
-			if g['id']==id
-				@cuentaDestino = g['cuenta']
+			if g[:id].eql? id
+				@cuentaDestino = g[:cuenta]
 			end
 		end
 	end
@@ -128,8 +105,8 @@ class Controlador < ActiveRecord::Base
 		id_destino = ""
 		array_grupos
 		@array_grupos.each do |g|
-			if g['id']==id
-				id_destino = g['id_despacho']
+			if g[:id].eql? id
+				id_destino = g[:id_despacho]
 			end
 		end
 		id_destino
@@ -137,19 +114,35 @@ class Controlador < ActiveRecord::Base
 
 
 	def self.array_grupos
-    @array_grupos = [
+		if Rails.env == 'development'
+            @array_grupos = [
         {id: "571262b8a980ba030058ab4f", grupo: 1, cuenta: "571262c3a980ba030058ab5b", id_despacho: "571262aaa980ba030058a147"},
         {id: "571262b8a980ba030058ab50", grupo: 2, cuenta: "571262c3a980ba030058ab5c", id_despacho: "571262aaa980ba030058a14e"},
-        {id: "571262b8a980ba030058ab51", grupo: 3, cuenta: "571262c3a980ba030058ab5d", id_despacho: ""},
-        {id: "571262b8a980ba030058ab53", grupo: 5, cuenta: "571262c3a980ba030058ab61", id_despacho: ""},
+        {id: "571262b8a980ba030058ab51", grupo: 3, cuenta: "571262c3a980ba030058ab5d", id_despacho: "571262aaa980ba030058a1f1"},
+        {id: "571262b8a980ba030058ab53", grupo: 5, cuenta: "571262c3a980ba030058ab61", id_despacho: "571262aaa980ba030058a244"},
         {id: "571262b8a980ba030058ab54", grupo: 6, cuenta: "571262c3a980ba030058ab62", id_despacho: ""},
         {id: "571262b8a980ba030058ab55", grupo: 7, cuenta: "571262c3a980ba030058ab60", id_despacho: ""},
         {id: "571262b8a980ba030058ab56", grupo: 8, cuenta: "571262c3a980ba030058ab5e", id_despacho: "571262aaa980ba030058a31e"},
-        {id: "", grupo: 9, cuenta: "asjkfbjkasf", id_despacho: ""},
+        {id: "571262b8a980ba030058ab57", grupo: 9, cuenta: "571262c3a980ba030058ab66", id_despacho: "571262aaa980ba030058a3b0"},
         {id: "571262b8a980ba030058ab58", grupo: 10, cuenta: "571262c3a980ba030058ab63", id_despacho: "571262aaa980ba030058a40c"},
         {id: "571262b8a980ba030058ab59", grupo: 11, cuenta: "571262c3a980ba030058ab64", id_despacho: "571262aaa980ba030058a488"},
-        {id: "571262b8a980ba030058ab5a", grupo: 12, cuenta: "asjkfbjkasf", id_despacho: ""}
+        {id: "571262b8a980ba030058ab5a", grupo: 12, cuenta: "571262c3a980ba030058ab65", id_despacho: "571262aba980ba030058a5c6"}
       ]
+        else
+            @array_grupos = [
+        {id: "572aac69bdb6d403005fb042", grupo: 1, cuenta: "572aac69bdb6d403005fb04e", id_despacho: "572aad41bdb6d403005fb066"},
+        {id: "572aac69bdb6d403005fb043", grupo: 2, cuenta: "572aac69bdb6d403005fb04f", id_despacho: "572aad41bdb6d403005fb0ba"},
+        {id: "572aac69bdb6d403005fb044", grupo: 3, cuenta: "572aac69bdb6d403005fb050", id_despacho: "572aad41bdb6d403005fb1bf"},
+        {id: "572aac69bdb6d403005fb046", grupo: 5, cuenta: "572aac69bdb6d403005fb052", id_despacho: "572aad41bdb6d403005fb278"},
+        {id: "572aac69bdb6d403005fb047", grupo: 6, cuenta: "572aac69bdb6d403005fb053", id_despacho: "572aad41bdb6d403005fb2d8"},
+        {id: "572aac69bdb6d403005fb048", grupo: 7, cuenta: "572aac69bdb6d403005fb054", id_despacho: "572aad41bdb6d403005fb3b9"},
+        {id: "572aac69bdb6d403005fb049", grupo: 8, cuenta: "572aac69bdb6d403005fb056", id_despacho: "572aad41bdb6d403005fb416"},
+        {id: "572aac69bdb6d403005fb04a", grupo: 9, cuenta: "572aac69bdb6d403005fb057", id_despacho: "572aad41bdb6d403005fb4b8"},
+        {id: "572aac69bdb6d403005fb04b", grupo: 10, cuenta: "572aac69bdb6d403005fb058", id_despacho: "572aad41bdb6d403005fb542"},
+        {id: "572aac69bdb6d403005fb04c", grupo: 11, cuenta: "572aac69bdb6d403005fb059", id_despacho: "572aad41bdb6d403005fb5b9"},
+        {id: "572aac69bdb6d403005fb04d", grupo: 12, cuenta: "572aac69bdb6d403005fb05a", id_despacho: "572aad42bdb6d403005fb69f"}
+      ]
+        end
   end
 
   def self.getPrecio(sku)

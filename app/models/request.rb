@@ -35,7 +35,6 @@ class Request < ActiveRecord::Base
 		hash = get_hash("POST"+prod_id.to_s+almacen_id.to_s)
 		body = { productoId: prod_id, almacenId: almacen_id}.to_json
 		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
-		puts "Mover Stock -> " + respuesta.inspect
 	end
 	
 	def self.moverStockFTP(prod_id, direccion, precio, id_oc)
@@ -43,19 +42,15 @@ class Request < ActiveRecord::Base
 		hash = get_hash("DELETE"+prod_id.to_s+direccion.to_s+precio.to_s+id_oc.to_s)
 		body = { productoId: prod_id, direccion: direccion, precio: precio, oc: id_oc}.to_json
 		respuesta = HTTParty.delete(ruta, :body => body, :headers => hash)
-		puts "Respuesta despacho FTP -> " + respuesta.inspect
-		if respuesta
-			puts "paso y es boolean"
-		end
-		
+		respuesta
 	end
 
 	def self.moverStockBodega(prod_id, almacen_id, oc_id, precio) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
 		ruta = URI.parse(set_url_bodega + "/moveStockBodega")
-		hash = get_hash("POST"+prod_id.to_s+almacen_id.to_s+oc_id.to_s+precio.to_s)
+		hash = get_hash("POST"+prod_id.to_s+almacen_id.to_s)
 		body = { productoId: prod_id, almacenId: almacen_id, oc: oc_id, precio: precio}.to_json
-		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
-		puts "Mover Stock -> " + respuesta.inspect
+		respuesta = HTTParty.post(ruta, :body => body, :headers => hash).parsed_response
+		respuesta
 	end
 
 	def self.getCuentaFabrica
@@ -243,7 +238,8 @@ class Request < ActiveRecord::Base
 	def self.enviarFactura(ruta, idfactura)
         ruta = URI.parse(ruta)
         body = {validado: true, idfactura: idfactura}.to_json
-		respuesta = HTTParty.get(ruta, body)
+		respuesta = HTTParty.get(ruta, :body => body)
+		puts "Esta es la respuesta al envío de la factura " + respuesta.inspect
     end
 
 
