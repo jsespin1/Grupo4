@@ -11,7 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160505222132) do
+ActiveRecord::Schema.define(version: 20160507171043) do
+
+  create_table "abastecers", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "almacens", force: :cascade do |t|
     t.string   "_id"
@@ -31,9 +36,24 @@ ActiveRecord::Schema.define(version: 20160505222132) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "compras", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "controladors", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "despachos", force: :cascade do |t|
+    t.string   "id_oc"
+    t.string   "id_factura"
+    t.string   "id_trx"
+    t.integer  "cantidad"
+    t.integer  "cantidad_despachada"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
   end
 
   create_table "facturas", force: :cascade do |t|
@@ -119,6 +139,11 @@ ActiveRecord::Schema.define(version: 20160505222132) do
     t.float    "monto"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+  end
+
+  create_table "venta", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

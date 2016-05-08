@@ -15,7 +15,21 @@ Rails.application.routes.draw do
       get '/oc/recibir/:_idorden' => 'b2b#analizarOC'
 
       #Método para recibir transaccion despues de pagada la factura
-      get '/pagos/recibir/:id_trx?id_factura=:id_factura' => 'b2b#transaccion'
+      get '/pagos/recibir/:idtrx' => 'b2b#transaccion'
+
+      #-------------------- API Privada Control -------------------------#
+
+      #Obtener Stock nuestras MP
+      get '/productos/mp' => 'b2b#getMP'
+
+      #Abastecer MP
+      get '/abastecer/mp' => 'b2b#abastecerMP'
+
+      #Descargar Ftp´s
+      get '/ftp/descargar' => 'b2b#descargarFtp'
+
+      #Procesar Ftp´s
+      get '/ftp/procesar' => 'b2b#procesarFtp'
       
       #Métodos que recibe transaccion y factura -> despacha
       #Métodos para registro y token

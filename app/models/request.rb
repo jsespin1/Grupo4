@@ -16,18 +16,18 @@ class Request < ActiveRecord::Base
 
 	def self.getSKUs(almacenID)
 		ruta = URI.parse(set_url_bodega + "/skusWithStock")
-		hash = get_hash("GET"+almacenID)
-		query = { almacenId: almacenID}
+		hash = get_hash("GET"+almacenID.to_s)
+		query = { almacenId: almacenID.to_s}
 		skus = HTTParty.get(ruta, :query => query, :headers => hash)
 		Sku.getSkus(skus)
 	end
 
-	def self.getStock(almacenID, skuId)
+	def self.getStock(almacenID, skuId, cantidad)
 		ruta = URI.parse(set_url_bodega + "/stock")
-		hash = get_hash("GET"+almacenID+skuId)
-		query = { almacenId: almacenID, sku: skuId}
+		hash = get_hash("GET"+almacenID.to_s+skuId.to_s)
+		query = { almacenId: almacenID, sku: skuId, limit: cantidad.to_i}
 		skus = HTTParty.get(ruta, :query => query, :headers => hash)
-		Producto.getProductos(skus.parsed_response, 100)
+		Producto.getProductos(skus.parsed_response, cantidad)
 	end
 
 	def self.moverStock(prod_id, almacen_id) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
@@ -35,19 +35,35 @@ class Request < ActiveRecord::Base
 		hash = get_hash("POST"+prod_id.to_s+almacen_id.to_s)
 		body = { productoId: prod_id, almacenId: almacen_id}.to_json
 		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
-		puts "Mover Stock -> " + respuesta.inspect
-
+	end
+	
+	def self.moverStockFTP(prod_id, direccion, precio, id_oc)
+		ruta = URI.parse(set_url_bodega + "/stock")
+		hash = get_hash("DELETE"+prod_id.to_s+direccion.to_s+precio.to_s+id_oc.to_s)
+		body = { productoId: prod_id, direccion: direccion, precio: precio, oc: id_oc}.to_json
+		respuesta = HTTParty.delete(ruta, :body => body, :headers => hash)
+		respuesta
 	end
 
 	def self.moverStockBodega(prod_id, almacen_id, oc_id, precio) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
-		ruta = URI.parse(set_url_bodega + "/fabrica/getCuenta")
-		hash = get_hash("GET")
-		cuenta = HTTParty.post(ruta, :headers => hash)
-		cuenta.to_json
+		ruta = URI.parse(set_url_bodega + "/moveStockBodega")
+		hash = get_hash("POST"+prod_id.to_s+almacen_id.to_s)
+		body = { productoId: prod_id, almacenId: almacen_id, oc: oc_id, precio: precio}.to_json
+		respuesta = HTTParty.post(ruta, :body => body, :headers => hash).parsed_response
+		respuesta
 	end
 
 	def self.getCuentaFabrica
-		ruta = URI.parse(set_url_bodega + "/moveStockBodega")
+		ruta = URI.parse(set_url_bodega + "/fabrica/getCuenta")
+		hash = get_hash("GET")
+		cuenta = HTTParty.get(ruta, :body => {}, :headers => hash).parsed_response
+	end
+
+	def self.producir(sku, trxId, cantidad)
+		ruta = URI.parse(set_url_bodega + "/fabrica/fabricar")
+		hash = get_hash("PUT"+sku+cantidad.to_s+trxId)
+		body = { sku: sku, trxId: trxId, cantidad: cantidad}.to_json
+		produccion = HTTParty.put(ruta, :body => body, :headers => hash)
 	end
 
 	def  self.get_hash(parametros="")
@@ -217,13 +233,21 @@ class Request < ActiveRecord::Base
 	end
 
 
-#-----------------------API-------------------------#
+#-----------------------API-B2B-------------------------#
 
 	def self.enviarFactura(ruta, idfactura)
         ruta = URI.parse(ruta)
         body = {validado: true, idfactura: idfactura}.to_json
-		respuesta = HTTParty.get(ruta, body)
+		respuesta = HTTParty.get(ruta, :body => body)
+		puts "Esta es la respuesta al envío de la factura " + respuesta.inspect
     end
+
+
+    def self.consultarStock(url)
+	  	ruta = URI.parse(url)
+	  	respuesta = HTTParty.get(ruta)
+	  	respuesta.parsed_response
+	end
 
 
 
@@ -232,7 +256,7 @@ class Request < ActiveRecord::Base
         if Rails.env == 'development'
             @url = "http://mare.ing.puc.cl/oc"
         else
-            @url = "http://mare.ing.puc.cl/oc"
+            @url = "http://moto.ing.puc.cl/oc"
         end
         @url
     end
@@ -241,7 +265,7 @@ class Request < ActiveRecord::Base
         if Rails.env == 'development'
             @url = "http://integracion-2016-dev.herokuapp.com/bodega"
         else
-            @url =  "http://integracion-2016-dev.herokuapp.com/bodega"
+            @url =  "http://integracion-2016-prod.herokuapp.com/bodega"
         end
         @url
     end
@@ -252,7 +276,7 @@ class Request < ActiveRecord::Base
         if Rails.env == 'development'
             @url = "http://mare.ing.puc.cl/facturas"
         else
-            @url = "http://mare.ing.puc.cl/facturas"
+            @url = "http://moto.ing.puc.cl/facturas"
         end
         @url
     end
@@ -261,7 +285,7 @@ class Request < ActiveRecord::Base
         if Rails.env == 'development'
             @url = "http://mare.ing.puc.cl/banco"
         else
-            @url = "http://mare.ing.puc.cl/banco"
+            @url = "http://moto.ing.puc.cl/banco"
         end
         @url
     end
