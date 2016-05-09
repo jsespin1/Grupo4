@@ -5,7 +5,7 @@ class Almacen < ActiveRecord::Base
 	def self.getAlmacenes(almacenes)
 		arreglo = []
 		almacenes.each do |b|
-			puts "Almacene -> " b.inspect
+			puts "Almacene -> " +b.inspect
 			a = Almacen.new(:_id => b['_id'], :grupo => b['grupo'], :pulmon => b['pulmon'], 
 				:despacho => b['despacho'], :recepcion => b['recepcion'], :totalSpace => b['totalSpace'], 
 				:usedSpace => b['usedSpace'], :v => b['__v'])

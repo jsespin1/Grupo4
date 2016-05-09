@@ -67,12 +67,13 @@ class Request < ActiveRecord::Base
 	end
 
 	def  self.get_hash(parametros="")
+		hash=""
 		if Rails.env == 'development'
             hash = Base64.encode64((HMAC::SHA1.new("tdk6NIzbhNfORDP") << parametros).digest).strip
         else
             hash = Base64.encode64((HMAC::SHA1.new("W82IWMQu3Ex9YzN") << parametros).digest).strip
         end
-		 auth_header = { 'Authorization' => "INTEGRACION grupo4:"+hash.to_s,  'Content-Type' => "application/json"}
+		auth_header = { 'Authorization' => "INTEGRACION grupo4:"+hash.to_s,  'Content-Type' => "application/json"}
 	end
 
 	def self.get_header1
