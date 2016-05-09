@@ -43,6 +43,13 @@ gem 'bootstrap-table-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+group :productio do
+  gem 'responders', '~> 2.0'
+  gem 'bootstrap-sass'
+  gem 'autoprefixer-rails'
+  gem 'bootstrap-table-rails'
+end
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
