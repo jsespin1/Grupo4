@@ -1,0 +1,425 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <![endif]-->
+    <title>GRUPO 4</title>
+    <!-- BOOTSTRAP CORE STYLE CSS -->
+    <%= stylesheet_link_tag "bootstrap" %>
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONT AWESOME CSS -->
+    <%= stylesheet_link_tag "awesome" %>
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- ANIMATION STYLES -->
+    <%= stylesheet_link_tag "animate" %>
+    <link href="assets/css/animate.css" rel="stylesheet" />
+    <!-- CUSTOM STYLE CSS -->
+    <%= stylesheet_link_tag "style" %>
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <!-- GOOGLE FONT -->
+    <%= stylesheet_link_tag "http://fonts.googleapis.com/css?family=Montserrat:400,700" %>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css' />
+</head>
+<body>
+
+    <div id="home-sec">
+
+        <div id="carousel-example" class="carousel slide" data-ride="carousel">
+
+            <div class="carousel-inner">
+                <div class="item active ">
+
+                    <%= image_tag("mile.jpg", alt: "Example Image") %>
+                    <div class="carousel-caption">
+                        <h1 class="slide-h1 wow bounceInDown" > GRUPO 4 </h1>
+                        <h2 class="slide-h2 wow bounceInLeft" > PROYECTO: TALLER DE INTEGRACION </h2>
+                    </div>
+                </div> <!--
+                <div class="item">
+                    <%= image_tag("mile.jpg", alt: "Example Image") %>
+                    <div class="carousel-caption">
+                        <h1 class="slide-h1 wow bounceInDown" > GRUPO 4 </h1>
+                        <h2 class="slide-h2 wow bounceInLeft" data-wow-duration="0s" data-wow-delay="0s">DOCUMENTACION</h2>
+                    </div>
+                </div>
+                <div class="item">
+                    <img src="app/assets/img/1.jpg" alt="" />
+                    <div class="carousel-caption">
+                        <h1 class="slide-h1 wow bounceInDown" data-wow-duration="2s"> DISFRUTE </h1>
+                        <h2 class="slide-h2 wow bounceInLeft" data-wow-duration="2s" data-wow-delay="1s">SOLO PARA USTED, Y LOS DEMAS GRUPOS</h2>
+                    </div>
+                </div>-->
+            </div>
+            <!--INDICATORS-->
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-example" data-slide-to="0" class="active"></li>
+                <!--<li data-target="#carousel-example" data-slide-to="1"></li>
+                <li data-target="#carousel-example" data-slide-to="2"></li>-->
+            </ol>
+
+        </div>
+    </div>
+    <!-- HOME SECTION END-->
+    <div id="nav">
+        <ul class="list-unstyled">
+            <li><a data-toggle="tooltip" data-placement="left" title="Home" href="#home-sec">Home</a></li>
+            <li><a data-toggle="tooltip" data-placement="left" title="APIs" href="#documentacion-sec">APIs</a></li>
+            <li><a data-toggle="tooltip" data-placement="left" title="Estado Bodegas" href="#bodegas-sec">Estado Bodegas</a></li>
+            <li><a data-toggle="tooltip" data-placement="left" title="Estado Ordenes de Compra" href="#oc-sec">Estado Ordenes de Compra</a></li>
+            <li><a data-toggle="tooltip" data-placement="left" title="ContactO" href="#contact-sec">Contacto</a></li>
+        </ul>
+    </div>
+    <!-- NAV SECTION END-->
+    <section id="documentacion-sec">
+        <div class="container" background-color = "blue">
+            <div class="row">
+                <div class="col-lg-9 col-md-8 col-sm-8 col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-12">
+                    <h1 data-scroll-reveal="enter from the bottom after 0.1s">DOCUMENTACION </h1>
+                    <p data-scroll-reveal="enter from the bottom after 0.3s">
+                        <ol>
+
+<dl>
+
+<li><dt>IDs: </dt>
+
+<dd> ID Grupo: 571262b8a980ba030058ab52 </dd>
+<dd> ID Banco: 571262c3a980ba030058ab5f </dd>
+<!-- <dd> ID Almacen: xxx</dd> -->
+
+</dd></li>
+</br>
+<style>
+a:link {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:visited {
+    color: green;
+    background-color: transparent;
+    text-decoration: none;
+}
+a:hover {
+    color: red;
+    background-color: transparent;
+    text-decoration: underline;
+}
+a:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: underline;
+}
+</style>
+
+<li><dt><a href="">integra4.ing.puc.cl/api/consultar/:sku (GET)</a></dt>
+
+<dd> Retorna un JSON con el stock del producto del SKU ingresado: {"stock": int, "sku": string}
+</dd></li>
+</br>
+
+<li><dt><a href="">integra4.ing.puc.cl/api/oc/recibir/:idoc (GET)</a></dt>
+
+<dd> Retorna un JSON informando si se acepta la OC: {"aceptado": boolean, "idoc": string}
+</dd></li>
+</br>
+
+
+<li><dt><a href="">integra4.ing.puc.cl/api/facturas/recibir/:idfactura (GET)</a></dt>
+
+<dd> Retorna un JSON informando si se valida la factura: {"validado": boolean, "idfactura": string}
+</dd></li>
+</br>
+
+
+<li><dt><a href="">integra4.ing.puc.cl/api/pagos/recibir/:idtrx?idfactura=:idfactura (GET)</a></dt>
+
+<dd> Retorna un JSON informando si la transaccion es valida: {"validado": boolean, "idtrx": string}
+</dd></li>
+</br>
+
+
+<li><dt><a href="">integra4.ing.puc.cl/api/despachos/recibir/:idfactura (GET)</a></dt>
+
+<dd> Retorna un JSON informando si los productos fueron despachados: {"validado": boolean}
+</dd></li>
+</br>
+
+</dl>
+</ol>
+
+
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- ABOUT SECTION END-->
+
+    <section id="bodegas-sec">
+        <div class="container ">
+            <div class="row pad-btm">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-12">
+                    <h1 data-scroll-reveal="enter from the bottom after 0.1s">ESTADO BODEGAS </h1>
+                    <p data-scroll-reveal="enter from the bottom after 0.3s">
+
+<table class=" table table-striped" data-sort-name="name" data-sort-order="desc">
+<thead>
+  <tr>
+    <th data-field="id_oc" data-sortable="true">ID</th>
+    <th data-field="id_factura" data-sortable="true">Espacio Usado</th>
+    <th data-field="estado" data-sortable="true">Espacio Total</th>
+<!--    <th data-field="fecha_despacho" data-sortable="true">SKU</th>
+    <th data-field="fecha_entrega" data-sortable="true">Stock</th> -->
+    </tr>
+</thead>
+
+ <tbody>
+   <% @almacenes.each do |almacen| %>
+    <tr>
+      <td><%= almacen._id %></td>
+      <td><%= almacen.usedSpace %></td>
+   	  <td><%= almacen.totalSpace %></td>
+    </tr>
+  <% end %> 
+ </tbody>
+</table>                    </p>
+                </div>
+
+            </div>
+            <!--<div class="row ">
+                <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12 text-center" data-scroll-reveal="enter from the bottom after 0.5s">
+                    <i class="fa fa-recycle fa-5x"></i>
+                    <h4 >Estado Bodegas</h4>
+                    <p>
+
+<table class=" table table-striped" data-sort-name="name" data-sort-order="desc">
+<thead>
+  <tr>
+    <th data-field="name" data-sortable="true">Name</th>
+    <th data-field="age" data-sortable="true">Age</th>
+  </tr>
+</thead>
+
+  <tbody>
+    
+      <tr>
+        <td> Miguel </td>
+        <td> 56 </td>
+      </tr>
+     <tr>
+        <td> Manuel </td>
+        <td> 20 </td>
+      </tr>
+  </tbody>
+</table>                    </p>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12 text-center" data-scroll-reveal="enter from the bottom after 0.7s" >
+                    <i class="fa fa-briefcase fa-5x"></i>
+                    <h4>Easy to Customize</h4>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                          Lorem ipsum dolor sit amet.
+                    </p>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12 text-center" data-scroll-reveal="enter from the bottom after 0.9s">
+                    <i class="fa fa-history fa-5x"></i>
+                    <h4>Free to Use</h4>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                           Lorem ipsum dolor sit amet.
+                    </p>
+                </div>
+
+            </div>-->
+         
+        </div>
+
+    </section>
+    <!-- FEATURE SECTION END-->
+    
+    <section id="oc-sec">
+        <div class="container" background-color = "lightblue">
+            <div class="row pad-btm">
+                <div class="ccol-lg-2 col-md-2 col-sm-2  col-xs-10">
+                    <h1 data-scroll-reveal="enter from the bottom after 0.1s">LISTA DE ORDENES DE COMPRA </h1>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-2  col-xs-12 " data-scroll-reveal="enter from the bottom after 0.4s">
+                    <!--<img src="assets/images/1t.jpg" class="img-circle img-responsive set-img" />-->
+
+                    <p data-scroll-reveal="enter from the bottom after 0.3s"><table class=" table table-striped" data-sort-name="name" data-sort-order="desc">
+
+<table class=" table table-striped" data-sort-name="name" data-sort-order="desc">
+<thead>
+  <tr>
+    <th data-field="id_oc" data-sortable="true">ID OC</th>
+    <th data-field="id_factura" data-sortable="true">ID Factura</th>
+    <th data-field="estado" data-sortable="true">Estado</th>
+    <th data-field="fecha_entrega" data-sortable="true">Fecha Entrega</th>
+    <th data-field="canal" data-sortable="true">Canal</th>
+    <th data-field="cliente" data-sortable="true">Cliente</th>
+    <th data-field="proveedor" data-sortable="true">Proveedor</th>
+    <th data-field="sku" data-sortable="true">SKU</th>
+    <th data-field="cantidad" data-sortable="true">Cantidad</th>
+    <th data-field="cantidad_despachada" data-sortable="true">Cantidad Despachada</th>
+  </tr>
+</thead>
+
+ <tbody>
+   <% @orden.each do |orden| %>
+    <tr> 
+      <td><%= orden._id %></td>
+      <td><%= orden.id_factura %></td>
+      <td><%= orden.estado %></td>
+      <td><%= orden.fecha_entrega %></td>
+      <td><%= orden.canal %></td>
+      <td><%= orden.cliente %></td>
+      <td><%= orden.proveedor %></td>
+      <td><%= orden.sku %></td>
+      <td><%= orden.cantidad %></td>
+      <td><%= orden.cantidad_despachada %></td>
+    
+    </tr>
+  <% end %>
+ </tbody>  
+</table>
+
+                    </p>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12 " data-scroll-reveal="enter from the bottom after 0.5s">
+                  <!--  <h2>LEENA CHI MAXI</h2>
+                    <p>
+                    </p> -->
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2  col-xs-12 " data-scroll-reveal="enter from the bottom after 0.6s">
+                    <!--<img src="assets/images/2t.jpg" class="img-circle img-responsive set-img" />-->
+
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12 " data-scroll-reveal="enter from the bottom after 0.7s">
+                  <!--  <h2>JHON DEO ALEX</h2>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                           Lorem ipsum dolor sit amet.
+                    </p> -->
+                </div>
+            </div> 
+
+        </div>
+
+    </section>
+    <!-- TEAM SECTION END-->
+    <section id="contact-sec">
+        <div class="container">
+            <div class="row pad-btm">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-12">
+                    <h1 data-scroll-reveal="enter from the bottom after 0.1s">CONTACTO </h1>
+                    <p data-scroll-reveal="enter from the bottom after 0.3s">
+                        Les agradecemos por visitarnos.
+                    </p>
+                </div>
+
+            </div>
+            <div class="row pad-btm">
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12  " data-scroll-reveal="enter from the bottom after 0.5s">
+                    <h2>UBICACION</h2>
+                    <p>
+                        PONTIFICIA UNIVERSIDAD CATOLICA DE CHILE
+                           <br />
+                        REGION METROPOLITANA, SANTIAGO 
+                           <br />
+                        CHILE
+                    </p>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12  " data-scroll-reveal="enter from the bottom after 0.6s">
+                    <!--<img src="assets/img/1t.jpg" class="img-circle img-responsive cnt-img" />-->
+
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12 " data-scroll-reveal="enter from the bottom after 0.6s">
+                    <p data-scroll-reveal="enter from the bottom after 0.3s">
+
+<table class="" data-sort-name="name" data-sort-order="desc">
+<thead>
+  <tr>
+    <th data-field="nombres" data-sortable="true">Nombre</th>
+    <th data-field="mails" data-sortable="true">Mails</th>
+    </tr>
+</thead>
+
+ <tbody>
+    <tr>
+      <td> FERNANDO TOMAS CHAME </td>
+      <td> ftchame@uc.cl </td>
+    </tr>
+    <tr>
+      <td> FRANCISCO ARTURO GARRI </td>
+      <td> fagarri@uc.cl </td>
+    </tr>
+    <tr>
+      <td> JAVIER ANDRES SOTO </td>
+      <td> jasoto6@uc.cl </td>
+    </tr>
+	<tr>
+      <td> JAVIER SEBASTIAN ESPINOSA </td>
+      <td> jsespin1@uc.cl </td>
+    </tr>
+    <tr>
+      <td> MANUEL ALDUNATE </td>
+   	  <td> maldunate@uc.cl </td>
+    </tr>
+ </tbody>
+</table>                    </p>
+
+              <!--      <div class="form-group">
+                        <input type="text" class="form-control" />
+                        <br />
+                        <a href="#" class="btn btn-primary">SUBSCRIBETE</a>
+                    </div> -->
+                </div>
+
+            </div>
+            
+                 </div>
+
+    </section>
+    <!-- CONTACT SECTION END-->
+
+    <div id="footer-sec">
+           &nbsp;2016 integra4.ing.puc.cl | 
+             <a href="http://integra4.ing.puc.cl" style="font-size: 14px; color: #fff" target="_blank">Design by : Grupo 4</a>
+
+    </div>
+    
+
+
+    <!-- FOOTER SECTION END-->
+    <!--CORE SCRIPTS-->
+    <%= javascript_include_tag "jquery-1.11.1" %>
+    <script src="assets/js/jquery-1.11.1.js"></script>
+    <!--BOOTSTRAP SCRIPTS-->
+    <%= javascript_include_tag "bootstrap" %>
+    <script src="assets/js/bootstrap.js"></script>
+    <!--WOW SCRIPTS-->
+    <%= javascript_include_tag "wow" %>
+    <script src="assets/js/wow.js"></script>
+    <!--SCROLL SCRIPTS-->
+    <%= javascript_include_tag "jquery.smooth-scroll.min" %>
+    <script src="assets/js/jquery.smooth-scroll.min.js"></script>
+    <!--SCROLL ANIMATION SCRIPTS-->
+    <%= javascript_include_tag "scrollReveal" %>
+    <script src="assets/js/scrollReveal.js"></script>
+    <!--CUSTOM SCRIPTS-->
+    <%= javascript_include_tag "custom" %>
+    <script src="assets/js/custom.js"></script>
+</body>
+
+</html>

@@ -32,9 +32,9 @@ class Api::V1::B2bController < ApplicationController
 					#Aceptar OC en el sistema
 					Request.receive_orden(id.to_s)
 					Orden.cambiarEstado(id, "aceptada")
-					Thread.new do
-						generar_factura(id,id_cliente)
-					end
+					#Thread.new do
+					#	generar_factura(id,id_cliente)
+					#end
 
 					format.json{render json: {aceptado: true, idoc: id.to_s}, status:200}
 
