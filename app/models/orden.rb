@@ -1,5 +1,6 @@
 class Orden < ActiveRecord::Base
 
+    validates :_id, :presence => true, :uniqueness => true
 	#has_one :factura
 
 	def self.getOrdenes(oc)
