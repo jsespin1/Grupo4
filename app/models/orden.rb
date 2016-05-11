@@ -17,7 +17,11 @@ class Orden < ActiveRecord::Base
 	 	orden = Orden.new(_id: r['_id'], fecha_creacion: r['created_at'], canal: r['canal'], proveedor: r['proveedor'], cliente: r['cliente'], 
 	 		sku: r['sku'], cantidad: r['cantidad'], cantidad_despachada: r['cantidadDespachada'], precio_unitario: r['precioUnitario'], 
 	 		fecha_entrega: r['fechaEntrega'], estado: r['estado'])
-	 	orden.save
+	 	if orden.save
+            orden = orden
+        else
+            orden = Orden.find_by(_id: r['_id'])
+        end
 	 	orden
     end
 
