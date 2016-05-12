@@ -174,9 +174,7 @@ class Almacen < ActiveRecord::Base
 	  	almacenes.each do |almacen|
 	  		if almacen.despacho == false and movidos<cantidad
 	  			#obtenemos los skus para el almacen
-	  			puts "Moviendo a Despacho, Almacen: " + almacen._id.to_s 
 	  			disponibles = getDisponible(almacen._id, sku) 
-	  			puts "Disponibles para mover: " + disponibles.to_s
 	  			faltantes = (cantidad.to_i - movidos.to_i).to_i
 	  			cantidad_a_mover = 0
 	  			if disponibles >= faltantes
@@ -188,8 +186,7 @@ class Almacen < ActiveRecord::Base
 	  			while (movidos_almacen.to_i < cantidad_a_mover.to_i)
 	  				array_productos = Request.getStock(almacen._id, sku, (cantidad_a_mover-movidos_almacen).to_i)
 					array_productos.each do |p|
-						hay_espacio = Request.moverStock(producto, id_despacho)
-						puts "Respuesta traslado -> " + hay_espacio.inspect
+						hay_espacio = Request.moverStock(p, id_despacho)
 						#if !hay_espacio
 						#	puts "El mover Stock FTP problema" + hay_espacio.inspect
 						#	break
@@ -197,8 +194,7 @@ class Almacen < ActiveRecord::Base
 						movidos_almacen = movidos_almacen + 1
 						movidos = movidos + 1
 					end
-	  			end
-	  			puts "Prods Movidos: " + movidos_almacen.to_s	  
+	  			end	  
 	  		end
 	  	end
 	  	"Se movieron a Despacho: " + movidos.to_s
