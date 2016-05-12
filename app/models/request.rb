@@ -87,7 +87,6 @@ class Request < ActiveRecord::Base
 		ruta = URI.parse(set_url_oc + "/obtener/" + iD.to_s)
 		hash = {'Content-Type' => "application/json"}
 		oc = HTTParty.get(ruta, :headers => hash)
-		puts "Request GET OC -> " + oc.inspect
 		Orden.toObject(oc.parsed_response)
 	end
 
@@ -127,7 +126,6 @@ class Request < ActiveRecord::Base
 		hash = {'Content-Type' => "application/json"}
 		body = { _id: orden_id, anulacion: motivo}.to_json
 		respuesta = HTTParty.delete(ruta, :body => body, :headers => hash)
-		puts "Orden -> " + respuesta.inspect
 	end
 
 	def self.obtain_orden
@@ -139,8 +137,6 @@ class Request < ActiveRecord::Base
 		hash = {'Content-Type' => "application/json"}
 		body = { _id: orden_id}.to_json
 		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
-		puts "Orden -> " + respuesta.inspect
-
 	end
 
 

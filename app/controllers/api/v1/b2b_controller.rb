@@ -76,6 +76,7 @@ class Api::V1::B2bController < ApplicationController
 				if factura!=nil and !(Factura.existe(factura)) and Factura.verificar_compra(factura)
 					#Se procede a pagar la factura
 					transaccion = pagar_factura(factura)
+					puts "Transaccion -> " + transaccion.inspect
 					if transaccion != nil
 						Thread.new do
 							enviar_transaccion(transaccion._id, id, factura.proveedor)

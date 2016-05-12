@@ -17,7 +17,7 @@ class Factura < ActiveRecord::Base
     def self.toObject(response)
         factura = nil
     	r = response
-        if r['_id']
+        if r.to_s.include? '_id'
             factura = Factura.new(_id: r['_id'], fecha_creacion: r['created_at'], proveedor: r['proveedor'], cliente: r['cliente'], 
             valor_bruto: r['bruto'], iva: r['iva'], valor_total: r['total'], estado_pago: r['estado'], 
             id_oc: r['oc'])
@@ -29,7 +29,7 @@ class Factura < ActiveRecord::Base
     def self.toObject2(response)
         factura = nil
         r = response[0]
-        if r['_id']
+        if r.to_s.include? '_id'
             factura = Factura.new(_id: r['_id'], fecha_creacion: r['created_at'], proveedor: r['proveedor'], cliente: r['cliente'], 
             valor_bruto: r['bruto'], iva: r['iva'], valor_total: r['total'], estado_pago: r['estado'], 
             id_oc: r['oc'])
