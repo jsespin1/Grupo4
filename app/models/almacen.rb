@@ -245,8 +245,8 @@ class Almacen < ActiveRecord::Base
 			end
 		end
 		#Request.deliver_orden(id_oc)
-		#Orden.cambiarEstado(id_oc, "finalizada")
-		#Orden.cambiarCantidad(id_oc, cantidad)
+		Orden.cambiarEstado(id_oc, "finalizada")
+		Orden.cambiarCantidad(id_oc, cantidad)
 		cuenta
 	end
 
