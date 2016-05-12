@@ -172,22 +172,24 @@ class Almacen < ActiveRecord::Base
 	  	id_despacho = getIdDespacho
 	  	almacenes = Request.getAlmacenesAll
 	  	almacenes.each do |almacen|
-	  		if almacen.despacho == false
+	  		if almacen.despacho == false and movidos<cantidad
 	  			#obtenemos los skus para el almacen
 	  			puts "Moviendo a Despacho, Almacen: " + almacen._id.to_s 
 	  			disponibles = getDisponible(almacen._id, sku) 
 	  			puts "Disponibles para mover: " + disponibles.to_s
-	  			faltantes = cantidad - movidos
+	  			faltantes = (cantidad.to_i - movidos.to_i).to_i
+	  			cantidad_a_mover = 0
 	  			if disponibles >= faltantes
 	  				cantidad_a_mover = faltantes
 	  			else
-	  				cantidad_a_mover = disponibles	
+	  				cantidad_a_mover = disponibles.to_i	
 	  			end
 	  			movidos_almacen = 0
-	  			begin 
+	  			while (movidos_almacen.to_i < cantidad_a_mover.to_i)
 	  				array_productos = Request.getStock(almacen._id, sku, (cantidad_a_mover-movidos_almacen).to_i)
 					array_productos.each do |p|
 						hay_espacio = Request.moverStock(producto, id_despacho)
+						puts "Respuesta traslado -> " + hay_espacio.inspect
 						#if !hay_espacio
 						#	puts "El mover Stock FTP problema" + hay_espacio.inspect
 						#	break
@@ -195,11 +197,11 @@ class Almacen < ActiveRecord::Base
 						movidos_almacen = movidos_almacen + 1
 						movidos = movidos + 1
 					end
-	  			end while 	movidos_almacen.to_i < cantidad_a_mover.to_i
+	  			end
 	  			puts "Prods Movidos: " + movidos_almacen.to_s	  
 	  		end
 	  	end
-	  	"Se despacharon a Despacho: " + movidos.to_s
+	  	"Se movieron a Despacho: " + movidos.to_s
 	end
 
 	def self.moverBodegaFTP(cantidad, sku, id_oc)
@@ -235,6 +237,7 @@ class Almacen < ActiveRecord::Base
 			array_productos = Request.getStock(id_despacho, sku, (cantidad-cuenta).to_i)
 			array_productos.each do |p|
 				hay_espacio = Request.moverStockBodega(p, almacen_destino, id_oc, oc.precio_unitario)
+				puts hay_espacio.inspect
 				condicion = "Traspaso no realizado debido a falta de espacio"
 				#if respuesta['error'].eql? condicion
 				#hay que vaciar despacho
