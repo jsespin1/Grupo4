@@ -12,6 +12,17 @@ class Controlador < ActiveRecord::Base
 
 	end
 
+	def self.validarTransaccion(idTrx, idFactura)
+	  	factura=Request.obtener_factura(idFactura)
+	  	trx=Request.obtener_transaccion(idTrx)
+	  	boolean=false
+	  	if factura.valor_total==trx.monto and (trx.cuenta_destino.eql? Finanza.getCuentaPropia)
+	  		boolean = true
+	  	end
+	 	boolean
+	end
+
+
 	def self.facturaFicticio(idOC)
 		#ESTO GATILLA TODO EL PROCESO FICTICIO
 		#Primero se recepciona orden de compra
@@ -70,7 +81,7 @@ class Controlador < ActiveRecord::Base
 
 	def self.facturar(idCliente, idFactura)
 		grupo = getGrupo(idCliente)
-		if grupo != 0
+		if grupo.to_i != 0
 			#Ahora simplemente debemos enviar la ruta correspondiente
 			#Delegamos el request a la clase request
 			ruta = "http://integra" + grupo.to_s + ".ing.puc.cl/api/facturas/recibir/" + idFactura.to_s
@@ -78,9 +89,14 @@ class Controlador < ActiveRecord::Base
 		end
 	end
 
+	def self.enviar_transaccion(id_trx, id_factura, idCliente)
+		grupo = getGrupo(idCliente)
+		ruta = "http://integra" + grupo.to_s + ".ing.puc.cl/api/pagos/recibir/" + id_trx.to_s
+		Request.enviarTransaccion(ruta, id_factura)
+	end
+
 
 	def self.getGrupo(id)
-		puts "id cliente" + id.to_s
 		retornar = 0
 		array_grupos
 		@array_grupos.each do |g|
@@ -92,13 +108,14 @@ class Controlador < ActiveRecord::Base
 	end
 
 	def self.cuentaDestino(id)
-		@cuentaOrigen = "571262c3a980ba030058ab5f"
+		cuentaDestino = ""
 		array_grupos
 		@array_grupos.each do |g|
 			if g[:id].eql? id
-				@cuentaDestino = g[:cuenta]
+				cuentaDestino = g[:cuenta]
 			end
 		end
+		cuentaDestino
 	end
 
 	def self.getDestino(id)
@@ -119,6 +136,7 @@ class Controlador < ActiveRecord::Base
         {id: "571262b8a980ba030058ab4f", grupo: 1, cuenta: "571262c3a980ba030058ab5b", id_despacho: "571262aaa980ba030058a147"},
         {id: "571262b8a980ba030058ab50", grupo: 2, cuenta: "571262c3a980ba030058ab5c", id_despacho: "571262aaa980ba030058a14e"},
         {id: "571262b8a980ba030058ab51", grupo: 3, cuenta: "571262c3a980ba030058ab5d", id_despacho: "571262aaa980ba030058a1f1"},
+        {id: "571262b8a980ba030058ab52", grupo: 4, cuenta: "571262c3a980ba030058ab5f", id_despacho: "571262aaa980ba030058a240"},
         {id: "571262b8a980ba030058ab53", grupo: 5, cuenta: "571262c3a980ba030058ab61", id_despacho: "571262aaa980ba030058a244"},
         {id: "571262b8a980ba030058ab54", grupo: 6, cuenta: "571262c3a980ba030058ab62", id_despacho: ""},
         {id: "571262b8a980ba030058ab55", grupo: 7, cuenta: "571262c3a980ba030058ab60", id_despacho: ""},
@@ -133,6 +151,7 @@ class Controlador < ActiveRecord::Base
         {id: "572aac69bdb6d403005fb042", grupo: 1, cuenta: "572aac69bdb6d403005fb04e", id_despacho: "572aad41bdb6d403005fb066"},
         {id: "572aac69bdb6d403005fb043", grupo: 2, cuenta: "572aac69bdb6d403005fb04f", id_despacho: "572aad41bdb6d403005fb0ba"},
         {id: "572aac69bdb6d403005fb044", grupo: 3, cuenta: "572aac69bdb6d403005fb050", id_despacho: "572aad41bdb6d403005fb1bf"},
+        {id: "572aac69bdb6d403005fb045", grupo: 4, cuenta: "572aac69bdb6d403005fb051", id_despacho: "572aad41bdb6d403005fb208"},
         {id: "572aac69bdb6d403005fb046", grupo: 5, cuenta: "572aac69bdb6d403005fb052", id_despacho: "572aad41bdb6d403005fb278"},
         {id: "572aac69bdb6d403005fb047", grupo: 6, cuenta: "572aac69bdb6d403005fb053", id_despacho: "572aad41bdb6d403005fb2d8"},
         {id: "572aac69bdb6d403005fb048", grupo: 7, cuenta: "572aac69bdb6d403005fb054", id_despacho: "572aad41bdb6d403005fb3b9"},
@@ -167,145 +186,6 @@ class Controlador < ActiveRecord::Base
   end
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  def self.validarTransaccion(idTrx, idFactura)
-  	factura=Request.obtener_factura(idFactura)
-  	trx=Request.obtener_transaccion(idTrx)
-  	boolean=false
-  	if factura.valor_total==trx.monto
-  		boolean = true
-  		boolean
-  	end
- 		boolean
-  end
-
-  
-  
-  
-  
-
 
 
 end

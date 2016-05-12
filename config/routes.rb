@@ -6,6 +6,9 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: {format: 'json'} do
     scope module: :v1 do
+
+      #---------------------------- API  ------------------------------#
+
       #Métodos para Stock
       get '/consultar/:_id' => 'b2b#getStock'
 
@@ -30,6 +33,8 @@ Rails.application.routes.draw do
 
       #Procesar Ftp´s
       get '/ftp/procesar' => 'b2b#procesarFtp'
+
+      #------------------------------------------------------------------#
       
       #Métodos que recibe transaccion y factura -> despacha
       #Métodos para registro y token

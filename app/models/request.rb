@@ -69,6 +69,7 @@ class Request < ActiveRecord::Base
 	def  self.get_hash(parametros="")
 		hash=""
 		if Rails.env == 'development'
+			#tdk6NIzbhNfORDP
             hash = Base64.encode64((HMAC::SHA1.new("tdk6NIzbhNfORDP") << parametros).digest).strip
         else
             hash = Base64.encode64((HMAC::SHA1.new("W82IWMQu3Ex9YzN") << parametros).digest).strip
@@ -86,7 +87,7 @@ class Request < ActiveRecord::Base
 		ruta = URI.parse(set_url_oc + "/obtener/" + iD.to_s)
 		hash = {'Content-Type' => "application/json"}
 		oc = HTTParty.get(ruta, :headers => hash)
-		#oc.parsed_response
+		puts "Request GET OC -> " + oc.inspect
 		Orden.toObject(oc.parsed_response)
 	end
 
@@ -242,9 +243,15 @@ class Request < ActiveRecord::Base
 
 	def self.enviarFactura(ruta, idfactura)
         ruta = URI.parse(ruta)
-        body = {validado: true, idfactura: idfactura}.to_json
-		respuesta = HTTParty.get(ruta, :body => body)
+		respuesta = HTTParty.get(ruta)
 		puts "Esta es la respuesta al envío de la factura " + respuesta.inspect
+    end
+
+    def self.enviarTransaccion(ruta, idfactura)
+        ruta = URI.parse(ruta)
+        query = {idfactura: idfactura}
+		respuesta = HTTParty.get(ruta, :query => query)
+		puts "Esta es la respuesta al envío de la transaccion " + respuesta.inspect
     end
 
 

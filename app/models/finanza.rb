@@ -8,6 +8,7 @@ class Finanza < ActiveRecord::Base
 	#
 
 	def self.transferir(monto, origen, destino)
+		#Devuelve objeto tipo Transaccion
 		respuesta = Request.transferir(monto, origen, destino)
 	end
 
@@ -18,8 +19,21 @@ class Finanza < ActiveRecord::Base
 	end
 
 	def self.getCuentaPropia
-		cuenta = "571262c3a980ba030058ab5f"
+		#571262c3a980ba030058ab5f
+		cuenta = ""
+		if Rails.env == 'development'
+            cuenta = "571262c3a980ba030058ab5f"
+        else
+            cuenta = "572aac69bdb6d403005fb051"
+        end
+		cuenta
 	end
+
+	def self.getCuentaDestino(idDestino)
+		Controlador.cuentaDestino(idDestino)
+	end
+
+
 
 	def self.getCartola(fecha_inicio, fecha_fin, id_cuenta, limite)
 	    Request.obtener_cartola(fecha_inicio, fecha_fin, id_cuenta, limite)

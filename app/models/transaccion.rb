@@ -7,15 +7,23 @@ class Transaccion < ActiveRecord::Base
       #t.float :monto
 
     def self.toObject(response)
+      transaccion = nil
       r = response
-  	 	transaccion = Transaccion.new(_id: r['_id'].to_s, fecha_creacion: r['created_at'], cuenta_origen: r['origen'].to_s, cuenta_destino: r['destino'].to_s, 
-  	 		monto: r['monto'].to_f)
+      if r['_id']
+        transaccion = Transaccion.new(_id: r['_id'].to_s, fecha_creacion: r['created_at'], cuenta_origen: r['origen'].to_s, cuenta_destino: r['destino'].to_s, 
+        monto: r['monto'].to_f)
+      end
+  	 	transaccion
     end
 
     def self.toObject2(response)
+      transaccion = nil
     	r = response[0]
-	 	  transaccion = Transaccion.new(_id: r['_id'], fecha_creacion: r['created_at'], cuenta_origen: r['origen'], cuenta_destino: r['destino'], 
-	 		    monto: r['monto'])
+	 	  if r['_id']
+        transaccion = Transaccion.new(_id: r['_id'].to_s, fecha_creacion: r['created_at'], cuenta_origen: r['origen'].to_s, cuenta_destino: r['destino'].to_s, 
+        monto: r['monto'].to_f)
+      end
+      transaccion
     end
 
 

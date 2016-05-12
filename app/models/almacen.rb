@@ -99,25 +99,6 @@ class Almacen < ActiveRecord::Base
   	end
   end
 
-  
-  def self.moverAlmacenDespacho(sku,cantidad)
-  	cantidad_a_mover = cantidad.to_i
-  	despachados = 0
-  	id_despacho = getIdDespacho
-  	almacenes = Request.getAlmacenesAll
-  	almacenes.each do |almacen|
-  		if almacen.despacho == false			  
-  			array_productos = Request.getStock(almacen._id,sku, cantidad)
-  			array_productos.each do |producto|
-  				if despachados < cantidad_a_mover
-  					Request.moverStock(producto, id_despacho)
-  					despachados = despachados + 1
-  				end
-  			end
-  		end
-  		"Se despacharon a Despacho: " + despachados.to_s
-  	end
-  end
 
 	
 	def self.getAlmacenRecepcion
@@ -175,6 +156,50 @@ class Almacen < ActiveRecord::Base
 		total > cantidad
 	end
 
+	def self.getDisponible(id_almacen, id_sku)
+		#Primero se obtienen todos los skus
+		total = 0
+		skus = Request.getSKUs(id_almacen)
+		skus.each do |s|
+			if s._id.to_i == id_sku.to_i
+				total += s.cantidad.to_i
+			end
+		end
+		total
+	end
+
+	def self.moverAlmacenDespacho(sku,cantidad)
+	  	movidos = 0
+	  	id_despacho = getIdDespacho
+	  	almacenes = Request.getAlmacenesAll
+	  	almacenes.each do |almacen|
+	  		if almacen.despacho == false
+	  			#obtenemos los skus para el almacen
+	  			disponibles = getDisponible(almacen._id, sku) 
+	  			faltantes = cantidad - movidos
+	  			if disponibles >= faltantes
+	  				cantidad_a_mover = faltantes
+	  			else
+	  				cantidad_a_mover = disponibles	
+	  			end
+	  			movidos_almacen = 0
+	  			begin 
+	  				array_productos = Request.getStock(almacen._id, sku, (cantidad_a_mover-movidos_almacen).to_i)
+					array_productos.each do |p|
+						hay_espacio = Request.moverStock(producto, id_despacho)
+						#if !hay_espacio
+						#	puts "El mover Stock FTP problema" + hay_espacio.inspect
+						#	break
+						#end
+						movidos_almacen = movidos_almacen + 1
+						movidos = movidos + 1
+					end
+	  			end while 	movidos_almacen.to_i < cantidad_a_mover.to_i	  
+	  		end
+	  	end
+	  	"Se despacharon a Despacho: " + movidos.to_s
+	end
+
 	def self.moverBodegaFTP(cantidad, sku, id_oc)
 		id_despacho = getIdDespacho
 		oc=Request.getOC(id_oc)
@@ -199,21 +224,23 @@ class Almacen < ActiveRecord::Base
 	def self.moverBodegaB2B(cantidad, sku, id_oc)
 		id_despacho = getIdDespacho
 		oc=Request.getOC(id_oc)
-		array_productos = Request.getStock(id_despacho, sku, cantidad)
-		cuenta=0
 		id_cliente=oc.cliente
 		almacen_destino=Controlador.getDestino(id_cliente)
-		array_productos.each do |p|
-			respuesta=Request.moverStockBodega(p, almacen_destino, id_oc, oc.precio_unitario)
-			condicion = "Traspaso no realizado debido a falta de espacio"
-			#if respuesta['error'].eql? condicion
-				#hay que vaciar despacho
-			#	break
-			#elsif respuesta['error']
-			#	break
-			#end
-			cuenta = cuenta + 1
-		end
+		cuenta=0
+		begin
+			array_productos = Request.getStock(id_despacho, sku, (cantidad-cuenta).to_i)
+				array_productos.each do |p|
+					hay_espacio = Request.moverStockBodega(p, almacen_destino, id_oc, oc.precio_unitario)
+					condicion = "Traspaso no realizado debido a falta de espacio"
+					#if respuesta['error'].eql? condicion
+					#hay que vaciar despacho
+					#	break
+					#elsif respuesta['error']
+					#	break
+					#end
+					cuenta = cuenta + 1
+				end
+		end while cuenta.to_i < cantidad.to_i
 		Request.deliver_orden(id_oc)
 		Orden.cambiarEstado(id_oc, "finalizada")
 		Orden.cambiarCantidad(id_oc, cantidad)
@@ -229,21 +256,24 @@ class Almacen < ActiveRecord::Base
 		if Almacen.verificar_stock_despacho(cantidad, sku)
 			canal="ftp"
 			if orden.canal.eql? canal
-				"SE METO A FTP"
+				puts "SE METIO A FTP DESPACHO"
 				cantidad = moverBodegaFTP(cantidad, sku, id_oc)
 			end
 			canal="b2b"
 			if orden.canal.eql? canal
+				puts "SE METIO A B2B DESPACHO"
 				cantidad = moverBodegaB2B(cantidad, sku, id_oc)
 			end
 		elsif Almacen.verificar_stock_sin_pulmon(cantidad,sku)
 			moverAlmacenDespacho(sku,cantidad)
 			canal="b2b"
 			if orden.canal.eql? canal
+				puts "SE METIO A FTP SIN PULMON"
 				cantidad = moverBodegaB2B(cantidad, sku, id_oc)
 			end
 			canal="ftp"
 			if orden.canal.eql? canal
+				"SE METIO A B2B SIN PULMON"
 				cantidad = moverBodegaFTP(cantidad, sku, id_oc)
 			end
 
@@ -252,10 +282,12 @@ class Almacen < ActiveRecord::Base
 			moverAlmacenDespacho(sku,cantidad)
 			canal="b2b"
 			if orden.canal.eql? canal
+				puts "SE METIO A FTP CON PULMON"
 				cantidad = moverBodegaB2B(cantidad, sku, id_oc)
 			end
 			canal="ftp"
 			if orden.canal.eql? canal
+				"SE METIO A B2B CON PULMON"
 				cantidad = moverBodegaFTP(cantidad, sku, id_oc)
 			end
 		else 

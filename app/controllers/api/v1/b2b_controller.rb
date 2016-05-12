@@ -2,6 +2,8 @@ class Api::V1::B2bController < ApplicationController
 
 	respond_to :json, :html
 
+
+	# ------------------------------------Get Stock-------------------------------------- #
 	def getStock
 		respond_to do |format|
 			if params[:_id]
@@ -20,16 +22,20 @@ class Api::V1::B2bController < ApplicationController
 
 	end
 
+	# ------------------------------------Recibir OC (VENTA)-------------------------------------- #
 	def analizarOC
 		respond_to do |format|
 			if params[:_idorden]
 				id = params[:_idorden]
-				@oc = Request.getOC(id)
-				id_cliente = @oc.cliente
-				sku = @oc.sku
-				cantidadOrden=@oc.cantidad
-				if Almacen.verificar_stock_con_pulmon(cantidadOrden,sku)
+				oc = Request.getOC(id)
+				if oc!=nil
+					id_cliente = oc.cliente
+					sku = oc.sku
+					cantidadOrden = oc.cantidad
+				end
+				if oc!=nil and !(Orden.existe(oc)) and Orden.verificar_oc(oc) and Almacen.verificar_stock_con_pulmon(cantidadOrden,sku) 
 					#Aceptar OC en el sistema
+					Orden.saveOc(oc)
 					Request.receive_orden(id.to_s)
 					Orden.cambiarEstado(id, "aceptada")
 					Thread.new do
@@ -40,7 +46,7 @@ class Api::V1::B2bController < ApplicationController
 
 				else # Rechazamos orden de compra, no se envia factura.
 					#Rechazar OC en el sistema
-					Request.reject_orden(id.to_s, "Por algún motivo, aún no implementado, lo sentimos")
+					Request.reject_orden(id.to_s, "Sin stock u orden inválida")
 					format.json{render json: {aceptado: false, idoc: id.to_s}, status:400}				
 				end
 			end
@@ -50,25 +56,79 @@ class Api::V1::B2bController < ApplicationController
 
 	def generar_factura(orden_id, id_grupo)
 		factura = Request.emitir_factura(orden_id)
-		id_factura = factura['_id']
-		orden = Orden.find_by(_id: orden_id)
-		orden.update_attributes(:id_factura => id_factura)
-		Controlador.facturar(id_grupo,id_factura)
+		puts "Factura Generada -> " + factura.inspect
+		if factura != nil
+			id_factura = factura['_id']
+			orden = Orden.find_by(_id: orden_id)
+			orden.update_attributes(:id_factura => id_factura)
+			Controlador.facturar(id_grupo,id_factura)
+		end
 	end
 
+	# ---------------------------------------Recibir Factura (COMPRA)---------------------------------------- #
 
+	#Recibimos factura -> Verificar que está correcta para pagarla
+	def facturar
+		respond_to do |format|
+			if params[:id_factura]
+				id = params[:id_factura]
+				factura = Request.obtener_factura(id)
+				if factura!=nil and !(Factura.existe(factura)) and Factura.verificar_compra(factura)
+					#Se procede a pagar la factura
+					transaccion = pagar_factura(factura)
+					if transaccion != nil
+						Thread.new do
+							enviar_transaccion(transaccion._id, id, factura.proveedor)
+						end
+						Request.pagar_factura(id)
+						factura.estado_pago = "pagada"
+						Factura.saveFactura(factura)
+					else
+						Factura.saveFactura(factura)
+						#Si no podemos pagar, queda con estado PENDIENTE
+					end
+					format.json {render json: {validado: true, idfactura: id}, status:200}
+				else
+					format.json {render json: {validado: false, idfactura: id}, status:200}
+				end
+			else
+				format.json {render json: {description: 'Missing parameters'},status:400}
+			end
+		end
+
+	end
+
+	def pagar_factura(factura)
+		#Obtenemos monto y cuenta de destino -> pagamos
+		monto = factura.valor_total
+		cuenta_origen = Finanza.getCuentaPropia
+		cuenta_destino = Finanza.getCuentaDestino(factura.proveedor)
+		transaccion = Finanza.transferir(monto, cuenta_origen, cuenta_destino)
+	end
+
+	def enviar_transaccion(id_trx, id_factura, id_cliente)
+		Controlador.enviar_transaccion(id_trx, id_factura, id_cliente)
+	end
+
+	# ------------------------------------Recibir TRX y Factura (VENTA)-------------------------------------- #
 	def transaccion
 		respond_to do |format|
 			if params[:idtrx] && params[:idfactura]
 				id_trx = params[:idtrx]
 				id_factura = params[:idfactura]
-				valido=Controlador.validarTransaccion(id_trx,id_factura)
+				valido = Controlador.validarTransaccion(id_trx,id_factura)
 				factura = Request.obtener_factura(id_factura)
-				id_oc=factura.id_oc
-				oc=Request.getOC(id_oc)
-				if valido
-					Almacen.revisarFormaDeDespacho(oc.cantidad, oc.sku, oc._id)
-					puts
+				if factura != nil
+					#Vemos en BD si está la OC, para comprobar que se hizo la solicitud
+					id_oc = factura.id_oc
+					oc = Orden.find_by(_id: id_oc)
+				end
+				if factura!=nil and oc and Factura.verificar_venta(factura) and valido
+					puts "La TRX, Factura y OC corresponden"
+					#Si todo está en orden, DESPACHAMOS
+					Thread.new do
+							Almacen.revisarFormaDeDespacho(oc.cantidad, oc.sku, oc._id)
+					end
 					format.json {render json: {aceptado: true, idtrx: id_trx.to_s}, status:200}
 				else
 					format.json {render json: {aceptado: false, idtrx: id_trx.to_s}, status:200}
@@ -82,6 +142,12 @@ class Api::V1::B2bController < ApplicationController
 		end
 
 	end
+
+
+
+
+
+	# ------------------------------------API Privada-------------------------------------- #
 
 	def getMP
 

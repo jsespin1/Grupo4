@@ -53,7 +53,7 @@ class Abastecer < ActiveRecord::Base
 			lote = Producto.get_lote("38").to_i
 			#Finalmente, se manda a producir
 			produccion = Request.producir("38", transferencia._id, lote)
-			puts "Produccion -> "+ produccion.inspect
+			puts "Fabrica Respuesta 33-> "+ produccion.inspect
 			actual_38 = actual_38 + lote
 			arreglo[0] = arreglo[0] + lote
 			puts "Disponibilidad: " + actual_38.to_s
@@ -65,7 +65,7 @@ class Abastecer < ActiveRecord::Base
 			transferencia = Finanza.transferir(costo, Finanza.getCuentaPropia, cuenta_fab)
 			lote = Producto.get_lote("44").to_i
 			produccion = Request.producir("44", transferencia._id, lote)
-			puts "Produccion 44-> "+ produccion.inspect
+			puts "Fabrica Respuesta 44-> "+ produccion.inspect
 			actual_44 = actual_44 + lote
 			arreglo[1] = arreglo[1] + lote
 			puts "Disponibilidad: " + actual_44.to_s

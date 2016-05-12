@@ -1,6 +1,6 @@
 class AlmacenController < ApplicationController
 
-	def index
+	def index 
 		#Compra.consultar_materia_prima("26")
 		#oc_id = "57145e4cf77d320300f0deb9"
 		#ftp_file = "1460952637328.xml"
