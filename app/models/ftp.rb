@@ -38,7 +38,7 @@ class Ftp < ActiveRecord::Base
         puts "Procesando FTP: " + ftp.to_s
         #Obtenemos la orden de compra, Vemos si está en el sistema
         oc = Request.getOC(oc_id)
-        if (Orden.existe(oc))
+        if (oc != nil) and (Orden.existe(oc))
             oc = Orden.find_by(_id: oc._id)
         end
         #Si cumple con las condiciones, se envía para despacho
