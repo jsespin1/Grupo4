@@ -294,6 +294,7 @@ class Almacen < ActiveRecord::Base
 		end
 
 		puts "Se despacharon -> " + cantidad.to_s
+		cantidad
 
 	end
 	

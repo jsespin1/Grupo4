@@ -188,8 +188,8 @@ class Api::V1::B2bController < ApplicationController
 
 		respond_to do |format|
 			#Debemos llamar al método abastecer MP para FABRICAR
-			Ftp.procesarFtps(Ftp.getFtps)
-			format.json {render json: {estado: "Se termino el proceso"},status:200}
+			cantidad = Ftp.procesarFtps(Ftp.getFtps)
+			format.json {render json: {estado: "Se termino el proceso"}, cantidad: cantidad, status:200}
 		end
 
 	end
