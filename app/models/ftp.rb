@@ -20,7 +20,6 @@ class Ftp < ActiveRecord::Base
         #La idea, es que generamos una orden de compra
         #Si hay stock, generamos la OC y movemos el archivo a la carpeta de ordenes FTP despachadas
         ftps.each do |ftp|
-            puts "Procesando FTP -> " + ftp.to_s
             f = File.open("./pedidos/"+ftp.to_s, "r")
             #id de la OC, em línea 3
             texto = f.readline()
@@ -31,23 +30,26 @@ class Ftp < ActiveRecord::Base
             oc_id = oc_id.tr("\n", '')
             f.close
             #Una vez obtenidos la OC id, obtenemos la orden de compra real
-            despacharFtp(oc_id, ftp)
+            revisarFtp(oc_id, ftp)
         end
     end
 
     def self.revisarFtp(oc_id, ftp)
-        #Obtenemos la orden de compra
+        puts "Procesando FTP: " + ftp.to_s
+        #Obtenemos la orden de compra, Vemos si está en el sistema
         oc = Request.getOC(oc_id)
+        if (Orden.existe(oc))
+            oc = Orden.find_by(_id: oc._id)
+        end
         #Si cumple con las condiciones, se envía para despacho
-        ftp = "ftp" # => es necesaria para comparar strings
-        if (oc.canal.eql? ftp) && ( oc.cantidad_despachada.to_i < oc.cantidad.to_i )
-            #despacharFtp(oc_id, ftp)
+        canal = "ftp" # => es necesaria para comparar strings
+        if (oc != nil) and (oc.canal.eql? canal) and ( oc.cantidad_despachada.to_i < oc.cantidad.to_i )
+            puts "SKU: " + oc.sku.to_s + ", Cantidad: " + oc.cantidad.to_s
+            despacharFtp(oc, ftp)
         end
     end
 
-    def self.despacharFtp(oc_id, ftp)
-        #Obtenemos la orden de compra
-        oc = Request.getOC(oc_id)
+    def self.despacharFtp(oc, ftp)
         #Obtenemos disponibilidad y cantidad a despachar
         disponible = Almacen.getSkusTotal(oc.sku)
         despachar = oc.cantidad-oc.cantidad_despachada
@@ -56,30 +58,24 @@ class Ftp < ActiveRecord::Base
         factura = Request.emitir_factura(oc._id)
 
         if disponible == 0 || factura==nil
+            puts "Error de factura o No hay productos disp."
             return
         end
+        #Guardamos la orden para despachar
+        oc.save
 
         #Despachamos según factibilidad
         if despachar <= disponible
             #Despachamos todo lo requerido
-            #METODO DESPACHAR!!!!!
-
-            Almacen.revisarFormaDeDespacho(despachar, oc.sku, oc_id)
-
-
+            Almacen.revisarFormaDeDespacho(despachar, oc.sku, oc)
         else
             #Despacho parcial segñun disponibilidad
-            #METODO DESPACHAR!!!!!
-
-            Almacen.revisarFormaDeDespacho(disponible, oc.sku, oc_id)
-
+            Almacen.revisarFormaDeDespacho(disponible, oc.sku, oc)
         end
 
         #Si el archivo ftp fue totalmente despachado, se elimina de la lista
-        if oc.cantidad_despachada ==  oc.cantidad && ftp != nil
-            File.delete("./pedidos/" + ftp)
-            puts "FTP: " + ftp.to_s + ", Eliminado Satisfactoriamente"
-        end
+        respuesta = File.delete("./pedidos/" + ftp.to_s)
+        puts "FTP: " + ftp.to_s + ", Eliminado Satisfactoriamente: " + respuesta.inspect
     end
 
     def self.descargarFtp

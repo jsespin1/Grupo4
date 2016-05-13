@@ -128,7 +128,7 @@ class Api::V1::B2bController < ApplicationController
 					puts "La TRX, Factura y OC corresponden"
 					#Si todo está en orden, DESPACHAMOS
 					Thread.new do
-							Almacen.revisarFormaDeDespacho(oc.cantidad, oc.sku, oc._id)
+							Almacen.revisarFormaDeDespacho(oc.cantidad, oc.sku, oc)
 					end
 					format.json {render json: {aceptado: true, idtrx: id_trx.to_s}, status:200}
 				else

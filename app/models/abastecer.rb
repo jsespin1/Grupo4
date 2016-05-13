@@ -74,14 +74,30 @@ class Abastecer < ActiveRecord::Base
 	end
 	
 
+	#------------------------------------ Compra B2B ---------------------------------------------#
 
-	def self.revisarmp
-		
+	def self.comprarB2B
+		#Tenemos que procesar Pasta de Trigo -> Harina 23 (G7), Sal 26 (G8) y Huevo 2 (G2)
+		#Tenemos que procesar Margarina -> Aceite de Maravilla 4 (G11)
+		#Revisamos niveles de cada uno
+		#Arreglo de arreglos con [sku, cantidadDispSKU, grupo] para cada SKU
+		array_disp = [ [23, Controlador.getStock("23")] , [26, Controlador.getStock("26")], [2, Controlador.getStock("2")], [4, actual_4 = Controlador.getStock("4")]]
+		#Si estamos bajo los niveles de cada uno, consultamos stock
+		array_disp.each do |sku_disp|
+			sku = sku_disp[0]
+			disponible = sku_disp[1]
+			#Consultamos stock al grupo correspondiente
+			stock = Compra.consultar_materia_prima(sku)
+
+			#QUEDA PENDIENTE POR FALTA DE STOCK DE LOS OTROS GRUPOS
+		end
 
 	end
 
 
-	def self.pagarFabrica
+	def self.pagarFabricarPP
+		#PENDIENTE, DEPENDE DEL METODO COMPRAR B2B PARA ABASTECERSE DE LAS MATERIAS PRIMAS
+		#Fabricar Pasta De Trigo 6 (Sku:4) y Margarina
 		
 
 	end

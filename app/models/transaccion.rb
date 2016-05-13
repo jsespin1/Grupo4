@@ -9,7 +9,7 @@ class Transaccion < ActiveRecord::Base
     def self.toObject(response)
       transaccion = nil
       r = response
-      if r['_id']
+      if r.to_s.include? '_id'
         transaccion = Transaccion.new(_id: r['_id'].to_s, fecha_creacion: r['created_at'], cuenta_origen: r['origen'].to_s, cuenta_destino: r['destino'].to_s, 
         monto: r['monto'].to_f)
       end
@@ -19,7 +19,7 @@ class Transaccion < ActiveRecord::Base
     def self.toObject2(response)
       transaccion = nil
     	r = response[0]
-	 	  if r['_id']
+	 	  if r.to_s.include? '_id'
         transaccion = Transaccion.new(_id: r['_id'].to_s, fecha_creacion: r['created_at'], cuenta_origen: r['origen'].to_s, cuenta_destino: r['destino'].to_s, 
         monto: r['monto'].to_f)
       end

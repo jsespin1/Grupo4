@@ -254,6 +254,7 @@ class Request < ActiveRecord::Base
     def self.consultarStock(url)
 	  	ruta = URI.parse(url)
 	  	respuesta = HTTParty.get(ruta)
+	  	puts "Respuesta a Stock: " + respuesta.inspect
 	  	respuesta.parsed_response
 	end
 

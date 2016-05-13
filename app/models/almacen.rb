@@ -200,31 +200,30 @@ class Almacen < ActiveRecord::Base
 	  	"Se movieron a Despacho: " + movidos.to_s
 	end
 
-	def self.moverBodegaFTP(cantidad, sku, id_oc)
+	def self.moverBodegaFTP(cantidad, sku, oc)
 		id_despacho = getIdDespacho
-		oc=Request.getOC(id_oc)
 		cuenta = 0
-		begin
+		puts "Despachando FTP, Cantidad: " + cantidad.to_s + ", SKU: " + sku.to_s
+		while cuenta.to_i < cantidad.to_i
 			array_productos = Request.getStock(id_despacho, sku, (cantidad-cuenta).to_i)
-				array_productos.each do |p|
-					hay_espacio = Request.moverStockFTP(p, oc.cliente, oc.precio_unitario,id_oc)
-					#if !hay_espacio
+			array_productos.each do |p|
+				hay_espacio = Request.moverStockFTP(p, oc.cliente, oc.precio_unitario, oc._id)
+				#if !hay_espacio
 					#	puts "El mover Stock FTP problema" + hay_espacio.inspect
 					#	break
-					#end
-					cuenta = cuenta + 1
-				end
-		end while cuenta.to_i < cantidad.to_i
-		Orden.cambiarEstado(id_oc, "finalizada")
-		Orden.cambiarCantidad(id_oc, cantidad)
+				#end
+				cuenta = cuenta + 1
+			end
+		end
+		Orden.cambiarEstado(oc._id, "finalizada")
+		Orden.cambiarCantidad(oc._id, cantidad)
 		#Request.deliver_orden(id_oc)
 		cuenta
 	end
 	
-	def self.moverBodegaB2B(cantidad, sku, id_oc)
+	def self.moverBodegaB2B(cantidad, sku, oc)
 		puts "Mover Bodega Despachando B2B | cantidad: " + cantidad.to_s + "| SKU: " + sku.to_s
 		id_despacho = getIdDespacho
-		oc=Request.getOC(id_oc)
 		id_cliente=oc.cliente
 		almacen_destino=Controlador.getDestino(id_cliente)
 		cuenta=0
@@ -232,8 +231,7 @@ class Almacen < ActiveRecord::Base
 			puts "Cuenta: " + cuenta.to_s
 			array_productos = Request.getStock(id_despacho, sku, (cantidad-cuenta).to_i)
 			array_productos.each do |p|
-				hay_espacio = Request.moverStockBodega(p, almacen_destino, id_oc, oc.precio_unitario)
-				puts hay_espacio.inspect
+				hay_espacio = Request.moverStockBodega(p, almacen_destino, oc._id, oc.precio_unitario)
 				condicion = "Traspaso no realizado debido a falta de espacio"
 				#if respuesta['error'].eql? condicion
 				#hay que vaciar despacho
@@ -245,38 +243,37 @@ class Almacen < ActiveRecord::Base
 			end
 		end
 		#Request.deliver_orden(id_oc)
-		Orden.cambiarEstado(id_oc, "finalizada")
-		Orden.cambiarCantidad(id_oc, cantidad)
+		Orden.cambiarEstado(oc._id, "finalizada")
+		Orden.cambiarCantidad(oc._id, cantidad)
 		cuenta
 	end
 
 
 	#revisa la forma en que se saca el stock para moverlo a despacho
-	def self.revisarFormaDeDespacho(cantidad, sku, id_oc)
-		puts "Despachando -> | Cantidad: " + cantidad.to_s+" | SKU:  "+sku+" | OC: "+id_oc
-		orden = Request.getOC(id_oc)
+	def self.revisarFormaDeDespacho(cantidad, sku, orden)
+		puts "Despachando -> | Cantidad: " + cantidad.to_s+" | SKU:  "+sku+" | OC: "+orden._id
 		if Almacen.verificar_stock_despacho(cantidad, sku)
 			canal="ftp"
 			if orden.canal.eql? canal
 				puts "SE METIO A FTP DESPACHO"
-				cantidad = moverBodegaFTP(cantidad, sku, id_oc)
+				cantidad = moverBodegaFTP(cantidad, sku, orden)
 			end
 			canal="b2b"
 			if orden.canal.eql? canal
 				puts "SE METIO A B2B DESPACHO"
-				cantidad = moverBodegaB2B(cantidad, sku, id_oc)
+				cantidad = moverBodegaB2B(cantidad, sku, orden)
 			end
 		elsif Almacen.verificar_stock_sin_pulmon(cantidad,sku)
 			moverAlmacenDespacho(sku,cantidad)
 			canal="b2b"
 			if orden.canal.eql? canal
 				puts "SE METIO A FTP SIN PULMON"
-				cantidad = moverBodegaB2B(cantidad, sku, id_oc)
+				cantidad = moverBodegaB2B(cantidad, sku, orden)
 			end
 			canal="ftp"
 			if orden.canal.eql? canal
 				"SE METIO A B2B SIN PULMON"
-				cantidad = moverBodegaFTP(cantidad, sku, id_oc)
+				cantidad = moverBodegaFTP(cantidad, sku, orden)
 			end
 
 					#despachar 
@@ -285,12 +282,12 @@ class Almacen < ActiveRecord::Base
 			canal="b2b"
 			if orden.canal.eql? canal
 				puts "SE METIO A FTP CON PULMON"
-				cantidad = moverBodegaB2B(cantidad, sku, id_oc)
+				cantidad = moverBodegaB2B(cantidad, sku, orden)
 			end
 			canal="ftp"
 			if orden.canal.eql? canal
 				"SE METIO A B2B CON PULMON"
-				cantidad = moverBodegaFTP(cantidad, sku, id_oc)
+				cantidad = moverBodegaFTP(cantidad, sku, orden)
 			end
 		else 
 						
