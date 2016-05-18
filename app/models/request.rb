@@ -97,6 +97,7 @@ class Request < ActiveRecord::Base
 		puts "hash -> " + hash.to_s
 		body = { canal: canal, cantidad: cantidad, sku: sku, cliente: cliente, proveedor: proveedor, precioUnitario: precio_unitario, fechaEntrega: date_to_millis(fecha_entrega), notas: notas }.to_json
 		orden = HTTParty.put(ruta, :body => body, :headers => hash)
+		Orden.toObject(orden.parsed_response) #modificado post entrega 1
 	end
 
 	def self.date_to_millis(fecha)
@@ -237,6 +238,23 @@ class Request < ActiveRecord::Base
 
 #-----------------------API-B2B-------------------------#
 
+	def self.enviarOC(numero_grupo, id_oc)
+		url ="a"
+		case numero_grupo
+		
+		when "8" #recibir
+			url = 'http://integra8.ing.puc.cl/api/oc/recibir/' + id_oc
+		when "2" # recibir
+			url = 'http://integra2.ing.puc.cl/api/oc/recibir/' + id_oc
+		when "7" # srecibir
+			url = 'http://integra7.ing.puc.cl/api/oc/recibir/' + id_oc
+		when "11" # sku_aceite_recibir
+			url = 'http://integra11.ing.puc.cl/api/oc/recibir/' + id_oc
+		end
+		ruta = URI.parse(url)
+		respuesta = HTTParty.get(url).parsed_response
+	end
+	
 	def self.enviarFactura(ruta, idfactura)
         ruta = URI.parse(ruta)
 		respuesta = HTTParty.get(ruta)

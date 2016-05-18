@@ -21,8 +21,18 @@ class Compra < ActiveRecord::Base
 	
 	end
 
-	def self.comprar_materia_prima(sku,cantidad_requerida,grupo_proveedor)
-
+	def self.enviar_orden(sku,cantidad_requerida,grupo_proveedor)
+		if cantidad_requerida<=consultar_materia_prima(sku)
+			#FALTA FECHA ENTREGA
+			orden=Request.create_orden(b2b, cantidad_requerida, sku, Orden.getIdPropio , grupo_proveedor, Controlador.getPrecio(sku)+1, fecha_entrega, notas)
+			
+			respuesta=Request.enviarOC(orden._id).parsed_response
+			if respuesta['aceptado']==true
+				Orden.saveOc(orden)
+				cambiarEstado(orden._id, "aceptado")
+				
+			end
+		end
 	end
 	
 	def self.compra_productos_procesados(sku, cantidad_requerida, grupo_proveedor)
