@@ -11,8 +11,8 @@ class Factura < ActiveRecord::Base
     # :id_oc, :string
     # :motivo_rechazo, :string
     # :motivo_anulacion, :string
-
-    #belongs_to :orden
+    validates :_id, :presence => true, :uniqueness => true
+    belongs_to :orden
 
     def self.toObject(response)
         factura = nil

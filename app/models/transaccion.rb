@@ -5,6 +5,8 @@ class Transaccion < ActiveRecord::Base
       #t.string :cuenta_origen
       #t.string :cuenta_destino
       #t.float :monto
+    validates :_id, :presence => true, :uniqueness => true
+    belongs_to :factura
 
     def self.toObject(response)
       transaccion = nil

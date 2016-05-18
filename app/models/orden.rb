@@ -2,8 +2,6 @@ class Orden < ActiveRecord::Base
 
     validates :_id, :presence => true, :uniqueness => true
 
-
-
 	def self.toObject(response)
 	 	r = response[0]
         if r.to_s.include? '_id'
@@ -57,7 +55,7 @@ class Orden < ActiveRecord::Base
     def self.cambiarEstado(oc_id, estado)
     	orden = Orden.find_by(_id: oc_id)
 		orden.update_attributes(:estado => estado)
-    end
+    end 
 
     def self.cambiarCantidad(oc_id, despachadas)
     	orden = Orden.find_by(_id: oc_id)

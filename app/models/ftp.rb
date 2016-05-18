@@ -68,7 +68,13 @@ class Ftp < ActiveRecord::Base
             return cantidad
         end
         #Guardamos la orden para despachar
-        oc.save
+        puts "Se guardara la orden en la factura"
+        factura.orden = oc
+        factura.save
+        if !oc.save or !factura.save
+            return cantidad
+        end
+
 
         #Despachamos según factibilidad
         if despachar <= disponible
@@ -80,8 +86,12 @@ class Ftp < ActiveRecord::Base
         end
 
         #Si el archivo ftp fue totalmente despachado, se elimina de la lista
-        respuesta = File.delete("./pedidos/" + ftp.to_s)
-        puts "FTP: " + ftp.to_s + ", Eliminado Satisfactoriamente: " + respuesta.inspect
+        begin
+          respuesta = File.delete("./pedidos/" + ftp.to_s)
+          puts "FTP: " + ftp.to_s + ", Eliminado Satisfactoriamente: " + respuesta.inspect
+        rescue => ex
+            #Do nothing
+        end
         cantidad
     end
 
