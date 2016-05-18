@@ -11,7 +11,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160506025406) do
+ActiveRecord::Schema.define(version: 20160518190630) do
+
 
   create_table "abastecers", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -71,7 +72,10 @@ ActiveRecord::Schema.define(version: 20160506025406) do
     t.string   "id_oc"
     t.string   "motivo_rechazo"
     t.string   "motivo_anulacion"
+    t.integer  "orden_id"
   end
+
+  add_index "facturas", ["orden_id"], name: "index_facturas_on_orden_id"
 
   create_table "finanzas", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -139,7 +143,10 @@ ActiveRecord::Schema.define(version: 20160506025406) do
     t.float    "monto"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.integer  "factura_id"
   end
+
+  add_index "transaccions", ["factura_id"], name: "index_transaccions_on_factura_id"
 
   create_table "venta", force: :cascade do |t|
     t.datetime "created_at", null: false
