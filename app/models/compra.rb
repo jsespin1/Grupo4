@@ -13,25 +13,31 @@ class Compra < ActiveRecord::Base
 		when "4" # sku_aceite_maravilla
 			url = 'http://integra11.ing.puc.cl/api/consultar/' + sku.to_s
 		end
+		puts "URL -> " +url
 		respuesta = Request.consultarStock(url)
-		stock = respuesta["stock"]
+		stock = respuesta['stock']
+		puts "STOCK -> "+stock.inspect
+		stock
 	end
 
 	def self.consultar_productos_procesados(sku)
 	
 	end
 
-	def self.enviar_orden(sku,cantidad_requerida,grupo_proveedor)
-		if cantidad_requerida<=consultar_materia_prima(sku)
-			#FALTA FECHA ENTREGA
-			orden=Request.create_orden(b2b, cantidad_requerida, sku, Orden.getIdPropio , grupo_proveedor, Controlador.getPrecio(sku)+1, fecha_entrega, notas)
-			
-			respuesta=Request.enviarOC(orden._id).parsed_response
-			if respuesta['aceptado']==true
-				Orden.saveOc(orden)
-				cambiarEstado(orden._id, "aceptado")
-				
-			end
+	def self.enviar_orden(sku,cantidad_requerida,grupo_proveedor,fecha_entrega)
+		puts "CANTIDAD REQUERIDA ->"+cantidad_requerida.to_s+" | "+"STOCK -> "+  consultar_materia_prima(sku).to_s
+		if cantidad_requerida<=consultar_materia_prima(sku).to_i
+	#		puts "HAY STOCK PARA COMPRAR"
+	#		#FALTA FECHA ENTREGA
+	#		orden=Request.create_orden(b2b, cantidad_requerida, sku, Orden.getIdPropio , grupo_proveedor, Controlador.getPrecio(sku)+1, fecha_entrega, notas)
+	#		puts "ORDEN -> " + orden.inspect
+	#		respuesta=Request.enviarOC(grupo_proveedor, orden._id).parsed_response
+	#		puts "RESPUESTA -> " + respuesta.inspect
+	#		if respuesta['aceptado']==true
+	#			Orden.saveOc(orden)
+	#			cambiarEstado(orden._id, "aceptado")
+	#			
+	#		end
 		end
 	end
 	

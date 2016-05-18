@@ -4,6 +4,7 @@ class AlmacenController < ApplicationController
 		@almacenes = Request.getAlmacenesAll
 		@orden = Orden.all
 		@factura = Factura.all
+		#Compra.enviar_orden("26",101,7,DateTime.current + 1.days)
 		#Ftp.procesarFtps(Ftp.getFtps)
 		#Compra.consultar_materia_prima("26")
 		#oc_id = "57145e4cf77d320300f0deb9"

@@ -273,7 +273,7 @@ class Request < ActiveRecord::Base
 	  	ruta = URI.parse(url)
 	  	respuesta = HTTParty.get(ruta)
 	  	puts "Respuesta a Stock: " + respuesta.inspect
-	  	respuesta.parsed_response
+	  	respuesta
 	end
 
 
