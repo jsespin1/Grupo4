@@ -29,6 +29,8 @@ gem 'httparty'
 
 gem 'responders', '~> 2.0'
 
+gem 'capistrano-rails-console'
+
 
 gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
