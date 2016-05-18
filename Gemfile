@@ -30,9 +30,13 @@ gem 'httparty'
 gem 'responders', '~> 2.0'
 
 
-gem 'bootstrap-sass'
-gem 'autoprefixer-rails'
-gem 'bootstrap-table-rails'
+#gem 'bootstrap-sass'
+#gem 'autoprefixer-rails'
+#gem 'bootstrap-table-rails'
+
+gem 'spree', '~> 3.0.9'
+gem 'spree_gateway', '~> 3.0.0'
+gem 'spree_auth_devise', '~> 3.0.0'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
