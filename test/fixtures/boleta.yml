@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  proveedor: MyString
+  direccion: MyString
+  monto: 1
+  idboleta: MyString
+  cantidad: 1
+  sku: MyString
+
+two:
+  proveedor: MyString
+  direccion: MyString
+  monto: 1
+  idboleta: MyString
+  cantidad: 1
+  sku: MyString

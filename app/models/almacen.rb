@@ -221,6 +221,25 @@ class Almacen < ActiveRecord::Base
 		cuenta
 	end
 	
+	def self.moverBodegaWEB(cantidad, sku, boletum)
+		id_despacho = getIdDespacho
+		cuenta = 0
+		puts "Despachando FTP, Cantidad: " + cantidad.to_s + ", SKU: " + sku.to_s
+		while cuenta.to_i < cantidad.to_i
+			array_productos = Request.getStock(id_despacho, sku, (cantidad-cuenta).to_i)
+			array_productos.each do |p|
+				hay_espacio = Request.moverStockFTP(p, boletum.direccion, Controlador.getPrecio(boletum.sku), boletum.idboleta)
+				#if !hay_espacio
+					#	puts "El mover Stock FTP problema" + hay_espacio.inspect
+					#	break
+				#end
+				cuenta = cuenta + 1
+			end
+		end
+	
+		cuenta
+	end
+	
 	def self.moverBodegaB2B(cantidad, sku, oc)
 		puts "Mover Bodega Despachando B2B | cantidad: " + cantidad.to_s + "| SKU: " + sku.to_s
 		id_despacho = getIdDespacho
