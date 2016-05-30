@@ -228,7 +228,12 @@ class Almacen < ActiveRecord::Base
 		while cuenta.to_i < cantidad.to_i
 			array_productos = Request.getStock(id_despacho, sku, (cantidad-cuenta).to_i)
 			array_productos.each do |p|
+				puts "producto ->" + p.inspect
+				puts "direccion -> " + boletum.direccion.inspect
+				puts "precio ->" +  Controlador.getPrecio(boletum.sku).inspect
+				puts "id boleta ->" + boletum.idboleta.inspect
 				hay_espacio = Request.moverStockFTP(p, boletum.direccion, Controlador.getPrecio(boletum.sku), boletum.idboleta)
+				puts "HAY ESPACIO" + hay_espacio.inspect
 				#if !hay_espacio
 					#	puts "El mover Stock FTP problema" + hay_espacio.inspect
 					#	break

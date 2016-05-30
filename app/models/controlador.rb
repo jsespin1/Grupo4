@@ -166,10 +166,11 @@ class Controlador < ActiveRecord::Base
 
   def self.getPrecio(sku)
   	precios
-  	precio = 0
+  	precio=0
   	@array_precios.each do |p|
-  		if sku==p['sku']
-  			precio = p['precio']
+  		sku2=p[:sku]
+  		if sku.eql? sku2
+  			precio = p[:precio]
   		end
   	end
   	precio
