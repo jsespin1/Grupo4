@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get "/inicio" => "home#inicio"
   end
 
+
   mount Spree::Core::Engine, at: '/'
         
   root 'almacen#index'

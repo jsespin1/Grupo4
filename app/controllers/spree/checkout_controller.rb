@@ -23,7 +23,7 @@ module Spree
 
     rescue_from Spree::Core::GatewayError, with: :rescue_from_spree_gateway_error
 
-    # Updates the order and advances to the next state (when possible.)
+
     def update
       if @order.update_from_params(params, permitted_checkout_attributes, request.headers.env)
         @order.temporary_address = !params[:save_user_address]
@@ -120,11 +120,13 @@ module Spree
 
     def ensure_sufficient_stock_lines
       product = @order.line_items
-      product = product[0].sku
+      sku = product[0].sku
+      stock = Controlador.getStock(sku)
+      cantidad_requerida = product[0].quantity.to_i
       puts "PRODUCTOO ->" + product.inspect
-      if @order.insufficient_stock_lines.present?
+      if cantidad_requerida > stock
         flash[:error] = Spree.t(:inventory_error_flash_for_insufficient_quantity)
-        redirect_to spree.cart_path
+        redirect_to checkout_state_path(@order.state)
       end
     end
 
@@ -145,12 +147,6 @@ module Spree
       @order.ship_address ||= Address.build_default if @order.checkout_steps.include?('delivery')
     end
 
-    def before_delivery
-      return if params[:order].present?
-
-      packages = @order.shipments.map(&:to_package)
-      @differentiator = Spree::Stock::Differentiator.new(@order, packages)
-    end
 
     def before_payment
       if @order.checkout_steps.include? "delivery"
