@@ -14,6 +14,9 @@ class Boletum < ActiveRecord::Base
     
         boletafinal.save
         puts "Boleta Final 2 -> " + boletafinal.inspect
+        boletaid=boleta['_id']
+        url="http://integracion-2016-dev.herokuapp.com/web/pagoenlinea?callbackUrl=localhost%3A3000&cancelUrl=http%3A%2F%2Fwww.emol.com&boletaId="+boletaid
+        redirect_to(url)
     end
    
     
