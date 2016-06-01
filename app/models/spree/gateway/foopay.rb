@@ -20,6 +20,7 @@ class Spree::Gateway::Foopay < Spree::Gateway
     cantidad_requerida = product.quantity.to_i
     price = product.price.to_i
     address = options[:billing_address][:address1]
+    Boletum.crearBoleta(sku, cantidad_requerida, address, price)
     ActiveMerchant::Billing::Response.new(true, 'success', {}, {})
   end
 end
