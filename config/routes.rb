@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     get "/exito" => "home#exito"
   end
 
+
   mount Spree::Core::Engine, at: '/'
         
   root 'almacen#index'

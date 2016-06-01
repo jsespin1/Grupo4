@@ -16,3 +16,12 @@ Spree.config do |config|
 end
 
 Spree.user_class = "Spree::User"
+
+Rails.application.config.spree.payment_methods << Spree::Gateway::Foopay
+
+Spree::Gateway::Foopay.create(      
+  name: 'Foopay',      
+  description: 'My fancy new Foopay!',      
+  active: true)    
+
+

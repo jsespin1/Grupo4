@@ -6,6 +6,7 @@ module Spree
       puts "SE LLAMO CREAR BOLETA 1"
 		  crearBoleta(38, 2, "mi casa",  1.513*1.19*2)
     end
+
     def exito
       
           boleta=Boletum.last
@@ -18,9 +19,14 @@ module Spree
           @bruto=@total*1/1.19
           @iva=@total-@bruto
           
-        
     end
     
-    
+    def index
+      @stock = 0
+      @products = Product.all
+      @searcher = build_searcher(params.merge(include_images: true))
+      @taxonomies = Spree::Taxonomy.includes(root: :children)
+    end
+
   end
 end
