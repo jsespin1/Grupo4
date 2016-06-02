@@ -12,7 +12,7 @@ module Spree
       sku = product[0].sku
       stock = Controlador.getStock(sku)
       cantidad_requerida = product[0].quantity.to_i
-      if cantidad_requerida > stock
+      if cantidad_requerida < stock
         flash[:error] = Spree.t(:inventory_error_flash_for_insufficient_quantity)
         redirect_to spree.cart_path
       end
@@ -49,21 +49,6 @@ module Spree
       end
     end
 
-    def before_payment
-      gateway_options_class = Spree::Payment::GatewayOptions
-      puts :amount.inspect
-      if @order.checkout_steps.include? "delivery"
-        packages = @order.shipments.map(&:to_package)
-        @differentiator = Spree::Stock::Differentiator.new(@order, packages)
-        @differentiator.missing.each do |variant, quantity|
-          @order.contents.remove(variant, quantity)
-        end
-      end
-
-      if try_spree_current_user && try_spree_current_user.respond_to?(:payment_sources)
-        @payment_sources = try_spree_current_user.payment_sources
-      end
-    end
     
   end
 end
