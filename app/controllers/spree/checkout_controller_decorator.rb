@@ -9,7 +9,7 @@ module Spree
       stock = Controlador.getStock(sku)
       cantidad_requerida = product[0].quantity.to_i
       puts "REQUERIDO: ->" + cantidad_requerida.to_s + ",  STOCK: " + stock.to_s
-      if cantidad_requerida > stock
+      if cantidad_requerida < stock
         flash[:error] = Spree.t(:inventory_error_flash_for_insufficient_quantity)
         redirect_to spree.cart_path
       end

@@ -1,0 +1,7 @@
+<%= form_for(:options) do |f| %>
+	<p>Oprima el boton para redirigir a pago</p>
+    <%= submit_tag Spree.t(:save_and_continue), :class => 'continue button primary' %>
+<% end %>
+
+
+ <script>Spree.disableSaveOnClick();</script>
