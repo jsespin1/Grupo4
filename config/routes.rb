@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   end
 
 
-  #mount Spree::Core::Engine, at: '/'
+  mount Spree::Core::Engine, at: '/'
         
   root 'almacen#index'
 
