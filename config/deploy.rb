@@ -50,8 +50,8 @@ namespace :deploy do
     end
   end
   task :set_spree do
-    run "rake spree_auth:admin:create"
-    run "rake db:seed"
+    execute :rake "spree_auth:admin:create"
+    execute :rake "db:seed"
   end
 
   after :publishing, 'deploy:restart'
