@@ -51,8 +51,8 @@ namespace :deploy do
   end
   task :set_spree do
     on roles(:app), in: :sequence, wait: 5 do
-      execute :rake, "spree_auth:admin:create"
-      execute :rake, "db:seed"
+      #execute :rake, "spree_auth:admin:create"
+      #execute :rake, "db:seed"
     end
   end
 
