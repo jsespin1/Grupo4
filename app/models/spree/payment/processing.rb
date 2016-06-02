@@ -10,7 +10,6 @@ module Spree
       def process!
         purchase!
         if payment_method && payment_method.auto_capture?
-          puts "HOLAAA"
           purchase!
         else
           #authorize!
@@ -121,8 +120,8 @@ module Spree
                                          source,
                                          gateway_options)
           handle_response(response, success_state, :failure)
-          redirect_to sho_almacen_path()
-          puts "HOLAAAA"
+          #redirect_to sho_almacen_path()
+          #puts "HOLAAAA"
         end
       end
 
