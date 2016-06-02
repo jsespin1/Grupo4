@@ -71,3 +71,7 @@ group :development do
   #Por ultimo metodo 'set :passenger_restart_with_touch, true' en deploy.rb
   gem 'capistrano-passenger'
 end
+
+gem 'spree', '~> 3.0.9'
+gem 'spree_gateway', '~> 3.0.0'
+gem 'spree_auth_devise', '~> 3.0.0'
