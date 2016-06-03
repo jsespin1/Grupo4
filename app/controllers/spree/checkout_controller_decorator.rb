@@ -1,12 +1,6 @@
 module Spree
 
   CheckoutController.class_eval do
-    before_filter :use_port_80 if Rails.env != 'development'
-    def use_port_80
-        class << request
-            def port; 80; end
-        end
-    end
     #Modificamos este método de spree para validar Stock contra sistema bodega
     def ensure_sufficient_stock_lines
       product = @order.line_items
@@ -37,10 +31,10 @@ module Spree
           monto = product.price.to_i * cantidad_requerida
           direccion = @order.bill_address.address1
           url = Boletum.crearBoleta(sku, cantidad_requerida, direccion, monto)
-          redirect_to url, port: 80
+          redirect_to url
           #@current_order = nil
-          #flash.notice = Spree.t(:order_processed_successfully)
-          #flash['order_completed'] = true
+          flash.notice = Spree.t(:order_processed_successfully)
+          flash['order_completed'] = true
           #redirect_to completion_route
         else
           redirect_to checkout_state_path(@order.state)
