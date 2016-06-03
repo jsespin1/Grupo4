@@ -8,7 +8,7 @@ module Spree
     end
 
     def exito
-      
+
           boleta=Boletum.last
           puts "BOLETA ->"+boleta.inspect
           puts "STOCK PRE DESPACHO " + Almacen.getSkusTotal("38").to_s
@@ -18,9 +18,9 @@ module Spree
           @total=boleta.monto
           @bruto=@total*1/1.19
           @iva=@total-@bruto
-          
+
     end
-    
+
     def index
       @stock = 0
       @products = Product.all
