@@ -48,6 +48,18 @@ Rails.application.configure do
   # when problems arise.
   config.log_level = :debug
 
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'integra4.ing.puc.cl',
+    port:                 80,
+    domain:               'integra4.ing.puc.cl',
+    user_name:            '<username>',
+    password:             '<password>',
+    authentication:       'plain',
+    enable_starttls_auto: true  }
+
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
 
