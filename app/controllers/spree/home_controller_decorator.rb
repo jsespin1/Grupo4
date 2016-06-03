@@ -10,10 +10,10 @@ module Spree
     def exito
       
           boleta=Boletum.last
-          puts "BOLETA ->"+boleta.inspect
-          puts "STOCK PRE DESPACHO " + Almacen.getSkusTotal("38").to_s
-          @despachados=Almacen.moverBodegaWEB(boleta.cantidad, boleta.sku, boleta)
-          puts "STOCK POST DESPACHO " + Almacen.getSkusTotal("38").to_s
+          @despachados = boleta.cantidad
+          Thread.new do
+            @despachados = Almacen.moverBodegaWEB(boleta.cantidad, boleta.sku, boleta)
+          end
           #puts "CANTIDAD DESPACHADA ->" + despachados
           @total=boleta.monto
           @bruto=@total*1/1.19
