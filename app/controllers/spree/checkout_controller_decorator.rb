@@ -34,7 +34,7 @@ module Spree
           product = @order.line_items[0]
           sku = product.sku
           cantidad_requerida = product.quantity.to_i
-          monto = product.price.to_i
+          monto = product.price.to_i * cantidad_requerida
           direccion = @order.bill_address.address1
           url = Boletum.crearBoleta(sku, cantidad_requerida, direccion, monto)
           redirect_to url, port: 80
