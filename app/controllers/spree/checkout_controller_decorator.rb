@@ -7,7 +7,7 @@ module Spree
       sku = product[0].sku
       stock = Controlador.getStock(sku)
       cantidad_requerida = product[0].quantity.to_i
-      if cantidad_requerida > stock
+      if cantidad_requerida < stock
         flash[:error] = Spree.t(:inventory_error_flash_for_insufficient_quantity)
         redirect_to spree.cart_path
       end
@@ -33,8 +33,8 @@ module Spree
           url = Boletum.crearBoleta(sku, cantidad_requerida, direccion, monto)
           redirect_to url
           #@current_order = nil
-          flash.notice = Spree.t(:order_processed_successfully)
-          flash['order_completed'] = true
+          #flash.notice = Spree.t(:order_processed_successfully)
+          #flash['order_completed'] = true
           #redirect_to completion_route
         else
           redirect_to checkout_state_path(@order.state)
