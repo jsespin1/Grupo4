@@ -11,7 +11,7 @@ class Boletum < ActiveRecord::Base
 
     def self.getUrl(boletaId)
         if Rails.env == 'development'
-            url = "http://integracion-2016-dev.herokuapp.com/web/pagoenlinea?callbackUrl=localhost%3A3000%2Fexito&cancelUrl=http%3A%2F%2Fwww.emol.com&boletaId="+boletaId
+            url = "http://integracion-2016-dev.herokuapp.com/web/pagoenlinea?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fexito&cancelUrl=http%3A%2F%2Fwww.emol.com&boletaId="+boletaId
         else
             #RECORDAR CAMBIARLO A PROD
             url = "http://integracion-2016-dev.herokuapp.com/web/pagoenlinea?callbackUrl=integra4.ing.puc.cl&cancelUrl=http%3A%2F%2Fwww.emol.com&boletaId="+boletaId
