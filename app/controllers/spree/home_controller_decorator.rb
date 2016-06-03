@@ -1,6 +1,11 @@
 module Spree
   HomeController.class_eval do
 
+    def falla
+      boleta=Boletum.last
+      @idboleta=boleta.idboleta
+      
+    end
 
     
     def exito
