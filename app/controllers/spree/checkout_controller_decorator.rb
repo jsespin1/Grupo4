@@ -1,10 +1,11 @@
 module Spree
 
   CheckoutController.class_eval do
-    extend ActiveSupport::Concern
-    included do
-      class_attribute :gateway_options_class
-      self.gateway_options_class = Spree::Payment::GatewayOptions
+    before_filter :use_port_80 if Rails.env == 'production'
+    def use_port_80
+        class << request
+            def port; 80; end
+        end
     end
     #Modificamos este método de spree para validar Stock contra sistema bodega
     def ensure_sufficient_stock_lines

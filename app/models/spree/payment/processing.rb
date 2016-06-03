@@ -6,14 +6,15 @@ module Spree
         class_attribute :gateway_options_class
         self.gateway_options_class = Spree::Payment::GatewayOptions
       end
-
+      #METODOS MODIFICADOS -> process!, handle_payment_preconditions
       def process!
+        #ACA OBLIGAMOS A QUE SE EFECTUE LA COMPRA
         purchase!
-        if payment_method && payment_method.auto_capture?
-          purchase!
-        else
+        #if payment_method && payment_method.auto_capture?
+          #purchase!
+        #else
           #authorize!
-        end
+        #end
       end
 
       def authorize!
@@ -97,7 +98,7 @@ module Spree
         unless block_given?
           raise ArgumentError.new("handle_payment_preconditions must be called with a block")
         end
-
+        #ACA SETEAMOS TODOS LOS VALORES A TRUE PARA QUE PASE Y DESPUES EN CHECKOUT_CONTROLLER REDIRIJA A SISTEMA PAGO
         if true
           if true
             if true
