@@ -1,11 +1,6 @@
 module Spree
   HomeController.class_eval do
 
-    def falla
-      boleta=Boletum.last
-      @idboleta=boleta.idboleta
-      
-    end
 
     
     def exito
@@ -15,10 +10,7 @@ module Spree
           Thread.new do
             @despachados = Almacen.moverBodegaWEB(boleta.cantidad, boleta.sku, boleta)
           end
-          #puts "CANTIDAD DESPACHADA ->" + despachados
-          @total=(boleta.monto *100).round / 100.0
-          @bruto=((@total*1/1.19)*100).round / 100.0
-          @iva=@total-@bruto
+
           
     end
     
