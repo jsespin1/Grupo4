@@ -39,8 +39,8 @@ module Spree
           url = Boletum.crearBoleta(sku, cantidad_requerida, direccion, monto)
           redirect_to url, port: 80
           #@current_order = nil
-          flash.notice = Spree.t(:order_processed_successfully)
-          flash['order_completed'] = true
+          #flash.notice = Spree.t(:order_processed_successfully)
+          #flash['order_completed'] = true
           #redirect_to completion_route
         else
           redirect_to checkout_state_path(@order.state)

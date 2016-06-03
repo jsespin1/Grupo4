@@ -7,6 +7,11 @@ module Spree
 		  crearBoleta(38, 2, "mi casa",  1.513*1.19*2)
     end
 
+    def falla
+      boleta=Boletum.last
+      @idboleta=boleta.idboleta
+      
+    end
     def exito
       
           boleta=Boletum.last
@@ -15,8 +20,8 @@ module Spree
             @despachados = Almacen.moverBodegaWEB(boleta.cantidad, boleta.sku, boleta)
           end
           #puts "CANTIDAD DESPACHADA ->" + despachados
-          @total=boleta.monto
-          @bruto=@total*1/1.19
+          @total=(boleta.monto *100).round / 100.0
+          @bruto=((@total*1/1.19)*100).round / 100.0
           @iva=@total-@bruto
           
     end

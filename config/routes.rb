@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   Spree::Core::Engine.routes.draw do
     get "/exito" => "home#exito"
+    get "/falla" => "home#falla"
   end
 
   mount Spree::Core::Engine, at: '/'
