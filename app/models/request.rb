@@ -196,8 +196,11 @@ class Request < ActiveRecord::Base
 		hash = {'Content-Type' => "application/json"}
 		body = { proveedor: proveedor_id, cliente: cliente_id, total: total }.to_json
 		respuesta = HTTParty.put(ruta, :body => body, :headers => hash)
+		respuesta
 		#puts "BOLETA -> " + respuesta.inspect
 	end
+	
+	
 
 
 #-----------------------Transferencias------------------------#

@@ -1,0 +1,2 @@
+class PagoController < ApplicationController
+end

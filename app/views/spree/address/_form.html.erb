@@ -1,0 +1,19 @@
+
+<% address_id = address_type.chars.first %>
+
+<div class="inner" data-hook=<%="#{address_type}_inner" %>>
+  <p class="form-group" id=<%="#{address_id}firstname" %>>
+    <%= form.label :firstname do %>
+      <%= Spree.t(:first_name) %><abbr class="required" title="required">*</abbr>
+    <% end %>
+    <%= form.text_field :firstname, :class => 'form-control required' %>
+  </p>
+  <p class="form-group" id=<%="#{address_id}address1" %>>
+    <%= form.label :address1 do %>
+      <%= Spree.t(:street_address) %><abbr class="required" title="required">*</abbr>
+    <% end %>
+    <%= form.text_field :address1, :class => 'form-control  required' %>
+  </p>
+
+
+</div>

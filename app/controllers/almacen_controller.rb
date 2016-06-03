@@ -1,10 +1,18 @@
 class AlmacenController < ApplicationController
 
 	def index 
+		puts "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		
 		@almacenes = Request.getAlmacenesAll
 		@orden = Orden.all
 		@factura = Factura.all
+<<<<<<< HEAD
 		#Compra.enviar_orden("26",101,7,DateTime.current + 1.days)
+=======
+		puts "SE LLAMO CREAR BOLETA 1"
+		Boletum.crearBoleta("38", 2, "mi casa",  (1513*1.19*2).ceil)
+		puts "SE LLAMO CREAR BOLETA"
+>>>>>>> 920e1f853c4c0904939e91e8629a7699ef452a13
 		#Ftp.procesarFtps(Ftp.getFtps)
 		#Compra.consultar_materia_prima("26")
 		#oc_id = "57145e4cf77d320300f0deb9"

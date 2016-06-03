@@ -1,0 +1,12 @@
+<% sku = @product.sku  %>
+<% if sku == "11"  %>
+	<% @stock = Controlador.getStock(11)  %>
+<% elsif sku == "16"  %>
+	<% @stock = Controlador.getStock(16)  %>
+<% elsif  sku == "38"  %>
+	<% @stock = Controlador.getStock(38)  %>
+<% else %>
+	<% @stock = Controlador.getStock(44)  %>
+<% end%>
+
+<p> Stock: <%="  " << @stock.to_s %></p>
