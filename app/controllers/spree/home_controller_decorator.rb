@@ -1,17 +1,13 @@
 module Spree
   HomeController.class_eval do
-    def inicio
-      puts "INICIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"
-      @products = Product.all
-      puts "SE LLAMO CREAR BOLETA 1"
-		  crearBoleta(38, 2, "mi casa",  1.513*1.19*2)
-    end
 
     def falla
       boleta=Boletum.last
       @idboleta=boleta.idboleta
       
     end
+
+    
     def exito
       
           boleta=Boletum.last
