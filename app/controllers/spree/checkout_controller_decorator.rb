@@ -1,7 +1,7 @@
 module Spree
 
   CheckoutController.class_eval do
-    before_filter :use_port_80 if Rails.env == 'production'
+    before_filter :use_port_80 if Rails.env != 'development'
     def use_port_80
         class << request
             def port; 80; end
@@ -37,7 +37,7 @@ module Spree
           monto = product.price.to_i
           direccion = @order.bill_address.address1
           url = Boletum.crearBoleta(sku, cantidad_requerida, direccion, monto)
-          redirect_to url
+          redirect_to url, port: 80
           #@current_order = nil
           flash.notice = Spree.t(:order_processed_successfully)
           flash['order_completed'] = true
