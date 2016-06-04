@@ -31,7 +31,7 @@ module Spree
           monto = product.price.to_i * cantidad_requerida
           direccion = @order.bill_address.address1
           url = Boletum.crearBoleta(sku, cantidad_requerida, direccion, monto)
-          redirect_to url
+          redirect_to url, port: 80
           #@current_order = nil
           #flash.notice = Spree.t(:order_processed_successfully)
           #flash['order_completed'] = true
