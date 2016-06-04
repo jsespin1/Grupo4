@@ -15,7 +15,8 @@ module Spree
           Thread.new do
             @despachados = Almacen.moverBodegaWEB(boleta.cantidad, boleta.sku, boleta)
           end
-          @total=(boleta.monto *100).round / 100.0
+          @total = boleta.monto.to_i * 100
+          @total = @total.round / 100.0
           @bruto=((@total*1/1.19)*100).round / 100.0
           @iva=@total-@bruto
           
