@@ -3,7 +3,7 @@ class Boletum < ActiveRecord::Base
     def self.crearBoleta(sku, cantidad, direccion, monto)
         monto = monto
         boleta=Request.crear_boleta(Factura.getIdPropio, direccion, monto)
-        boletafinal = Boletum.new(proveedor: Factura.getIdPropio, direccion: direccion, monto: monto, idboleta: boleta['_id'], cantidad: cantidad, sku: sku) 
+        boletafinal = Boletum.new(proveedor: Factura.getIdPropio, direccion: direccion, monto: monto.to_i, idboleta: boleta['_id'], cantidad: cantidad.to_i, sku: sku) 
         boletafinal.save
         boletaid = boleta['_id']
         url = getUrl(boletaid)
