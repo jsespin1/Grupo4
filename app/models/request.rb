@@ -45,7 +45,7 @@ class Request < ActiveRecord::Base
 		respuesta
 	end
 
-	def self.moverStockBodega(prod_id, almacen_id, oc_id, precio) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
+	def self.moverStockBodega(prodid, almacen_id, oc_id, precio) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
 		ruta = URI.parse(set_url_bodega + "/moveStockBodega")
 		hash = get_hash("POST"+prod_id.to_s+almacen_id.to_s)
 		body = { productoId: prod_id, almacenId: almacen_id, oc: oc_id, precio: precio}.to_json
@@ -194,7 +194,7 @@ class Request < ActiveRecord::Base
 	def self.crear_boleta(proveedor_id, cliente_id, total)
 		ruta = URI.parse(set_url_fac+"/boleta")
 		hash = {'Content-Type' => "application/json"}
-		body = { proveedor: proveedor_id, cliente: cliente_id, total: total }.to_json
+		body = { proveedor: proveedor_id, cliente: cliente_id, total: total.to_i }.to_json
 		respuesta = HTTParty.put(ruta, :body => body, :headers => hash)
 		respuesta
 		#puts "BOLETA -> " + respuesta.inspect
