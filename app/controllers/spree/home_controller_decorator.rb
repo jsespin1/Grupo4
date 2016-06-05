@@ -9,7 +9,7 @@ module Spree
 
     
     def exito
-      
+
           boleta=Boletum.last
           @despachados = boleta.cantidad
           Thread.new do
@@ -19,9 +19,9 @@ module Spree
           @total = @total.round / 100.0
           @bruto=((@total*1/1.19)*100).round / 100.0
           @iva=@total-@bruto
-          
+
     end
-    
+
     def index
       @stock = 0
       @products = Product.all
