@@ -92,7 +92,7 @@ class Request < ActiveRecord::Base
 
 
 	def self.create_orden(canal, cantidad, sku, cliente, proveedor, precio_unitario, fecha_entrega, notas)
-		ruta = URI.parse("http://mare.ing.puc.cl/oc" + "/crear")
+		ruta = URI.parse(set_url_oc + "/crear")
 		hash = { 'Content-type' => "application/json" } # get_hash("PUT"+canal+cantidad.to_s+sku+cliente+proveedor+precio_unitario.to_s+fecha_entrega.to_s+notas)
 		puts "hash -> " + hash.to_s
 		body = { canal: canal, cantidad: cantidad, sku: sku, cliente: cliente, proveedor: proveedor, precioUnitario: precio_unitario, fechaEntrega: date_to_millis(fecha_entrega), notas: notas }.to_json
