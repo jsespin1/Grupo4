@@ -222,6 +222,9 @@ class Almacen < ActiveRecord::Base
 	end
 	
 	def self.moverBodegaWEB(cantidad, sku, boletum)
+		if !(Almacen.verificar_stock_despacho(cantidad, sku))
+			moverAlmacenDespacho(sku,cantidad)
+		end
 		id_despacho = getIdDespacho
 		cuenta = 0
 		puts "Despachando FTP, Cantidad: " + cantidad.to_s + ", SKU: " + sku.to_s
