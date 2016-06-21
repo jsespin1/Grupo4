@@ -120,6 +120,7 @@ class Almacen < ActiveRecord::Base
 				total = s.cantidad.to_i
 			end
 		end
+		puts "Total en Despacho -> " + total.to_s
 		total >= cantidad.to_i
 	end
 	
@@ -217,7 +218,7 @@ class Almacen < ActiveRecord::Base
 		end
 		Orden.cambiarEstado(oc._id, "finalizada")
 		Orden.cambiarCantidad(oc._id, cantidad)
-		#Request.deliver_orden(id_oc)
+		#Request.deliver_orden(oc._id)
 		cuenta
 	end
 	
@@ -251,14 +252,20 @@ class Almacen < ActiveRecord::Base
 	def self.moverBodegaB2B(cantidad, sku, oc)
 		puts "Mover Bodega Despachando B2B | cantidad: " + cantidad.to_s + "| SKU: " + sku.to_s
 		id_despacho = getIdDespacho
+		puts "ID Despacho -> " + id_despacho.to_s
 		id_cliente=oc.cliente
+		puts "OC Cliente -> " + oc.cliente.to_s
 		almacen_destino=Controlador.getDestino(id_cliente)
+		puts "Almacen Destino Obtenido -> " + almacen_destino.to_s
 		cuenta=0
 		while cuenta.to_i < cantidad.to_i
-			puts "Cuenta: " + cuenta.to_s
+			#puts "Cuenta: " + cuenta.to_s
 			array_productos = Request.getStock(id_despacho, sku, (cantidad-cuenta).to_i)
+			#puts "Array productos -> " + array_productos.inspect
 			array_productos.each do |p|
+				puts "Almacen Destino Antes -> " + almacen_destino.to_s
 				hay_espacio = Request.moverStockBodega(p, almacen_destino, oc._id, oc.precio_unitario)
+				puts "Respuesta Mover Bodega -> " + hay_espacio.inspect
 				condicion = "Traspaso no realizado debido a falta de espacio"
 				#if respuesta['error'].eql? condicion
 				#hay que vaciar despacho
@@ -269,7 +276,7 @@ class Almacen < ActiveRecord::Base
 				cuenta = cuenta + 1
 			end
 		end
-		#Request.deliver_orden(id_oc)
+		#Request.deliver_orden(oc._id)
 		Orden.cambiarEstado(oc._id, "finalizada")
 		Orden.cambiarCantidad(oc._id, cantidad)
 		cuenta
@@ -303,7 +310,6 @@ class Almacen < ActiveRecord::Base
 				cantidad = moverBodegaFTP(cantidad, sku, orden)
 			end
 
-					#despachar 
 		elsif Almacen.verificar_stock_con_pulmon(cantidad,sku)
 			moverAlmacenDespacho(sku,cantidad)
 			canal="b2b"

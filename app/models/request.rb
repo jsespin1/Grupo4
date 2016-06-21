@@ -45,11 +45,11 @@ class Request < ActiveRecord::Base
 		respuesta
 	end
 
-	def self.moverStockBodega(prodid, almacen_id, oc_id, precio) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
+	def self.moverStockBodega(prod_id, almacen_id, oc_id, precio) #Despachar producto: Método que permite marcar los productos despachados de una orden de compra
 		ruta = URI.parse(set_url_bodega + "/moveStockBodega")
 		hash = get_hash("POST"+prod_id.to_s+almacen_id.to_s)
 		body = { productoId: prod_id, almacenId: almacen_id, oc: oc_id, precio: precio}.to_json
-		respuesta = HTTParty.post(ruta, :body => body, :headers => hash).parsed_response
+		respuesta = HTTParty.post(ruta, :body => body, :headers => hash)
 		respuesta
 	end
 
