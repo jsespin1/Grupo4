@@ -36,6 +36,10 @@ gem 'bootstrap-sass'
 gem 'autoprefixer-rails'
 gem 'bootstrap-table-rails'
 
+#----------Mensajes AMQP-Promociones---------#
+
+gem "bunny", ">= 2.3.1"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

@@ -44,6 +44,7 @@ GEM
     acts_as_list (0.7.2)
       activerecord (>= 3.0)
     addressable (2.4.0)
+    amq-protocol (2.0.1)
     arel (6.0.3)
     autoprefixer-rails (6.3.6.1)
       execjs
@@ -57,6 +58,8 @@ GEM
       sass (>= 3.3.4)
     bootstrap-table-rails (1.10.1)
     builder (3.2.2)
+    bunny (2.4.0)
+      amq-protocol (>= 2.0.1)
     byebug (8.2.4)
     camertron-eprun (1.1.0)
     cancancan (1.10.1)
@@ -353,6 +356,7 @@ DEPENDENCIES
   autoprefixer-rails
   bootstrap-sass
   bootstrap-table-rails
+  bunny (>= 2.3.1)
   byebug
   capistrano (~> 3.4.1)
   capistrano-bundler (~> 1.1.4)
