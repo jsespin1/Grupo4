@@ -8,23 +8,30 @@ class Promocion < ActiveRecord::Base
 #38 : Semilla de maravilla
 #44: Agave
 
-  	def self.postFacebook(sku)
+  	def self.postFacebook(sku, precio, inicio, fin, codigo)
+  		nombre = "Desconocido"
 	    case sku
 	    when 11
 	      link = 'https://i.ytimg.com/vi/Vrbfyax_T6s/hqdefault.jpg'
+	      nombre = "Margarina"
 	    when 16
 	      link = 'http://www.suraventurabikes.es/wp-content/uploads/2015/10/pastas-de-trigo.jpg'
+	      nombre = "Pasta de Trigo"
 	    when 38
 	      link = 'http://superalimentos.cl/wp-content/uploads/2014/12/Semilla-de-maravilla.jpg'
+	      nombre = "Semilla de maravilla"
 	    when 44
 	      link = 'http://static.imujer.com/sites/default/files/otramedicina/P/Propiedades-del-agave-1.jpg'
+	      nombre = "Agave"
 	    else
 	      sku = 0
 	    end
 
+	    inicio = ActiveSupport::TimeZone['America/Santiago'].parse(inicio.to_s)
+	    fin = ActiveSupport::TimeZone['America/Santiago'].parse(fin.to_s)
 	    me = FbGraph::User.me('EAADxZBBU7tuEBADW6oxBGVbOGwznZB2t02aem8cHDxnJMZCmHx67Bh4wHrPGf3OWegji4mIr91PJOaz3lvdHJuiww7BFC55EZCxALp9ZA5SgIVnGlmczFXhDNFqfkCzThLXDVlgBs5h8fh2FYaX929aBq3nRL75sZD')
 	    me.feed!(
-	      message: 'prueba',
+	      message: "Producto: " << nombre << 'Sku: ' << sku << ", Precio: " << precio << "Fecha Inicio: " << inicio << ", Fin: " << fin << ", Código: " << codigo,
 	      picture: link,
 	      link: link,
 	      name: 'FbGraph',
@@ -64,10 +71,14 @@ class Promocion < ActiveRecord::Base
 		  #ch.ack(delivery_info.delivery_tag, true)
 		  #ch.consumers[delivery_info.consumer_tag].cancel
 		  sku = json_information_message['sku']
+		  precio = json_information_message['precio']
+		  inicio = json_information_message['inicio']
+		  fin = json_information_message['fin']
+		  codigo = json_information_message['codigo']
 		  publicar = true
 		  puts "JSON: " << json_information_message['sku']
 		  if publicar
-		  	self.postFacebook(sku)
+		  	self.postFacebook(sku, precio, inicio, fin, codigo)
 		  end
 		  self.createPromotion(sku, inicio, fin)
 		  #mostrar(json_information_message)
@@ -80,7 +91,7 @@ class Promocion < ActiveRecord::Base
       link = 'https://i.ytimg.com/vi/Vrbfyax_T6s/hqdefault.jpg'
     when 16
       link = 'http://www.suraventurabikes.es/wp-content/uploads/2015/10/pastas-de-trigo.jpg'
-    when 22
+    when 42
       link = 'http://www.suraventurabikes.es/wp-content/uploads/2015/10/pastas-de-trigo.jpg' 
     when 38
       link = 'http://superalimentos.cl/wp-content/uploads/2014/12/Semilla-de-maravilla.jpg'
@@ -115,7 +126,7 @@ class Promocion < ActiveRecord::Base
 		    without_protection: true)
 	end
 
-  def set_environment
+  def self.set_environment
     if Rails.env == 'development'
       @url = 'amqp://jvcelgyi:moDjqWMbjzS31KhguvPnCICBEKa6V-4j@hyena.rmq.cloudamqp.com/jvcelgyi'
       @host = 'hyena.rmq.cloudamqp.com'
