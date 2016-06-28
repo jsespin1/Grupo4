@@ -57,14 +57,19 @@ class Promocion < ActiveRecord::Base
 		  #end
 		  #ch.ack(delivery_info.delivery_tag, true)
 		  #ch.consumers[delivery_info.consumer_tag].cancel
+		  sku = json_information_message['sku']
+		  publicar = true
 		  puts "JSON: " << json_information_message['sku']
-		  self.createPromotion(sku, )
+		  if publicar
+		  	self.postFacebook(sku)
+		  end
+		  self.createPromotion(sku, inicio, fin)
 		  #mostrar(json_information_message)
 		end
 	end
 
 
-	def self.createPromotion
+	def self.createPromotion(sku, inicio, fin)
 
 		d = ActiveSupport::TimeZone['America/New_York'].parse(Date.today.to_s)
 		promo = Spree::Promotion.create(
