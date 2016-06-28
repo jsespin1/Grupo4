@@ -35,10 +35,11 @@
             <div class="carousel-inner">
                 <div class="item active ">
 
-                    <%= image_tag("mile.jpg", alt: "Example Image") %>
+                    <%= link_to image_tag("mile.jpg", alt: "Example Image"), root_path %>
                     <div class="carousel-caption">
                         <h1 class="slide-h1 wow bounceInDown" > GRUPO 4 </h1>
                         <h2 class="slide-h2 wow bounceInLeft" > PROYECTO: TALLER DE INTEGRACION </h2>
+                        <h3> <a href="/"> Ir a Inicio </a> </h3> 
                     </div>
                 </div> <!--
                 <div class="item">
@@ -70,9 +71,7 @@
         <ul class="list-unstyled">
             <li><a data-toggle="tooltip" data-placement="left" title="Home" href="#home-sec">Home</a></li>
             <li><a data-toggle="tooltip" data-placement="left" title="APIs" href="#documentacion-sec">APIs</a></li>
-            <li><a data-toggle="tooltip" data-placement="left" title="Estado Bodegas" href="#bodegas-sec">Estado Bodegas</a></li>
-            <li><a data-toggle="tooltip" data-placement="left" title="Estado Ordenes de Compra" href="#oc-sec">Estado Ordenes de Compra</a></li>
-            <li><a data-toggle="tooltip" data-placement="left" title="ContactO" href="#contact-sec">Contacto</a></li>
+            <li><a data-toggle="tooltip" data-placement="left" title="Contacto" href="#contact-sec">Contacto</a></li>
         </ul>
     </div>
     <!-- NAV SECTION END-->
@@ -80,34 +79,6 @@
         <div class="container" background-color = "blue">
             <div class="row">
                 <div class="col-lg-9 col-md-8 col-sm-8 col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-12">
-
-<table class="table table-striped">
-<thead>
-  <tr>
-    <th data-field="nombres" data-sortable="true">Visita Nuestro:</th>
-    <th data-field="mails" data-sortable="true">Descripción</th>
-    </tr>
-</thead>
-
- <tbody>
-    <tr>
-      <td>  <a href="/spree"l-md data-placement="center">E-Commerce</a><br>
-</td>
-      <td> Aquí podrás conocer nuestros productos y comprar los que desees. </td>
-    </tr>
-    <tr>
-      <td>   <a href="/dashboards/logistico" data-placement="center"> Dashboard Logistico</a><br>
- </td>
-      <td> Aquí encontrarás todo lo que tienes que saber sobre nuestros estados logísticos. </td>
-    </tr>
-    <tr>
-      <td>   <a href="/dashboards/financiero" data-placement="center"> Dashboard Financiero</a>
- </td>
-      <td> Aquí encontrarás todo lo que tienes que saber sobre nuestros estados financieros. </td>
-    </tr>
- </tbody>
-</table>              
-
  
                     <h1 data-scroll-reveal="enter from the bottom after 0.1s">DOCUMENTACION </h1>
                     <p data-scroll-reveal="enter from the bottom after 0.3s">
@@ -189,162 +160,6 @@ a:active {
 
             </div>
         </div>
-    </section>
-    <!-- ABOUT SECTION END-->
-
-    <section id="bodegas-sec">
-        <div class="container ">
-            <div class="row pad-btm">
-                <div class="col-lg-8 col-md-8 col-sm-8 col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-12">
-                    <h1 data-scroll-reveal="enter from the bottom after 0.1s">ESTADO BODEGAS </h1>
-                    <p data-scroll-reveal="enter from the bottom after 0.3s">
-
-<table class="table table-striped" data-sort-name="name" data-sort-order="desc">
-<thead>
-  <tr>
-    <th data-field="id_oc" data-sortable="true">ID</th>
-    <th data-field="id_factura" data-sortable="true">Espacio Usado</th>
-    <th data-field="estado" data-sortable="true">Espacio Total</th>
-<!--    <th data-field="fecha_despacho" data-sortable="true">SKU</th>
-    <th data-field="fecha_entrega" data-sortable="true">Stock</th> -->
-    </tr>
-</thead>
-
- <tbody>
-   <% @almacenes.each do |almacen| %>
-    <tr>
-      <td><%= almacen._id %></td>
-      <td><%= almacen.usedSpace %></td>
-   	  <td><%= almacen.totalSpace %></td>
-    </tr>
-  <% end %> 
- </tbody>
-</table>                    </p>
-                </div>
-
-            </div>
-            <!--<div class="row ">
-                <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12 text-center" data-scroll-reveal="enter from the bottom after 0.5s">
-                    <i class="fa fa-recycle fa-5x"></i>
-                    <h4 >Estado Bodegas</h4>
-                    <p>
-
-<table class=" table table-striped" data-sort-name="name" data-sort-order="desc">
-<thead>
-  <tr>
-    <th data-field="name" data-sortable="true">Name</th>
-    <th data-field="age" data-sortable="true">Age</th>
-  </tr>
-</thead>
-
-  <tbody>
-    
-      <tr>
-        <td> Miguel </td>
-        <td> 56 </td>
-      </tr>
-     <tr>
-        <td> Manuel </td>
-        <td> 20 </td>
-      </tr>
-  </tbody>
-</table>                    </p>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12 text-center" data-scroll-reveal="enter from the bottom after 0.7s" >
-                    <i class="fa fa-briefcase fa-5x"></i>
-                    <h4>Easy to Customize</h4>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                          Lorem ipsum dolor sit amet.
-                    </p>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12 text-center" data-scroll-reveal="enter from the bottom after 0.9s">
-                    <i class="fa fa-history fa-5x"></i>
-                    <h4>Free to Use</h4>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                           Lorem ipsum dolor sit amet.
-                    </p>
-                </div>
-
-            </div>-->
-         
-        </div>
-
-    </section>
-    <!-- FEATURE SECTION END-->
-    
-    <section id="oc-sec">
-        <div class="container" background-color = "lightblue">
-            <div class="row pad-btm">
-                <div class="ccol-lg-2 col-md-2 col-sm-2  col-xs-10">
-                    <h1 data-scroll-reveal="enter from the bottom after 0.1s">LISTA DE ORDENES DE COMPRA </h1>
-                </div>
-
-            </div>
-            <div class="row">
-                <div class="col-lg-2 col-md-2 col-sm-2  col-xs-12 " data-scroll-reveal="enter from the bottom after 0.4s">
-                    <!--<img src="assets/images/1t.jpg" class="img-circle img-responsive set-img" />-->
-
-                    <p data-scroll-reveal="enter from the bottom after 0.3s"><table class=" table table-striped" data-sort-name="name" data-sort-order="desc">
-
-<table class=" table table-striped" data-sort-name="name" data-sort-order="desc">
-<thead>
-  <tr>
-    <th data-field="id_oc" data-sortable="true">ID OC</th>
-    <th data-field="id_factura" data-sortable="true">ID Factura</th>
-    <th data-field="estado" data-sortable="true">Estado</th>
-    <th data-field="fecha_entrega" data-sortable="true">Fecha Entrega</th>
-    <th data-field="canal" data-sortable="true">Canal</th>
-    <th data-field="cliente" data-sortable="true">Cliente</th>
-    <th data-field="proveedor" data-sortable="true">Proveedor</th>
-    <th data-field="sku" data-sortable="true">SKU</th>
-    <th data-field="cantidad" data-sortable="true">Cantidad</th>
-    <th data-field="cantidad_despachada" data-sortable="true">Cantidad Despachada</th>
-  </tr>
-</thead>
-
- <tbody>
-   <% @orden.each do |orden| %>
-    <tr> 
-      <td><%= orden._id %></td>
-      <td><%= orden.id_factura %></td>
-      <td><%= orden.estado %></td>
-      <td><%= orden.fecha_entrega %></td>
-      <td><%= orden.canal %></td>
-      <td><%= orden.cliente %></td>
-      <td><%= orden.proveedor %></td>
-      <td><%= orden.sku %></td>
-      <td><%= orden.cantidad %></td>
-      <td><%= orden.cantidad_despachada %></td>
-    
-    </tr>
-  <% end %>
- </tbody>  
-</table>
-
-                    </p>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12 " data-scroll-reveal="enter from the bottom after 0.5s">
-                  <!--  <h2>LEENA CHI MAXI</h2>
-                    <p>
-                    </p> -->
-                </div>
-                <div class="col-lg-2 col-md-2 col-sm-2  col-xs-12 " data-scroll-reveal="enter from the bottom after 0.6s">
-                    <!--<img src="assets/images/2t.jpg" class="img-circle img-responsive set-img" />-->
-
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4  col-xs-12 " data-scroll-reveal="enter from the bottom after 0.7s">
-                  <!--  <h2>JHON DEO ALEX</h2>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                           Lorem ipsum dolor sit amet.
-                    </p> -->
-                </div>
-            </div> 
-
-        </div>
-
     </section>
     <!-- TEAM SECTION END-->
     <section id="contact-sec">

@@ -1,14 +1,19 @@
 class AlmacenController < ApplicationController
 
+	def home
+	
+	end
+
 	def index 
-		puts "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		#puts "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 		
 		@almacenes = Request.getAlmacenesAll
+		#@almacenes = Almacen.all
 		@orden = Orden.all
 		@factura = Factura.all
-		puts "SE LLAMO CREAR BOLETA 1"
-		Boletum.crearBoleta("38", 2, "mi casa",  (1513*1.19*2).ceil)
-		puts "SE LLAMO CREAR BOLETA"
+		#puts "SE LLAMO CREAR BOLETA 1"
+		#Boletum.crearBoleta("38", 2, "mi casa",  (1513*1.19*2).ceil)
+		#puts "SE LLAMO CREAR BOLETA"
 		#Ftp.procesarFtps(Ftp.getFtps)
 		#Compra.consultar_materia_prima("26")
 		#oc_id = "57145e4cf77d320300f0deb9"
@@ -58,6 +63,17 @@ class AlmacenController < ApplicationController
 		@skus = Request.getSKUs(params[:almacen]['_id'])
 		#Obtenemos
 		#productos = Request.getStock(params[:almacen]['_id'], s._id)	
+	end
+
+	def ordenesFactura
+		@almacenes = Request.getAlmacenesAll
+		#@almacenes = Almacen.all
+		@orden = Orden.all
+		@factura = Factura.all
+	end
+
+	def documentacion
+
 	end
 
 end

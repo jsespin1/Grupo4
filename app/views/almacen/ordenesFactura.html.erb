@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -35,10 +34,11 @@
             <div class="carousel-inner">
                 <div class="item active ">
 
-                    <%= image_tag("mile.jpg", alt: "Example Image") %>
+                    <%= link_to image_tag("mile.jpg", alt: "Example Image"), root_path %>
                     <div class="carousel-caption">
                         <h1 class="slide-h1 wow bounceInDown" > GRUPO 4 </h1>
                         <h2 class="slide-h2 wow bounceInLeft" > PROYECTO: TALLER DE INTEGRACION </h2>
+                        <h3> <a href="/"> Ir a Inicio </a> </h3>
                     </div>
                 </div> <!--
                 <div class="item">
@@ -69,123 +69,51 @@
     <div id="nav">
         <ul class="list-unstyled">
             <li><a data-toggle="tooltip" data-placement="left" title="Home" href="#home-sec">Home</a></li>
-            <li><a data-toggle="tooltip" data-placement="left" title="APIs" href="#documentacion-sec">APIs</a></li>
+            <li><a data-toggle="tooltip" data-placement="left" title="Estado Facturas" href="#facturas-sec">Estado Facturas</a></li>
             <li><a data-toggle="tooltip" data-placement="left" title="Estado Bodegas" href="#bodegas-sec">Estado Bodegas</a></li>
             <li><a data-toggle="tooltip" data-placement="left" title="Estado Ordenes de Compra" href="#oc-sec">Estado Ordenes de Compra</a></li>
-            <li><a data-toggle="tooltip" data-placement="left" title="ContactO" href="#contact-sec">Contacto</a></li>
+            <li><a data-toggle="tooltip" data-placement="left" title="Contacto" href="#contact-sec">Contacto</a></li>
         </ul>
     </div>
     <!-- NAV SECTION END-->
-    <section id="documentacion-sec">
+    <section id="facturas-sec">
         <div class="container" background-color = "blue">
             <div class="row">
                 <div class="col-lg-9 col-md-8 col-sm-8 col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-xs-12">
+                    <h1 data-scroll-reveal="enter from the bottom after 0.1s">FACTURAS </h1>
 
-<table class="table table-striped">
+
+                    <p data-scroll-reveal="enter from the bottom after 0.3s"><table class=" table table-striped" data-sort-name="name" data-sort-order="desc">
+
+<table class="table table-striped" data-sort-name="name" data-sort-order="desc">
 <thead>
   <tr>
-    <th data-field="nombres" data-sortable="true">Visita Nuestro:</th>
-    <th data-field="mails" data-sortable="true">Descripción</th>
-    </tr>
+    <th data-field="id_factura" data-sortable="true">ID Factura</th>
+    <th data-field="id_oc" data-sortable="true">ID OC</th>
+    <th data-field="estado" data-sortable="true">Estado</th>
+    <th data-field="fecha_pago" data-sortable="true">Fecha Pago</th>
+    <th data-field="cliente" data-sortable="true">Cliente</th>
+    <th data-field="proveedor" data-sortable="true">Proveedor</th>
+    <th data-field="valor_total" data-sortable="true">Valor Total</th>
 </thead>
 
  <tbody>
-    <tr>
-      <td>  <a href="/spree"l-md data-placement="center">E-Commerce</a><br>
-</td>
-      <td> Aquí podrás conocer nuestros productos y comprar los que desees. </td>
+   <% @factura.each do |fact| %>
+    <tr> 
+      <td><%= fact._id %></td>
+      <td><%= fact.id_oc %></td>
+      <td><%= fact.estado_pago %></td>
+      <td><%= fact.fecha_pago %></td>
+      <td><%= fact.cliente %></td>
+      <td><%= fact.proveedor %></td>
+      <td><%= fact.valor_total %></td>
     </tr>
-    <tr>
-      <td>   <a href="/dashboards/logistico" data-placement="center"> Dashboard Logistico</a><br>
- </td>
-      <td> Aquí encontrarás todo lo que tienes que saber sobre nuestros estados logísticos. </td>
-    </tr>
-    <tr>
-      <td>   <a href="/dashboards/financiero" data-placement="center"> Dashboard Financiero</a>
- </td>
-      <td> Aquí encontrarás todo lo que tienes que saber sobre nuestros estados financieros. </td>
-    </tr>
- </tbody>
-</table>              
+  <% end %>
+ </tbody>  
+</table>
 
- 
-                    <h1 data-scroll-reveal="enter from the bottom after 0.1s">DOCUMENTACION </h1>
-                    <p data-scroll-reveal="enter from the bottom after 0.3s">
-                        <ol>
-
-
-<dl>
-
-<li><dt>IDs: </dt>
-
-<dd> ID Grupo: 571262b8a980ba030058ab52 </dd>
-<dd> ID Banco: 571262c3a980ba030058ab5f </dd>
-<!-- <dd> ID Almacen: xxx</dd> -->
-
-</dd></li>
-</br>
-<style>
-a:link {
-    color: black;
-    background-color: transparent;
-    text-decoration: none;
-}
-a:visited {
-    color: green;
-    background-color: transparent;
-    text-decoration: none;
-}
-a:hover {
-    color: red;
-    background-color: transparent;
-    text-decoration: underline;
-}
-a:active {
-    color: yellow;
-    background-color: transparent;
-    text-decoration: underline;
-}
-</style>
-
-<li><dt><a href="">integra4.ing.puc.cl/api/consultar/:sku (GET)</a></dt>
-
-<dd> Retorna un JSON con el stock del producto del SKU ingresado: {"stock": int, "sku": string}
-</dd></li>
-</br>
-
-<li><dt><a href="">integra4.ing.puc.cl/api/oc/recibir/:idoc (GET)</a></dt>
-
-<dd> Retorna un JSON informando si se acepta la OC: {"aceptado": boolean, "idoc": string}
-</dd></li>
-</br>
-
-
-<li><dt><a href="">integra4.ing.puc.cl/api/facturas/recibir/:idfactura (GET)</a></dt>
-
-<dd> Retorna un JSON informando si se valida la factura: {"validado": boolean, "idfactura": string}
-</dd></li>
-</br>
-
-
-<li><dt><a href="">integra4.ing.puc.cl/api/pagos/recibir/:idtrx?idfactura=:idfactura (GET)</a></dt>
-
-<dd> Retorna un JSON informando si la transaccion es valida: {"validado": boolean, "idtrx": string}
-</dd></li>
-</br>
-
-
-<li><dt><a href="">integra4.ing.puc.cl/api/despachos/recibir/:idfactura (GET)</a></dt>
-
-<dd> Retorna un JSON informando si los productos fueron despachados: {"validado": boolean}
-</dd></li>
-</br>
-
-</dl>
-</ol>
-
-
-                    </p>
-                </div>
+                    </p> 
+                 </div>
 
             </div>
         </div>
