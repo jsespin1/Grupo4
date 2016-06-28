@@ -1,13 +1,18 @@
 class AlmacenController < ApplicationController
 
 	def index
-		Promocion.postFacebook()
-		Promocion.postTwitter()
-		puts "gol"
+		#Promocion.postFacebook()
+		#Promocion.postTwitter()
+		#puts "gol"
 		@almacenes = Request.getAlmacenesAll
 		@orden = Orden.all
 		@factura = Factura.all
+<<<<<<< HEAD
 		Promocion.amqp_consumer
+=======
+		Promocion.postTwitter(38)
+
+>>>>>>> 563b4d6935b1155d83b9097d6f0ab26827b0a87b
 		#puts "SE LLAMO CREAR BOLETA 1"
 		#Boletum.crearBoleta("38", 2, "mi casa",  (1513*1.19*2).ceil)
 		#puts "SE LLAMO CREAR BOLETA"
