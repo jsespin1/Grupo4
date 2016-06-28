@@ -25,6 +25,10 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'ruby-hmac'
 
+gem 'fb_graph'
+
+gem 'twitter'
+
 gem 'httparty'
 
 gem 'responders', '~> 2.0'

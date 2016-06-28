@@ -11,8 +11,8 @@ Rails.application.routes.draw do
     get "/falla" => "home#falla"
   end
 
-  mount Spree::Core::Engine, at: '/'
-        
+  #mount Spree::Core::Engine, at: '/'
+
   root 'almacen#index'
 
   get 'almacen/show', :as => :show_almacen
@@ -48,7 +48,7 @@ Rails.application.routes.draw do
       get '/ftp/procesar' => 'b2b#procesarFtp'
 
       #------------------------------------------------------------------#
-      
+
       #Métodos que recibe transaccion y factura -> despacha
       #Métodos para registro y token
       #Registrar grupo

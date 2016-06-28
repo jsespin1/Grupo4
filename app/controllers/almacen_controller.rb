@@ -1,6 +1,9 @@
 class AlmacenController < ApplicationController
 
-	def index 
+	def index
+		Promocion.postFacebook()
+		Promocion.postTwitter()
+		puts "gol"
 		@almacenes = Request.getAlmacenesAll
 		@orden = Orden.all
 		@factura = Factura.all
@@ -27,7 +30,7 @@ class AlmacenController < ApplicationController
 			#skus = Request.getSKUs(a._id)
 			#productos = Request.getStock(a._id, "38",5)
 			#puts "   PRODUCTOS " + productos.count.to_s
-			
+
 			#skus = Request.getSKUs(a._id)
 			#puts "   SKUs " + skus.inspect
 		#end
@@ -49,13 +52,14 @@ class AlmacenController < ApplicationController
 		#@oc = Request.getOC("57127d2e8a9e6506000b998a")
 		#Ftp.showls
 	end
-	
+
 
 	def show
+		puts "gol"
 		@almacen = params[:almacen]
 		@skus = Request.getSKUs(params[:almacen]['_id'])
 		#Obtenemos
-		#productos = Request.getStock(params[:almacen]['_id'], s._id)	
+		#productos = Request.getStock(params[:almacen]['_id'], s._id)
 	end
 
 end
