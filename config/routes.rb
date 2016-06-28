@@ -10,11 +10,14 @@ Rails.application.routes.draw do
     get "/exito" => "home#exito"
     get "/falla" => "home#falla"
   end
-
-  #mount Spree::Core::Engine, at: '/'
-
-  root 'almacen#index'
-
+  
+  mount Spree::Core::Engine, at: '/spree'
+        
+  root 'almacen#home'
+  
+  get 'almacen/index'#, :as => :index_almacen
+  get 'almacen/documentacion'#, :as => :index_almacen
+  get 'almacen/ordenesFactura'#, :as => :ordenesFactura_almacen
   get 'almacen/show', :as => :show_almacen
 
   namespace :api, defaults: {format: 'json'} do

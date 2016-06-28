@@ -1,15 +1,17 @@
 class AlmacenController < ApplicationController
 
-	def index
-		#Promocion.postFacebook()
-		#Promocion.postTwitter()
-		#puts "gol"
+
+	def home
+	
+	end
+
+	def index 
 		@almacenes = Request.getAlmacenesAll
+		#@almacenes = Almacen.all
 		@orden = Orden.all
 		@factura = Factura.all
 		Promocion.amqp_consumer
 		#Promocion.postTwitter(38)
-
 		#puts "SE LLAMO CREAR BOLETA 1"
 		#Boletum.crearBoleta("38", 2, "mi casa",  (1513*1.19*2).ceil)
 		#puts "SE LLAMO CREAR BOLETA"
@@ -63,6 +65,17 @@ class AlmacenController < ApplicationController
 		@skus = Request.getSKUs(params[:almacen]['_id'])
 		#Obtenemos
 		#productos = Request.getStock(params[:almacen]['_id'], s._id)
+	end
+
+	def ordenesFactura
+		@almacenes = Request.getAlmacenesAll
+		#@almacenes = Almacen.all
+		@orden = Orden.all
+		@factura = Factura.all
+	end
+
+	def documentacion
+
 	end
 
 end
