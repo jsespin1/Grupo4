@@ -109,16 +109,17 @@ class Promocion < ActiveRecord::Base
     client.update_with_media('PRUEBA', open(link))
   end
 
-  def self.createPromotion(sku, inicio, fin)
+  def self.createPromotion(sku, inicio, fin, codigo)
 
-		d = ActiveSupport::TimeZone['America/New_York'].parse(Date.today.to_s)
+		inicio = ActiveSupport::TimeZone['America/Santiago'].parse(inicio.to_s)
+		fin = ActiveSupport::TimeZone['America/Santiago'].parse(fin.to_s)
 		promo = Spree::Promotion.create(
 		  name: "20% Off",
 		  description: "#{d.strftime('%Y-%m-%d')} - 20% off coupon code, automatically generated",
 		  event_name: 'spree.checkout.coupon_code_added',
 		  match_policy: 'all',
-		  starts_at: d,
-		  expires_at: (d + 2.weeks).end_of_day,
+		  starts_at: inicio,
+		  expires_at: fin,
 		  code: "GET20#{SecureRandom.hex(2).upcase}"
 		)
 		promo.promotion_actions << Spree::Promotion::Actions::CreateAdjustment.create(
