@@ -240,7 +240,14 @@ class Api::V1::B2bController < ApplicationController
 		end
 	end
 	
-	
+
+  def actualizar_saldo
+  	Request.obtener_cuenta(Finanza.getCuentaPropia)
+  	respond_to do |format|
+			format.json {render json: {status:200}}
+		end
+  end
+
 
 
 

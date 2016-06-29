@@ -245,7 +245,10 @@ class Request < ActiveRecord::Base
 		hash = {'Content-Type' => "application/json"}
 		body = { _id: id_cuenta}.to_json
 		respuesta = HTTParty.get(ruta, :body => body, :headers => hash)
-		puts "cuenta -> " + respuesta.inspect
+		parsed = respuesta.parsed_response[0]
+		#puts "SALDO -Z " << parsed['saldo'].to_s
+		Saldo.saveSaldo(parsed['saldo'].to_s)
+		parsed
 	end
 
 

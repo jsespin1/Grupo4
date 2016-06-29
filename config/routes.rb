@@ -63,11 +63,13 @@ Rails.application.routes.draw do
       #Actualizar stocks
       get '/dashboards/actualizar_stock' => 'b2b#actualizar_stock'
 
-      
       #Comprarle a otros grupos
       put '/comprar/mp' => 'b2b#comprarMP'
       
-      
+
+      #Actualizar saldo
+      get '/dashboards/actualizar_saldo' => 'b2b#actualizar_saldo'
+
       #------------------------------------------------------------------#
 
       #Métodos que recibe transaccion y factura -> despacha
