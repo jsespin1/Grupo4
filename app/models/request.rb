@@ -104,7 +104,7 @@ class Request < ActiveRecord::Base
 		hash = { 'Content-type' => "application/json" } # get_hash("PUT"+canal+cantidad.to_s+sku+cliente+proveedor+precio_unitario.to_s+fecha_entrega.to_s+notas)
 		puts "hash -> " + hash.to_s
 		proveedor_id=Controlador.getId(proveedor.to_i)
-		body = { canal: canal, cantidad: cantidad, sku: sku, cliente: cliente, proveedor: proveedor_id, precioUnitario: precio_unitario, fechaEntrega: date_to_millis(fecha_entrega), notas: notas }.to_json
+		body = { canal: canal, cantidad: cantidad, sku: sku, cliente: cliente, proveedor: proveedor_id, precioUnitario: precio_unitario, fechaEntrega: date_to_millis(fecha_entrega)+6000000, notas: notas }.to_json
 		orden = HTTParty.put(ruta, :body => body, :headers => hash)
 		puts "ORDEN REQUEST - " + orden.parsed_response.inspect 
 		Orden.toObject2(orden.parsed_response) #modificado post entrega 1
