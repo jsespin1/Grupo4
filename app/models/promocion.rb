@@ -55,10 +55,7 @@ class Promocion < ActiveRecord::Base
 		q.subscribe(:block => true, :manual_ack => true) do |delivery_info, properties, payload|
 		  json_information_message = JSON.parse(payload)
 		  puts "Json info: " << json_information_message.inspect
-		  if Rails.env == 'development'
 		  	#nack(delivery_tag, multiple = false, requeue = false)
-		  	ch.basic_nack(delivery_info.delivery_tag, true, true)
-		  end
 		  #ch.ack(delivery_info.delivery_tag, true)
 		  #ch.consumers[delivery_info.consumer_tag].cancel
 		  sku = json_information_message['sku']
@@ -68,17 +65,21 @@ class Promocion < ActiveRecord::Base
 		  codigo = json_information_message['codigo']
 		  publicar = true
 		  puts "JSON: " << json_information_message['sku']
-		  promo = self.createPromotion(sku, inicio, fin, codigo)
+		  promo = self.createPromotion(sku, precio, inicio, fin, codigo)
 		  if publicar and promo
 		  	self.postFacebook(sku, precio, inicio, fin, codigo)
-			self.postTwitter(sku, precio, inicio, fin, codigo)
+			self.postTwitter(sku)
 		  end
+		  ch.basic_nack(delivery_info.delivery_tag, true, false)
 		end
 	end
 
 	def self.createPromotion(sku, precio, inicio, fin, codigo)
 		inicio = ActiveSupport::TimeZone['America/New_York'].parse(Date.strptime(inicio.to_s, '%Q').to_s).beginning_of_day
 		fin = ActiveSupport::TimeZone['America/New_York'].parse(Date.strptime(fin.to_s, '%Q').to_s).end_of_day
+		if codigo.length < 2
+			codigo = "Desconocido" << sku.to_s
+		end
 		promo = Spree::Promotion.create(
 		  name: codigo,
 		  description: "Promocion, sku:" << sku.to_s,

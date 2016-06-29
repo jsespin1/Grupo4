@@ -50,6 +50,8 @@ Rails.application.routes.draw do
       #Procesar Ftp´s
       get '/ftp/procesar' => 'b2b#procesarFtp'
 
+      get '/promocion/guardar' => 'b2b#guardarPromocion'
+
       #------------------------------------------------------------------#
 
       #Métodos que recibe transaccion y factura -> despacha

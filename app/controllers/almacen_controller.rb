@@ -8,7 +8,7 @@ class AlmacenController < ApplicationController
 		inicio=1467223779973
 		fin=1467238179973
 		codigo="codigo16"
-		Promocion.createPromotion(sku, precio, inicio, fin, codigo)
+		#Promocion.createPromotion(sku, precio, inicio, fin, codigo)
 	end
 
 	def index 
@@ -85,7 +85,7 @@ class AlmacenController < ApplicationController
 	def ordenesFactura
 		@almacenes = Request.getAlmacenesAll
 		#@almacenes = Almacen.all
-		@orden = Orden.all
+		@orden = Orden.where(cliente:!Orden.getIdPropio)
 		@factura = Factura.all
 	end
 
