@@ -11,6 +11,7 @@ class Finanza < ActiveRecord::Base
 		#Devuelve objeto tipo Transaccion
 		respuesta = Request.transferir(monto, origen, destino)
 		respuesta.save
+		respuesta
 	end
 
 
