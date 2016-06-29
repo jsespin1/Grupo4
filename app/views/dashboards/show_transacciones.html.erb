@@ -1,2 +1,31 @@
-<h1><%= @inicio %></h1>
-<h1><%= @final %></h1>
+<!--<h1><%= @inicio %></h1>
+<h1><%= @final %></h1>-->
+
+
+<div class = "row">
+	<div class="col-sm-6">
+		<h3 style="text-align: center;">Transacciones del día</h3>
+		<table class="table table-hover search-table">
+		  <thead>
+		    <tr>
+		      <th>ID</th>
+		      <th>Fecha</th>
+		      <th>Cuenta de origen</th>
+		      <th>Cuenta de destino</th>
+		      <th>Monto</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	<% @transacciones.each do |t| %>
+		  		<tr>
+		  			<td><%= t._id %></td>
+			      <td><%= t.fecha_creacion %></td>
+			      <td><%= t.cuenta_origen %></td>
+			      <td><%= t.cuenta_destino %></td>
+			      <td><%= t.monto %></td>
+		  		</tr>
+		  	<% end %>		  	
+		  </tbody>
+		</table>
+	</div>
+</div>

@@ -1,5 +1,6 @@
 class DashboardsController < ApplicationController
   def financiero
+  	#Request.obtener_cuenta(Finanza.getCuentaPropia)
   end
 
   def logistico
@@ -9,6 +10,7 @@ class DashboardsController < ApplicationController
   def show_transacciones
   	@inicio =  params[:fecha_inicial]
   	@final = params[:fecha_final]
+  	@transacciones = Transaccion.where(created_at: @inicio..@final)
   end
 
 end
