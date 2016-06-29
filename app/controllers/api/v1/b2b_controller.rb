@@ -194,6 +194,16 @@ class Api::V1::B2bController < ApplicationController
 
 	end
 
+	def actualizar_stock
+  	@almacenes = Request.getAlmacenesAll
+  	@almacenes.each do |a|
+  		Request.saveSKUs(a._id)
+  	end
+  	respond_to do |format|
+			format.json {render json: {status:200}}
+		end
+  end
+
 
 
 

@@ -22,6 +22,14 @@ class Request < ActiveRecord::Base
 		Sku.getSkus(skus)
 	end
 
+	def self.saveSKUs(almacenID)
+		ruta = URI.parse(set_url_bodega + "/skusWithStock")
+		hash = get_hash("GET"+almacenID.to_s)
+		query = { almacenId: almacenID.to_s}
+		skus = HTTParty.get(ruta, :query => query, :headers => hash)	
+		Sku.saveSkus(skus)
+	end
+
 	def self.getStock(almacenID, skuId, cantidad)
 		ruta = URI.parse(set_url_bodega + "/stock")
 		hash = get_hash("GET"+almacenID.to_s+skuId.to_s)

@@ -1,0 +1,52 @@
+<div class = "row">
+	<div class="col-sm-12">
+		<h1 style="text-align: center;">BI - Módulo Financiero</h1>
+	</div>
+</div>
+
+<div class = "row">
+	<div class="col-sm-6">
+		<h3 style="text-align: center;">Saldo diario</h3>
+		<canvas id="saldo" class="canvas" ></canvas>
+	</div>
+</div>
+
+
+<script>
+saldoChart();
+function saldoChart(){
+	var ctx = document.getElementById("saldo");
+	var data = {
+    labels: ["<%= Date.today - 6 %>", "<%= Date.today - 5 %>", "<%= Date.today - 4 %>", "<%= Date.today - 3 %>", "<%= Date.today - 2 %>", "<%= Date.today - 1 %>", "<%= Date.today  %>"],
+    datasets: [
+        {
+            label: "Saldo",
+            backgroundColor: "rgba(255,99,132,0.2)",
+            borderColor: "rgba(255,99,132,1)",
+            borderWidth: 1,
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            hoverBorderColor: "rgba(255,99,132,1)",
+            data: [<%= Saldo.where(created_at: 6.days.ago.beginning_of_day..6.days.ago.end_of_day, _id: 11).sum(:monto) %>, 
+            <%= Saldo.where(created_at: 5.days.ago.beginning_of_day..5.days.ago.end_of_day, _id: 11).sum(:monto) %>, 
+            <%= Saldo.where(created_at: 4.days.ago.beginning_of_day..4.days.ago.end_of_day, _id: 11).sum(:monto) %>, 
+            <%= Saldo.where(created_at: 3.days.ago.beginning_of_day..3.days.ago.end_of_day, _id: 11).sum(:monto) %>, 
+            <%= Saldo.where(created_at: 2.days.ago.beginning_of_day..2.days.ago.end_of_day , _id: 11).sum(:monto) %>, 
+            <%= Saldo.where(created_at: 1.day.ago.beginning_of_day..1.day.ago.end_of_day, _id: 11).sum(:monto) %>,
+            <%= Saldo.where(created_at: Date.today.beginning_of_day..Time.current, _id: 11).sum(:monto) %>]
+        }
+    ]
+	};
+	var myBarChart = new Chart(ctx, {
+    type: 'bar',
+    data: data
+	});
+}
+
+
+
+
+
+
+
+
+</script>

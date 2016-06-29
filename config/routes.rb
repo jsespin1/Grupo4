@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  
+
   # This line mounts Spree's routes at the root of your application.
   # This means, any requests to URLs such as /products, will go to Spree::ProductsController.
   # If you would like to change where this engine is mounted, simply change the :at option to something different.
@@ -7,13 +9,21 @@ Rails.application.routes.draw do
   # We ask that you don't use the :as option here, as Spree relies on it being the default of "spree"
 
   Spree::Core::Engine.routes.draw do
+  #get 'dashboards/financiero'
+
+  #get 'dashboards/logistico'
+
     get "/exito" => "home#exito"
     get "/falla" => "home#falla"
   end
 
-  mount Spree::Core::Engine, at: '/'
+  mount Spree::Core::Engine, at: '/spree'
         
   root 'almacen#index'
+
+  get 'dashboards/financiero'
+
+  get 'dashboards/logistico'
 
   get 'almacen/show', :as => :show_almacen
 
@@ -46,6 +56,9 @@ Rails.application.routes.draw do
 
       #Procesar Ftp´s
       get '/ftp/procesar' => 'b2b#procesarFtp'
+
+      #Actualizar stocks
+      get '/dashboards/actualizar_stock' => 'b2b#actualizar_stock'
 
       #------------------------------------------------------------------#
       

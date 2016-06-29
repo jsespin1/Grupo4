@@ -25,6 +25,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'ruby-hmac'
 
+gem 'chart-js-rails'
+
 gem 'httparty'
 
 gem 'responders', '~> 2.0'
