@@ -91,6 +91,7 @@ class Api::V1::B2bController < ApplicationController
 						if facturaPagada != nil
 							factura.estado_pago = "pagada"
 							Factura.saveFactura(factura)
+							Orden.where(_id:factura.id_oc).update(id_factura:factura._id)
 						end
 					else
 						puts "TRX = null"
@@ -215,7 +216,7 @@ class Api::V1::B2bController < ApplicationController
 				sku =params[:sku]
 				cantidad= params[:cantidad]
 				proveedor = params[:proveedor]
-				todoBien=Compra.enviar_orden(sku,cantidad,proveedor,DateTime.current)	
+				todoBien=Compra.enviar_orden(sku,cantidad,proveedor,DateTime.current+ 1.hours)	
 				puts todoBien
 				if todoBien
 					format.json {render json: {status: todoBien},status:200}

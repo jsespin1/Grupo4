@@ -23,13 +23,13 @@ class Compra < ActiveRecord::Base
 		end
 		puts "URL -> " +url
 		respuesta = Request.consultarStock(url)
-		grupo8 = "26"
+		grupo8 = "aaa"
 		if sku.eql? grupo8
 			respuesta=JSON.parse(respuesta)	
 		end
 		stock = respuesta["stock"]
 		puts "STOCK -> "+stock.inspect
-		stock
+		stock.to_i
 	end
 
 	def self.consultar_productos_procesados(sku)
