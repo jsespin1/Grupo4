@@ -69,7 +69,7 @@ class Ftp < ActiveRecord::Base
         end
         #Guardamos la orden para despachar
         puts "Se guardara la orden en la factura"
-        factura.orden = oc
+        factura.orden = oc._id
         factura.save
         if !oc.save or !factura.save
             return cantidad
