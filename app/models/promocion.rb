@@ -81,11 +81,11 @@ class Promocion < ActiveRecord::Base
 		fin = ActiveSupport::TimeZone['America/New_York'].parse(Date.strptime(fin.to_s, '%Q').to_s)
 		promo = Spree::Promotion.create(
 		  name: codigo,
-		  description: "Promocion",
+		  description: "Promocion, sku:" << sku.to_s,
 		  match_policy: 'all',
 		  starts_at: inicio,
 		  expires_at: (inicio + 1.weeks).end_of_day,
-		  code: codigo
+		  code: codigo,
 		)
 		puts "Promocion: " << promo.inspect
 		calculator = Spree::Calculator::FlatRate.new

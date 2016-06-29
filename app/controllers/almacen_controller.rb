@@ -3,11 +3,11 @@ class AlmacenController < ApplicationController
 
 	def home
 		#Promocion.amqp_consumer
-		sku="13"
+		sku="16"
 		precio = 1980
 		inicio=1467223779973
 		fin=1467238179973
-		codigo="codigo13"
+		codigo="codigo16"
 		Promocion.createPromotion(sku, precio, inicio, fin, codigo)
 	end
 
