@@ -25,6 +25,8 @@ Rails.application.routes.draw do
 
   get 'dashboards/logistico'
 
+  get 'dashboards/show_transacciones'
+
   get 'almacen/show', :as => :show_almacen
 
   namespace :api, defaults: {format: 'json'} do
