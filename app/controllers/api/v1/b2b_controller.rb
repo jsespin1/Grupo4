@@ -94,7 +94,11 @@ class Api::V1::B2bController < ApplicationController
 						end
 					else
 						puts "TRX = null"
+						
 						Factura.saveFactura(factura)
+						Orden.where(_id:factura.id_oc).update(id_factura:factura._id)
+						
+						
 						#Si no podemos pagar, queda con estado PENDIENTE
 					end
 					format.json {render json: {validado: true, idfactura: id}, status:200}
@@ -211,7 +215,7 @@ class Api::V1::B2bController < ApplicationController
 				sku =params[:sku]
 				cantidad= params[:cantidad]
 				proveedor = params[:proveedor]
-				todoBien=Compra.enviar_orden(sku,cantidad,proveedor,DateTime.current + 3600000)	
+				todoBien=Compra.enviar_orden(sku,cantidad,proveedor,DateTime.current)	
 				puts todoBien
 				if todoBien
 					format.json {render json: {status: todoBien},status:200}
