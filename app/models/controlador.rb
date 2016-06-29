@@ -129,6 +129,16 @@ class Controlador < ActiveRecord::Base
 		id_destino
 	end
 
+	def self.getId(grupo)
+		id_destino = ""
+		array_grupos
+		@array_grupos.each do |g|
+			if g[:grupo] == grupo
+				id_destino = g[:id]
+			end
+		end
+		id_destino
+	end
 
 	def self.array_grupos
 		if Rails.env == 'development'
@@ -181,6 +191,11 @@ class Controlador < ActiveRecord::Base
         {sku: "11", precio: 6238},
         {sku: "16", precio: 9793},
         {sku: "38", precio: 1513},
+        {sku: "44", precio: 1254},
+        {sku: "1", precio: 1159},
+        {sku: "36", precio: 3968},
+        {sku: "26", precio: 926}, 
+        {sku: "45", precio: 1695}, 
         {sku: "44", precio: 1254}
       ]
 

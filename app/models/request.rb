@@ -95,9 +95,11 @@ class Request < ActiveRecord::Base
 		ruta = URI.parse(set_url_oc + "/crear")
 		hash = { 'Content-type' => "application/json" } # get_hash("PUT"+canal+cantidad.to_s+sku+cliente+proveedor+precio_unitario.to_s+fecha_entrega.to_s+notas)
 		puts "hash -> " + hash.to_s
-		body = { canal: canal, cantidad: cantidad, sku: sku, cliente: cliente, proveedor: proveedor, precioUnitario: precio_unitario, fechaEntrega: date_to_millis(fecha_entrega), notas: notas }.to_json
+		proveedor_id=Controlador.getId(proveedor.to_i)
+		body = { canal: canal, cantidad: cantidad, sku: sku, cliente: cliente, proveedor: proveedor_id, precioUnitario: precio_unitario, fechaEntrega: date_to_millis(fecha_entrega), notas: notas }.to_json
 		orden = HTTParty.put(ruta, :body => body, :headers => hash)
-		Orden.toObject(orden.parsed_response) #modificado post entrega 1
+		puts "ORDEN REQUEST - " + orden.parsed_response.inspect 
+		Orden.toObject2(orden.parsed_response) #modificado post entrega 1
 	end
 
 	def self.date_to_millis(fecha)
@@ -246,16 +248,29 @@ class Request < ActiveRecord::Base
 		case numero_grupo
 		
 		when "8" #recibir
-			url = 'http://integra8.ing.puc.cl/api/oc/recibir/' + id_oc
+			url = 'http://integra8.ing.puc.cl/api/oc/recibir/' + id_oc.to_s
 		when "2" # recibir
 			url = 'http://integra2.ing.puc.cl/api/oc/recibir/' + id_oc
 		when "7" # srecibir
 			url = 'http://integra7.ing.puc.cl/api/oc/recibir/' + id_oc
 		when "11" # sku_aceite_recibir
-			url = 'http://integra11.ing.puc.cl/api/oc/recibir/' + id_oc
+			url = 'http://integra11.ing.puc.cl/api/oc/recibir/' + id_oc.to_s
+		when "7" # pollo prueba
+			url = 'http://integra7.ing.puc.cl/api/oc/recibir/' + id_oc
+		when "1" # pollo prueba
+			url = 'http://integra1.ing.puc.cl/api/oc/recibir/' + id_oc
+		when "4" # pollo prueba
+			url = 'https://grupo4v2-fgarri.c9users.io/api/oc/recibir/' + id_oc
+			
 		end
+		
 		ruta = URI.parse(url)
-		respuesta = HTTParty.get(url).parsed_response
+		puts numero_grupo
+		puts id_oc
+		puts url
+		respuesta = HTTParty.get(url)
+		
+		respuesta
 	end
 	
 	def self.enviarFactura(ruta, idfactura)
@@ -275,7 +290,8 @@ class Request < ActiveRecord::Base
     def self.consultarStock(url)
 	  	ruta = URI.parse(url)
 	  	respuesta = HTTParty.get(ruta)
-	  	puts "Respuesta a Stock: " + respuesta.inspect
+	  	
+	  	puts "Respuesta a Stock JSON: " + respuesta.inspect
 	  	respuesta
 	end
 
