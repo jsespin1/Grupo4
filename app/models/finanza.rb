@@ -10,7 +10,9 @@ class Finanza < ActiveRecord::Base
 	def self.transferir(monto, origen, destino)
 		#Devuelve objeto tipo Transaccion
 		respuesta = Request.transferir(monto, origen, destino)
-		respuesta.save
+		if respuesta
+			respuesta.save
+		end
 		respuesta
 	end
 
