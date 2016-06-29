@@ -1,0 +1,213 @@
+<div class = "row">
+	<div class="col-sm-12">
+		<h1 style="text-align: center;">BI - Logística</h1>
+	</div>
+</div>
+<div class = "row">
+	<div class="col-sm-6">
+		<h3 style="text-align: center;">Stock por producto</h3>
+		<canvas id="chart" class="canvas" ></canvas>
+	</div>
+	<div class = "col-sm-6">
+	<h3 style="text-align: center;">Utilización total de la bodega (sin pulmón)</h3>
+  	<canvas id="bodega" class="canvas" ></canvas>
+	</div> 
+</div>
+
+<div class= "row">
+	<% @almacenes.each do |a| %>	
+		<% if !(a.pulmon) %>
+			<div class="col-sm-3">
+				<% if a.despacho %>
+					<h3 style="text-align: center;">Almacén de despacho</h3>
+				<% elsif a.recepcion %>
+					<h3 style="text-align: center;">Almacén de recepcion</h3>
+				<% else %>
+					<h3 style="text-align: center;">Almacén normal</h3>
+				<% end %>
+		  	<canvas id="<%= a._id %>" class="canvas"></canvas>
+	  	</div>	
+  	<% end %>
+	<% end %>
+</div>
+
+<script>
+/**<% puts Date.today.beginning_of_day , Time.current %>
+<% puts "------------------" %>
+<% puts 1.day.ago.beginning_of_day, 1.day.ago.end_of_day %>
+<% puts "------------------" %>
+<% puts 2.days.ago.beginning_of_day, 2.days.ago.end_of_day %>
+<% puts "------------------" %>
+<% puts 3.days.ago.beginning_of_day, 3.days.ago.end_of_day %>
+<% puts "------------------" %>
+<% puts 4.days.ago.beginning_of_day, 4.days.ago.end_of_day %>
+<% puts "------------------" %>
+<% puts 5.days.ago.beginning_of_day, 5.days.ago.end_of_day %>
+<% puts "------------------" %>
+<% puts 6.days.ago.beginning_of_day, 6.days.ago.end_of_day %>
+
+var fecha = "<%= Date.today %>"
+
+console.log(fecha);**/
+var ctx = document.getElementById("chart");
+var data = {
+    labels: ["<%= Date.today - 6 %>", "<%= Date.today - 5 %>", "<%= Date.today - 4 %>", "<%= Date.today - 3 %>", "<%= Date.today - 2 %>", "<%= Date.today - 1 %>", "<%= Date.today  %>"],
+    datasets: [
+        {
+            label: "Margarina",
+            backgroundColor: "#FF6384",
+            borderColor: "#FF6384",
+            borderWidth: 1,
+            hoverBackgroundColor: "#FF6384",
+            hoverBorderColor: "#FF6384",
+            data: [<%= Sku.where(created_at: 6.days.ago.beginning_of_day..6.days.ago.end_of_day, _id: 11).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 5.days.ago.beginning_of_day..5.days.ago.end_of_day, _id: 11).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 4.days.ago.beginning_of_day..4.days.ago.end_of_day, _id: 11).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 3.days.ago.beginning_of_day..3.days.ago.end_of_day, _id: 11).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 2.days.ago.beginning_of_day..2.days.ago.end_of_day , _id: 11).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 1.day.ago.beginning_of_day..1.day.ago.end_of_day, _id: 11).sum(:cantidad) %>,
+            <%= Sku.where(created_at: Date.today.beginning_of_day..Time.current, _id: 11).sum(:cantidad) %>] 
+        },
+        {
+            label: "Pasta de trigo",
+            backgroundColor: "#4BC0C0",
+            borderColor: "#4BC0C0",
+            borderWidth: 1,
+            hoverBackgroundColor: "#4BC0C0",
+            hoverBorderColor: "#4BC0C0",
+            data: [<%= Sku.where(created_at: 6.days.ago.beginning_of_day..6.days.ago.end_of_day, _id: 16).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 5.days.ago.beginning_of_day..5.days.ago.end_of_day, _id: 16).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 4.days.ago.beginning_of_day..4.days.ago.end_of_day, _id: 16).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 3.days.ago.beginning_of_day..3.days.ago.end_of_day, _id: 16).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 2.days.ago.beginning_of_day..2.days.ago.end_of_day , _id: 16).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 1.day.ago.beginning_of_day..1.day.ago.end_of_day, _id: 16).sum(:cantidad) %>,
+            <%= Sku.where(created_at: Date.today.beginning_of_day..Time.current, _id: 16).sum(:cantidad) %>]
+        },
+        {
+            label: "Semillas de maravilla",
+            backgroundColor: "#FFCE56",
+            borderColor: "#FFCE56",
+            borderWidth: 1,
+            hoverBackgroundColor: "#FFCE56",
+            hoverBorderColor: "#FFCE56",
+            data: [<%= Sku.where(created_at: 6.days.ago.beginning_of_day..6.days.ago.end_of_day, _id: 38).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 5.days.ago.beginning_of_day..5.days.ago.end_of_day, _id: 38).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 4.days.ago.beginning_of_day..4.days.ago.end_of_day, _id: 38).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 3.days.ago.beginning_of_day..3.days.ago.end_of_day, _id: 38).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 2.days.ago.beginning_of_day..2.days.ago.end_of_day , _id: 38).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 1.day.ago.beginning_of_day..1.day.ago.end_of_day, _id: 38).sum(:cantidad) %>,
+            <%= Sku.where(created_at: Date.today.beginning_of_day..Time.current, _id: 38).sum(:cantidad) %>]
+        },
+        {
+            label: "Agave",
+            backgroundColor: "#36A2EB",
+            borderColor: "#36A2EB",
+            borderWidth: 1,
+            hoverBackgroundColor: "#36A2EB",
+            hoverBorderColor: "#36A2EB",
+            data: [<%= Sku.where(created_at: 6.days.ago.beginning_of_day..6.days.ago.end_of_day, _id: 44).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 5.days.ago.beginning_of_day..5.days.ago.end_of_day, _id: 44).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 4.days.ago.beginning_of_day..4.days.ago.end_of_day, _id: 44).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 3.days.ago.beginning_of_day..3.days.ago.end_of_day, _id: 44).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 2.days.ago.beginning_of_day..2.days.ago.end_of_day , _id: 44).sum(:cantidad) %>, 
+            <%= Sku.where(created_at: 1.day.ago.beginning_of_day..1.day.ago.end_of_day, _id: 44).sum(:cantidad) %>,
+            <%= Sku.where(created_at: Date.today.beginning_of_day..Time.current, _id: 44).sum(:cantidad) %>] 
+        }
+    ]
+};
+
+var myBarChart = new Chart(ctx, {
+    type: 'bar',
+    data: data
+});
+
+pieChart();
+function pieChart(){
+	<% @almacenes.each do |a| %>
+		<% if !(a.pulmon) %>
+			var ctx = document.getElementById("<%= a._id %>");
+			var utilizado = <%= a.usedSpace %>
+			var total = <%= a.totalSpace %>
+			var porcentajeUsado = utilizado/total*100;
+			var porcentajeLibre = 100 - porcentajeUsado;
+			if(porcentajeLibre < 0){
+				porcentajeUsado = 100;
+				porcentajeLibre = 0;
+			}
+
+			var data = {
+	    labels: [
+	        "% usado", "% libre"
+	    ],
+	    datasets: [
+	        {
+	            data: [porcentajeUsado, porcentajeLibre],
+	            backgroundColor: [
+	                "#FF6384"
+	            ],
+	            hoverBackgroundColor: [
+	                "#FF6384"
+	            ]
+	        }]
+			};
+			var myPieChart = new Chart(ctx,{
+		    type: 'pie',
+		    data: data
+			});
+		<% end %>
+	<% end %>
+}
+
+bodegaChart();
+function bodegaChart(){
+	var context = document.getElementById("bodega");
+	var utilizacionDespacho = 0;
+	var utilizacionRecepcion = 0;
+	var utilizacionOtras = 0;
+	var total = 0;
+
+	<% @almacenes.each do |a| %>
+		<% if !(a.pulmon) %>
+			<% if a.despacho %>
+				utilizacionDespacho += <%= a.usedSpace %>
+				total += <%= a.totalSpace %>
+			<% elsif a.recepcion %>
+				utilizacionRecepcion += <%= a.usedSpace %>
+				total += <%= a.totalSpace %>
+			<% else %>
+				utilizacionOtras += <%= a.usedSpace %>
+				total += <%= a.totalSpace %>
+			<% end %>	
+		<% end %>		
+	<% end %>
+
+		var data2 = {
+	  labels: [
+	      "Recepcion", "Despacho", "Otras", "Libre"
+	  ],
+	  datasets: [
+	      {
+	          data: [utilizacionRecepcion, utilizacionDespacho, utilizacionOtras, total],
+	          backgroundColor: [
+	              "#FF6384",
+	              "#36A2EB",
+                "#FFCE56"
+	          ],
+	          hoverBackgroundColor: [
+	              "#FF6384",
+	              "#36A2EB",
+                "#FFCE56"
+	          ]
+	      }]
+		};
+		var bodegaChart = new Chart(context,{
+	    type: 'pie',
+	    data: data2
+		});
+	
+}
+
+
+
+
+</script>
