@@ -68,23 +68,23 @@ class Promocion < ActiveRecord::Base
 		  codigo = json_information_message['codigo']
 		  publicar = true
 		  puts "JSON: " << json_information_message['sku']
-		  if publicar
-		  	#self.postFacebook(sku, precio, inicio, fin, codigo)
-		  	self.createPromotion(sku, inicio, fin, codigo)
+		  promo = self.createPromotion(sku, inicio, fin, codigo)
+		  if publicar and promo
+		  	self.postFacebook(sku, precio, inicio, fin, codigo)
+			self.postTwitter(sku, precio, inicio, fin, codigo)
 		  end
-		  #mostrar(json_information_message)
 		end
 	end
 
 	def self.createPromotion(sku, precio, inicio, fin, codigo)
-		inicio = ActiveSupport::TimeZone['America/New_York'].parse(Date.strptime(inicio.to_s, '%Q').to_s)
-		fin = ActiveSupport::TimeZone['America/New_York'].parse(Date.strptime(fin.to_s, '%Q').to_s)
+		inicio = ActiveSupport::TimeZone['America/New_York'].parse(Date.strptime(inicio.to_s, '%Q').to_s).beginning_of_day
+		fin = ActiveSupport::TimeZone['America/New_York'].parse(Date.strptime(fin.to_s, '%Q').to_s).end_of_day
 		promo = Spree::Promotion.create(
 		  name: codigo,
 		  description: "Promocion, sku:" << sku.to_s,
 		  match_policy: 'all',
 		  starts_at: inicio,
-		  expires_at: (inicio + 1.weeks).end_of_day,
+		  expires_at: fin,
 		  code: codigo,
 		)
 		puts "Promocion: " << promo.inspect
@@ -93,9 +93,7 @@ class Promocion < ActiveRecord::Base
         action = Spree::Promotion::Actions::CreateAdjustment.create!(calculator: calculator)
         promo.actions << action
         promo.save!
-		#promo.promotion_actions << Spree::Promotion::Actions::CreateAdjustment.create(
-		    #{calculator: Spree::Calculator::FlatRate.new(preferred_percent: precio)},
-		    #without_protection: true)
+		promo
   	end
 
   def self.postTwitter(sku)
