@@ -38,6 +38,7 @@ class Compra < ActiveRecord::Base
 
 	def self.enviar_orden(sku,cantidad_requerida,grupo_proveedor,fecha_entrega)
 		puts "CANTIDAD REQUERIDA ->"+cantidad_requerida.to_s+" | "+"STOCK -> "+  consultar_materia_prima(sku).to_s
+		todoBien=false
 		if cantidad_requerida<=consultar_materia_prima(sku).to_i
 			puts "HAY STOCK PARA COMPRAR"
 			notas="notas"
@@ -53,13 +54,18 @@ class Compra < ActiveRecord::Base
 					puts "RESPUESTA -> " + respuesta.inspect
 					
 					if respuesta['aceptado']==true
+						puts "ESTA ENTRANDO ACAAA"
+						todoBien=true
 						Orden.saveOc(orden)
 						Orden.cambiarEstado(orden._id, "aceptado")
+						
 					end
 				end
 			end
-				
+			puts todoBien
+			todoBien		
 		end
+		
 	end
 	
 	def self.compra_productos_procesados(sku, cantidad_requerida, grupo_proveedor)

@@ -2,6 +2,8 @@ class Api::V1::B2bController < ApplicationController
 
 	respond_to :json, :html
 
+ 	protect_from_forgery with: :null_session
+	skip_before_filter  :verify_authenticity_token
 
 	# ------------------------------------Get Stock-------------------------------------- #
 	def getStock
@@ -200,7 +202,30 @@ class Api::V1::B2bController < ApplicationController
 		end
 
 	end
-
+	
+	def comprarMP
+		respond_to do |format|
+			puts "HOLAAAAAAA"
+			if params[:sku] and params[:cantidad] and params[:proveedor]
+				puts "ENTRO AL PRIMER IF"
+				sku =params[:sku]
+				cantidad= params[:cantidad]
+				proveedor = params[:proveedor]
+				todoBien=Compra.enviar_orden(sku,cantidad,proveedor,DateTime.current + 3600000)	
+				puts todoBien
+				if todoBien
+					format.json {render json: {status: todoBien},status:200}
+				else
+					puts "ACAAAAAAAAAAAAAAAAAAA"
+					format.json {render json: {status: todoBien},status:200}
+				end
+			else
+				format.json {render json: {description: 'Missing parameters'},status:400}	
+			end
+		end
+	end
+	
+	
 
 
 

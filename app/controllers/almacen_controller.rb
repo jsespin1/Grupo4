@@ -2,16 +2,17 @@ class AlmacenController < ApplicationController
 
 	def index 
 		@almacenes = Request.getAlmacenesAll
-		@orden = Orden.all
+		@orden = Orden.where(cliente:!Orden.getIdPropio)
+		#@orden = Orden.all
 		@factura = Factura.all
 		#puts "SE LLAMO CREAR BOLETA 1"
 		#Boletum.crearBoleta("38", 2, "mi casa",  (1513*1.19*2).ceil)
 		puts "SE LLAMO CREAR BOLETA"
 		#Ftp.procesarFtps(Ftp.getFtps)
-		Compra.consultar_materia_prima("26")
+		Compra.consultar_materia_prima("45")
 		
 		
-		#Compra.enviar_orden("44",20,4,DateTime.current + 1.days)
+		
 	#	orden=Request.create_orden("b2b", 20, "45", Orden.getIdPropio , 1 , Controlador.getPrecio("45") +10,DateTime.current + 1.days , "asdf")
 	#	puts orden.inspect
 	#	Orden.saveOc(orden)
