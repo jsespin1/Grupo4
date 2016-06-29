@@ -45,17 +45,20 @@ class Compra < ActiveRecord::Base
 			
 			orden=Request.create_orden("b2b", cantidad_requerida, sku, Orden.getIdPropio , grupo_proveedor, Controlador.getPrecio(sku) +10, fecha_entrega, notas)
 			puts "ORDEN -> " + orden.inspect
-			
-			respuesta=Request.enviarOC(grupo_proveedor.to_s, orden._id)
-			
-			puts "RESPUESTA -> " + respuesta.inspect
-			
-			if respuesta['aceptado']==true
-				Orden.saveOc(orden)
-				Orden.cambiarEstado(orden._id, "aceptado")
+			if orden != nil
+					
+				respuesta=Request.enviarOC(grupo_proveedor.to_s, orden._id)
+				if respuesta != nil
 				
+					puts "RESPUESTA -> " + respuesta.inspect
+					
+					if respuesta['aceptado']==true
+						Orden.saveOc(orden)
+						Orden.cambiarEstado(orden._id, "aceptado")
+					end
+				end
 			end
-			
+				
 		end
 	end
 	

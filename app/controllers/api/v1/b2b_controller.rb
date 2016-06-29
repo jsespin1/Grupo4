@@ -86,8 +86,10 @@ class Api::V1::B2bController < ApplicationController
 						end
 						facturaPagada=Request.pagar_factura(id)
 						puts "Factura Pagada"  +  facturaPagada.inspect
-						factura.estado_pago = "pagada"
-						Factura.saveFactura(factura)
+						if facturaPagada != nil
+							factura.estado_pago = "pagada"
+							Factura.saveFactura(factura)
+						end
 					else
 						puts "TRX = null"
 						Factura.saveFactura(factura)
