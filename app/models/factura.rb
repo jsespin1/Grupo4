@@ -42,21 +42,28 @@ class Factura < ActiveRecord::Base
         respuesta = true
         #Cliente-Nosotros y Estado de Factura-Pendiente
         estado = "pendiente"
-        if !(factura.cliente == getIdPropio) or !(factura.estado_pago.eql? estado)
+        idpropio=getIdPropio
+        puts factura.inspect
+        if !(factura.cliente.eql? idpropio) or !(factura.estado_pago.eql? estado)
+            puts "ENTRO A PRIMER IF DE VERIFICAR COMPRA " + idpropio 
             respuesta = false
         end
         #Ahora se obtiene la OC asociada
         oc = Orden.find_by(_id: factura.id_oc)
         if oc != nil
+            
             #Cliente orden nosotros, estado de orden aceptada, cantidadDespachada = 0 y Id factura la misma
             id_cliente = oc.cliente
-            estado = "aceptada"
+            estado = "aceptado"
             despachado = oc.cantidad_despachada
             id_factura = oc.id_factura
-            if !(id_cliente==getIdPropio) or !(oc.estado.eql? estado) or !(despachado.to_i==0) or !(id_factura.eql? factura._id)
+            if !(id_cliente.eql? getIdPropio) or !(oc.estado.eql? estado) or !(despachado.to_i==0)
+                puts "ENTRO A ULTIMO IF DE VERIFICAR COMPRA " + oc.inspect
+                puts getIdPropio
                 respuesta = false
             end
         else
+            puts "OC = NIL"
             respuesta = false
         end
         respuesta

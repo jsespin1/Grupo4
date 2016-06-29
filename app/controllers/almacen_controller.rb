@@ -16,13 +16,22 @@ class AlmacenController < ApplicationController
 		#@almacenes = Almacen.all
 		@orden = Orden.all
 		@factura = Factura.all
-		Promocion.amqp_consumer
+		#Promocion.amqp_consumer
 		#Promocion.postTwitter(38)
 		#puts "SE LLAMO CREAR BOLETA 1"
 		#Boletum.crearBoleta("38", 2, "mi casa",  (1513*1.19*2).ceil)
 		#puts "SE LLAMO CREAR BOLETA"
 		#Ftp.procesarFtps(Ftp.getFtps)
+		
 		#Compra.consultar_materia_prima("26")
+		
+		
+		#Compra.enviar_orden("44",20,4,DateTime.current + 1.days)
+	#	orden=Request.create_orden("b2b", 20, "45", Orden.getIdPropio , 1 , Controlador.getPrecio("45") +10,DateTime.current + 1.days , "asdf")
+	#	puts orden.inspect
+	#	Orden.saveOc(orden)
+	#	Orden.cambiarEstado(orden._id, "aceptado")
+	#	asdf
 		#oc_id = "57145e4cf77d320300f0deb9"
 		#ftp_file = "1460952637328.xml"
 		#Ftp.revisarFtp(oc_id, ftp_file)
