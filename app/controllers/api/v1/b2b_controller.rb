@@ -73,18 +73,25 @@ class Api::V1::B2bController < ApplicationController
 			if params[:id_factura]
 				id = params[:id_factura]
 				factura = Request.obtener_factura(id)
-				if factura!=nil and !(Factura.existe(factura)) and Factura.verificar_compra(factura)
+				puts factura.inspect
+				if factura!=nil and Factura.verificar_compra(factura)
+					puts "paso primer if factura"
 					#Se procede a pagar la factura
 					transaccion = pagar_factura(factura)
 					puts "Transaccion -> " + transaccion.inspect
 					if transaccion != nil
+						puts "TRX != null"
 						Thread.new do
 							enviar_transaccion(transaccion._id, id, factura.proveedor)
 						end
-						Request.pagar_factura(id)
-						factura.estado_pago = "pagada"
-						Factura.saveFactura(factura)
+						facturaPagada=Request.pagar_factura(id)
+						puts "Factura Pagada"  +  facturaPagada.inspect
+						if facturaPagada != nil
+							factura.estado_pago = "pagada"
+							Factura.saveFactura(factura)
+						end
 					else
+						puts "TRX = null"
 						Factura.saveFactura(factura)
 						#Si no podemos pagar, queda con estado PENDIENTE
 					end
@@ -96,7 +103,7 @@ class Api::V1::B2bController < ApplicationController
 				format.json {render json: {description: 'Missing parameters'},status:400}
 			end
 		end
-
+		
 	end
 
 	def pagar_factura(factura)
@@ -141,7 +148,7 @@ class Api::V1::B2bController < ApplicationController
 				format.json {render json: {description: 'Missing parameters'},status:400}
 			end
 		end
-
+		
 	end
 
 

@@ -13,8 +13,20 @@ class Orden < ActiveRecord::Base
         end
 	 	orden
     end
-
-
+    
+    def self.toObject2(response)
+	 	r = response
+	 	puts response.inspect
+        if r.to_s.include? '_id'
+            orden = Orden.new(_id: r['_id'], fecha_creacion: r['created_at'], canal: r['canal'], proveedor: r['proveedor'], cliente: r['cliente'], 
+            sku: r['sku'], cantidad: r['cantidad'], cantidad_despachada: r['cantidadDespachada'], precio_unitario: r['precioUnitario'], 
+            fecha_entrega: r['fechaEntrega'], estado: r['estado'])
+        else
+            orden = nil
+        end
+	 	orden
+    end
+    
     def self.verificar_oc(oc)
     	respuesta = true
     	arreglo = ["11", "16", "38", "44"]
