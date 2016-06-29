@@ -8,9 +8,7 @@ class AlmacenController < ApplicationController
 		inicio=1467223779973
 		fin=1467238179973
 		codigo="codigo13"
-		#puts "FECHAA: " << inicio.strftime("%m/%d/%Y")
-		puts "FECHAA: " << Date.strptime(inicio.to_s, '%Q').to_s
-		#Promocion.createPromotion(sku, precio, inicio, fin, codigo)
+		Promocion.createPromotion(sku, precio, inicio, fin, codigo)
 	end
 
 	def index 

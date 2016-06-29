@@ -27,8 +27,8 @@ class Promocion < ActiveRecord::Base
 	      sku = 0
 	    end
 
-	    inicio = ActiveSupport::TimeZone['America/Santiago'].parse(inicio.to_s)
-	    fin = ActiveSupport::TimeZone['America/Santiago'].parse(fin.to_s)
+	    inicio = ActiveSupport::TimeZone['America/Santiago'].parse(Date.strptime(inicio.to_s, '%Q').to_s)
+	    fin = ActiveSupport::TimeZone['America/Santiago'].parse(Date.strptime(fin.to_s, '%Q').to_s)
 	    me = FbGraph::User.me('EAADxZBBU7tuEBADW6oxBGVbOGwznZB2t02aem8cHDxnJMZCmHx67Bh4wHrPGf3OWegji4mIr91PJOaz3lvdHJuiww7BFC55EZCxALp9ZA5SgIVnGlmczFXhDNFqfkCzThLXDVlgBs5h8fh2FYaX929aBq3nRL75sZD')
 	    me.feed!(
 	      message: "Producto: " << nombre << 'Sku: ' << sku << ", Precio: " << precio << "Fecha Inicio: " << inicio << ", Fin: " << fin << ", Código: " << codigo,
@@ -77,15 +77,14 @@ class Promocion < ActiveRecord::Base
 	end
 
 	def self.createPromotion(sku, precio, inicio, fin, codigo)
-		inicio = Date.strptime(inicio.to_s, '%Q').to_s
-		fin = Date.strptime(fin.to_s, '%Q').to_s
-	    puts "Fecha Inicio: " << inicio.to_s
+		inicio = ActiveSupport::TimeZone['America/New_York'].parse(Date.strptime(inicio.to_s, '%Q').to_s)
+		fin = ActiveSupport::TimeZone['America/New_York'].parse(Date.strptime(fin.to_s, '%Q').to_s)
 		promo = Spree::Promotion.create(
 		  name: codigo,
 		  description: "Promocion",
 		  match_policy: 'all',
 		  starts_at: inicio,
-		  expires_at: fin,
+		  expires_at: (inicio + 1.weeks).end_of_day,
 		  code: codigo
 		)
 		puts "Promocion: " << promo.inspect
