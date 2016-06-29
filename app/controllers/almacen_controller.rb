@@ -2,7 +2,15 @@ class AlmacenController < ApplicationController
 
 
 	def home
-	
+		#Promocion.amqp_consumer
+		sku="13"
+		precio = 1980
+		inicio=1467223779973
+		fin=1467238179973
+		codigo="codigo13"
+		#puts "FECHAA: " << inicio.strftime("%m/%d/%Y")
+		puts "FECHAA: " << Date.strptime(inicio.to_s, '%Q').to_s
+		#Promocion.createPromotion(sku, precio, inicio, fin, codigo)
 	end
 
 	def index 
