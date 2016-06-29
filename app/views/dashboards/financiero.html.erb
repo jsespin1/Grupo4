@@ -1,0 +1,101 @@
+<div class = "row">
+	<div class="col-sm-12">
+		<h1 style="text-align: center;">BI - Módulo Financiero</h1>
+	</div>
+</div>
+
+<div class = "row">
+	<div class="col-sm-6">
+		<h3 style="text-align: center;">Saldo diario</h3>
+		<canvas id="saldo" class="canvas" ></canvas>
+	</div>
+	<div class="col-sm-2">
+		<h3 style="text-align: center;">Transacciones</h3>
+		<table class="table table-hover search-table">
+		  <thead>
+		    <tr>
+		      <th>Día</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		  	<tr>
+          <td><%= link_to Date.today,
+                  dashboards_show_transacciones_path(fecha_inicial: Date.today.beginning_of_day, fecha_final: Time.current)
+              %></td>               
+        </tr>
+        <tr>
+          <td><%= link_to Date.today - 1,
+                  dashboards_show_transacciones_path(fecha_inicial: 1.day.ago.beginning_of_day, fecha_final: 1.day.ago.end_of_day)
+              %></td>               
+        </tr>
+        <tr>
+          <td><%= link_to Date.today - 2,
+                  dashboards_show_transacciones_path(fecha_inicial: 2.days.ago.beginning_of_day, fecha_final: 2.days.ago.end_of_day)
+              %></td>              
+        </tr>
+        <tr>
+          <td><%= link_to Date.today - 3,
+                  dashboards_show_transacciones_path(fecha_inicial: 3.days.ago.beginning_of_day, fecha_final: 3.days.ago.end_of_day)
+              %></td>               
+        </tr>
+        <tr>
+          <td><%= link_to Date.today - 4,
+                  dashboards_show_transacciones_path(fecha_inicial: 4.days.ago.beginning_of_day, fecha_final: 4.days.ago.end_of_day)
+              %></td>               
+        </tr>
+        <tr>
+          <td><%= link_to Date.today - 5,
+                  dashboards_show_transacciones_path(fecha_inicial: 5.days.ago.beginning_of_day, fecha_final: 5.days.ago.end_of_day)
+              %></td>               
+        </tr>
+        <tr>
+          <td><%= link_to Date.today - 6,
+                  dashboards_show_transacciones_path(fecha_inicial: 6.days.ago.beginning_of_day, fecha_final: 6.days.ago.end_of_day)
+              %></td>               
+        </tr>
+		  </tbody>
+		</table>
+	</div>
+</div>
+
+
+
+
+<script>
+saldoChart();
+function saldoChart(){
+	var ctx = document.getElementById("saldo");
+	var data = {
+    labels: ["<%= Date.today - 6 %>", "<%= Date.today - 5 %>", "<%= Date.today - 4 %>", "<%= Date.today - 3 %>", "<%= Date.today - 2 %>", "<%= Date.today - 1 %>", "<%= Date.today  %>"],
+    datasets: [
+        {
+            label: "Saldo",
+            backgroundColor: "rgba(255,99,132,0.2)",
+            borderColor: "rgba(255,99,132,1)",
+            borderWidth: 1,
+            hoverBackgroundColor: "rgba(255,99,132,0.4)",
+            hoverBorderColor: "rgba(255,99,132,1)",
+            data: [<%= Saldo.where(created_at: 6.days.ago.beginning_of_day..6.days.ago.end_of_day, _id: 11).sum(:monto) %>, 
+            <%= Saldo.where(created_at: 5.days.ago.beginning_of_day..5.days.ago.end_of_day, _id: 11).sum(:monto) %>, 
+            <%= Saldo.where(created_at: 4.days.ago.beginning_of_day..4.days.ago.end_of_day, _id: 11).sum(:monto) %>, 
+            <%= Saldo.where(created_at: 3.days.ago.beginning_of_day..3.days.ago.end_of_day, _id: 11).sum(:monto) %>, 
+            <%= Saldo.where(created_at: 2.days.ago.beginning_of_day..2.days.ago.end_of_day , _id: 11).sum(:monto) %>, 
+            <%= Saldo.where(created_at: 1.day.ago.beginning_of_day..1.day.ago.end_of_day, _id: 11).sum(:monto) %>,
+            <%= Saldo.where(created_at: Date.today.beginning_of_day..Time.current, _id: 11).sum(:monto) %>]
+        }
+    ]
+	};
+	var myBarChart = new Chart(ctx, {
+    type: 'bar',
+    data: data
+	});
+}
+
+
+
+
+
+
+
+
+</script>

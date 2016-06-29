@@ -88,6 +88,9 @@
 #wrapper.sidebar-minimized #main-sidebar {
   width: 50px;
   overflow: visible;
+  $gray-base:              #000 !default;
+  $gray-lighter:           lighten($gray-base, 93.5%);
+  $navbar-height:3px;
 
   li {
     &:hover, &.menu-active {
