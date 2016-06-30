@@ -9,7 +9,7 @@ class Promocion < ActiveRecord::Base
 #44: Agave
 
   	def self.postFacebook(sku, precio, inicio, fin, codigo)
-	    case sku
+	    case sku.to_i
 	    when 11
 	      link = 'https://i.ytimg.com/vi/Vrbfyax_T6s/hqdefault.jpg'
 	      nombre = "Margarina"
@@ -98,7 +98,7 @@ class Promocion < ActiveRecord::Base
 
   def self.postTwitter(sku, precio, inicio, fin, codigo)
   	link = 'https://i.ytimg.com/vi/Vrbfyax_T6s/hqdefault.jpg'
-    case sku
+    case sku.to_i
     when 11
       link = 'https://i.ytimg.com/vi/Vrbfyax_T6s/hqdefault.jpg'
       nombre = "Margarina"
