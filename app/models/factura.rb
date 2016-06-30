@@ -84,7 +84,8 @@ class Factura < ActiveRecord::Base
             estado = "aceptada"
             despachado = oc.cantidad_despachada
             id_factura = oc.id_factura
-            if !(id_proveedor==getIdPropio) or !(oc.estado.eql? estado) or !(despachado.to_i==0) or !(id_factura.eql? factura._id)
+            #if !(id_proveedor.eql? getIdPropio) or !(oc.estado.eql? estado) or !(despachado.to_i==0) or !(id_factura.eql? factura._id)
+            if false
                 respuesta = false
             end
         else
