@@ -28,7 +28,7 @@ require "json"
       #Bind a queue to an exchange
       q.bind(x, :routing_key => "process")
       
-      information_message = "{\"sku\": \"44\",\"precio\": \"10000\",\"inicio\": \"1467223779973\",\"fin\": \"1467223779973\",\"codigo\": \"probando123\",\"publicar\": \"true\"}"
+      information_message = "{\"sku\": \"38\",\"precio\": \"10000\",\"inicio\": \"1467223779973\",\"fin\": \"1467223779973\",\"codigo\": \"probandoooooo\",\"publicar\": \"true\"}"
       
       x.publish(information_message,
         :timestamp      => Time.now.to_i,
