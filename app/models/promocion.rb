@@ -72,7 +72,7 @@ class Promocion < ActiveRecord::Base
 		  	self.postFacebook(sku, precio, inicio, fin, codigo)
 			self.postTwitter(sku)
 		  end
-		  ch.basic_nack(delivery_info.delivery_tag, true, true)
+		  ch.basic_nack(delivery_info.delivery_tag, true, false)
 		end
 	end
 
