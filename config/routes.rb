@@ -70,6 +70,9 @@ Rails.application.routes.draw do
       #Actualizar saldo
       get '/dashboards/actualizar_saldo' => 'b2b#actualizar_saldo'
 
+      get '/promocion/guardar' => 'b2b#guardarPromocion'
+
+
       #------------------------------------------------------------------#
 
       #Métodos que recibe transaccion y factura -> despacha

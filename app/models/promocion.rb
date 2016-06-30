@@ -26,12 +26,9 @@ class Promocion < ActiveRecord::Base
 	    else
 	      sku = 0
 	    end
-
-	    inicio = ActiveSupport::TimeZone['America/Santiago'].parse(Date.strptime(inicio.to_s, '%Q').to_s)
-	    fin = ActiveSupport::TimeZone['America/Santiago'].parse(Date.strptime(fin.to_s, '%Q').to_s)
 	    me = FbGraph::User.me('EAADxZBBU7tuEBADW6oxBGVbOGwznZB2t02aem8cHDxnJMZCmHx67Bh4wHrPGf3OWegji4mIr91PJOaz3lvdHJuiww7BFC55EZCxALp9ZA5SgIVnGlmczFXhDNFqfkCzThLXDVlgBs5h8fh2FYaX929aBq3nRL75sZD')
 	    me.feed!(
-	      message: "Producto: " << nombre << 'Sku: ' << sku << ", Precio: " << precio << "Fecha Inicio: " << inicio << ", Fin: " << fin << ", Código: " << codigo,
+	      message: "Producto: " << nombre << 'Sku: ' << sku.to_s << ", Precio: " << precio.to_s << "Fecha Inicio: " << inicio.to_s << ", Fin: " << fin.to_s << ", Código: " << codigo.to_s,
 	      picture: link,
 	      link: link,
 	      name: 'FbGraph',
@@ -55,37 +52,40 @@ class Promocion < ActiveRecord::Base
 		q.subscribe(:block => true, :manual_ack => true) do |delivery_info, properties, payload|
 		  json_information_message = JSON.parse(payload)
 		  puts "Json info: " << json_information_message.inspect
-		  if Rails.env == 'development'
 		  	#nack(delivery_tag, multiple = false, requeue = false)
-		  	ch.basic_nack(delivery_info.delivery_tag, true, true)
-		  end
-		  #ch.ack(delivery_info.delivery_tag, true)
 		  #ch.consumers[delivery_info.consumer_tag].cancel
 		  sku = json_information_message['sku']
 		  precio = json_information_message['precio']
 		  inicio = json_information_message['inicio']
+		  inicio = ActiveSupport::TimeZone['America/Santiago'].parse(Date.strptime(inicio.to_s, '%Q').to_s).beginning_of_day
 		  fin = json_information_message['fin']
+		  fin = ActiveSupport::TimeZone['America/Santiago'].parse(Date.strptime(fin.to_s, '%Q').to_s).end_of_day
 		  codigo = json_information_message['codigo']
+		  publicar = json_information_message['publicar']
 		  publicar = true
 		  puts "JSON: " << json_information_message['sku']
-		  if publicar
-		  	#self.postFacebook(sku, precio, inicio, fin, codigo)
-		  	self.createPromotion(sku, inicio, fin, codigo)
+		  if codigo.length < 2
+			codigo = "Desconocido" << sku.to_s
 		  end
-		  #mostrar(json_information_message)
+		  promo = self.createPromotion(sku, precio, inicio, fin, codigo)
+		  if publicar and promo
+		  	self.postFacebook(sku, precio, inicio, fin, codigo)
+			self.postTwitter(sku)
+		  end
+		  ch.basic_nack(delivery_info.delivery_tag, true, true)
 		end
 	end
 
 	def self.createPromotion(sku, precio, inicio, fin, codigo)
-		inicio = ActiveSupport::TimeZone['America/New_York'].parse(Date.strptime(inicio.to_s, '%Q').to_s)
-		fin = ActiveSupport::TimeZone['America/New_York'].parse(Date.strptime(fin.to_s, '%Q').to_s)
+		puts "Fecha Inicio: " << inicio.to_s
+		puts "Fecha Fin: " << fin.to_s
 		promo = Spree::Promotion.create(
 		  name: codigo,
-		  description: "Promocion",
+		  description: "Promocion, sku:" << sku.to_s,
 		  match_policy: 'all',
 		  starts_at: inicio,
-		  expires_at: (inicio + 1.weeks).end_of_day,
-		  code: codigo
+		  expires_at: fin,
+		  code: codigo,
 		)
 		puts "Promocion: " << promo.inspect
 		calculator = Spree::Calculator::FlatRate.new
@@ -93,9 +93,7 @@ class Promocion < ActiveRecord::Base
         action = Spree::Promotion::Actions::CreateAdjustment.create!(calculator: calculator)
         promo.actions << action
         promo.save!
-		#promo.promotion_actions << Spree::Promotion::Actions::CreateAdjustment.create(
-		    #{calculator: Spree::Calculator::FlatRate.new(preferred_percent: precio)},
-		    #without_protection: true)
+		promo
   	end
 
   def self.postTwitter(sku)

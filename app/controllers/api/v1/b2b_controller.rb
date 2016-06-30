@@ -249,6 +249,19 @@ class Api::V1::B2bController < ApplicationController
 		end
   end
 
+	def guardarPromocion
+
+		respond_to do |format|
+			#Debemos llamar al método abastecer MP para FABRICAR
+			Thread.new do
+				Promocion.amqp_consumer
+			end
+			format.json {render json: {estado: "procesaron las promociones"}, status:200}
+		end
+
+	end
+
+
 
 
 
