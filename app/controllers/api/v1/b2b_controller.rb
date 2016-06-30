@@ -139,7 +139,8 @@ class Api::V1::B2bController < ApplicationController
 					id_oc = factura.id_oc
 					oc = Orden.find_by(_id: id_oc)
 				end
-				if factura!=nil and oc and Factura.verificar_venta(factura) and valido
+				#Factura.verificar_venta(factura)
+				if factura!=nil and oc and true and valido
 					puts "La TRX, Factura y OC corresponden"
 					#Si todo está en orden, DESPACHAMOS
 					Thread.new do
