@@ -19,7 +19,7 @@ class Compra < ActiveRecord::Base
 		when "45" # celulosa (prueba)
 			url = 'http://integra1.ing.puc.cl/api/consultar/' + sku.to_s	
 		when "44" # nosotros (prueba)
-			url = 'https://grupo4v2-fgarri.c9users.io/api/consultar/' + sku.to_s	
+			url = 'http://integra4.ing.puc.cl/api/consultar/' + sku.to_s	
 		end
 		puts "URL -> " +url
 		respuesta = Request.consultarStock(url)
