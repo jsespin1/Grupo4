@@ -85,7 +85,7 @@ class AlmacenController < ApplicationController
 	def ordenesFactura
 		@almacenes = Request.getAlmacenesAll
 		#@almacenes = Almacen.all
-		@orden = Orden.where(cliente:!Orden.getIdPropio)
+		@orden = Orden.where("cliente != ?", Orden.getIdPropio)
 		@factura = Factura.all
 	end
 
