@@ -23,11 +23,12 @@ class Promocion < ActiveRecord::Base
 	      link = 'http://static.imujer.com/sites/default/files/otramedicina/P/Propiedades-del-agave-1.jpg'
 	      nombre = "Agave"
 	    else
+	      link = "https://s-media-cache-ak0.pinimg.com/avatars/pinky19295_1444434602_140.jpg"
 	      nombre = "Desconocido"
 	    end
 	    me = FbGraph::User.me('EAADxZBBU7tuEBADW6oxBGVbOGwznZB2t02aem8cHDxnJMZCmHx67Bh4wHrPGf3OWegji4mIr91PJOaz3lvdHJuiww7BFC55EZCxALp9ZA5SgIVnGlmczFXhDNFqfkCzThLXDVlgBs5h8fh2FYaX929aBq3nRL75sZD')
 	    me.feed!(
-	      message: "Producto: " << nombre << ', Sku: ' << sku.to_s << ", Precio: " << precio.to_s << "Fecha Inicio: " << inicio.to_s << ", Fin: " << fin.to_s << ", Código: " << codigo.to_s,
+	      message: "Producto: " << nombre << ', Sku: ' << sku.to_s << ", Precio: " << precio.to_s << ", Fecha Inicio: " << inicio.to_s << ", Fin: " << fin.to_s << ", Código: " << codigo.to_s,
 	      picture: link,
 	      link: link,
 	      name: 'FbGraph',
@@ -97,7 +98,6 @@ class Promocion < ActiveRecord::Base
   	end
 
   def self.postTwitter(sku, precio, inicio, fin, codigo)
-  	link = 'https://i.ytimg.com/vi/Vrbfyax_T6s/hqdefault.jpg'
     case sku
     when 11
       link = 'https://i.ytimg.com/vi/Vrbfyax_T6s/hqdefault.jpg'
@@ -115,6 +115,7 @@ class Promocion < ActiveRecord::Base
       link = 'http://static.imujer.com/sites/default/files/otramedicina/P/Propiedades-del-agave-1.jpg'
       nombre = "Agave"
     else
+      link = "https://s-media-cache-ak0.pinimg.com/avatars/pinky19295_1444434602_140.jpg"
       nombre = "Desconocido"
     end
     client = Twitter::REST::Client.new do |config|
