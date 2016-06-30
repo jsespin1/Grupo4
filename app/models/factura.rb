@@ -73,7 +73,7 @@ class Factura < ActiveRecord::Base
         respuesta = true
         #Cliente-Nosotros y Estado de Factura-Pagado
         estado = "pagada"
-        if !(factura.proveedor == getIdPropio) or !(factura.estado_pago.eql? estado)
+        if !(factura.proveedor.eql? getIdPropio) or !(factura.estado_pago.eql? estado)
             respuesta = false
         end
         #Ahora se obtiene la OC asociada

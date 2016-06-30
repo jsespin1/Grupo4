@@ -131,7 +131,8 @@ class Api::V1::B2bController < ApplicationController
 			if params[:idtrx] && params[:idfactura]
 				id_trx = params[:idtrx]
 				id_factura = params[:idfactura]
-				valido = Controlador.validarTransaccion(id_trx,id_factura)
+				#valido = Controlador.validarTransaccion(id_trx,id_factura)
+				valido = true
 				factura = Request.obtener_factura(id_factura)
 				if factura != nil
 					#Vemos en BD si está la OC, para comprobar que se hizo la solicitud
