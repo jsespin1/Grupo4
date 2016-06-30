@@ -123,7 +123,7 @@ class Promocion < ActiveRecord::Base
       config.access_token = '747540484193685504-BVBgqItmbb1dKkT45DQEkTsBgFJzeTZ'
       config.access_token_secret = 'aNKKsfkdl4Gs4UOQvqjLrWVsXt8FNxVkTR9NEkw2faq5G'
     end
-    message =  "Producto: " << nombre << ', Sku: ' << sku.to_s << ", Precio: " << precio.to_s << "Fecha Inicio: " << inicio.to_s << ", Fin: " << fin.to_s << ", Código: " << codigo.to_s
+    message =  "Producto: " << nombre << ", Precio: " << precio.to_s << "Fecha Inicio: " << inicio.to_s  << ", Código: " << codigo.to_s
     client.update_with_media(message, open(link))
   end
 
